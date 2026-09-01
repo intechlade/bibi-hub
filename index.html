@@ -1,0 +1,3696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Bibi Hub 💗</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    min-height: 100vh;
+    background: #050505;
+    overflow-x: hidden;
+}
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
+
+.background-slideshow {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -10;
+    overflow: hidden;
+    background: #000;
+}
+
+.bg-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+    filter: brightness(38%);
+}
+
+.bg-slide.active {
+    opacity: 1;
+}
+
+.background-overlay {
+    position: fixed;
+    inset: 0;
+    background:
+        linear-gradient(
+            rgba(0,0,0,.45),
+            rgba(0,0,0,.75)
+        );
+    z-index: -9;
+    pointer-events: none;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 35px 20px 25px;
+    background: rgba(0,0,0,.72);
+    border-bottom: 1px solid rgba(255,20,147,.35);
+}
+
+header h1 {
+    color: #ff1493;
+    font-size: 2.8rem;
+    text-shadow: 0 0 20px rgba(255,20,147,.5);
+}
+
+header p {
+    margin-top: 8px;
+    color: #eee;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+#connectionStatus {
+    margin: 12px auto 0;
+    max-width: 600px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: .85rem;
+    background: rgba(255,20,147,.08);
+    color: #ffb6d9;
+}
+
+.status-ok {
+    color: #8cffc1 !important;
+}
+
+.status-error {
+    color: #ff8c9c !important;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+main {
+    position: relative;
+    z-index: 2;
+    width: 92%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px 0 80px;
+}
+
+/* =====================================================
+   PAGES
+===================================================== */
+
+.page-section {
+    display: none;
+    animation: fadeIn .4s ease;
+}
+
+.page-section.active {
+    display: block;
+}
+
+/* =====================================================
+   HOME
+===================================================== */
+
+.welcome {
+    text-align: center;
+    padding: 35px 20px;
+    margin-bottom: 25px;
+    background: rgba(0,0,0,.65);
+    border: 1px solid rgba(255,20,147,.35);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.welcome h2 {
+    color: #ff1493;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    color: #ddd;
+}
+
+.streak-box {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 20px;
+    border: 2px solid #ff1493;
+    border-radius: 30px;
+    background: rgba(0,0,0,.7);
+    box-shadow: 0 0 20px rgba(255,20,147,.25);
+}
+
+.streak-number {
+    color: #ff1493;
+    font-weight: bold;
+}
+
+/* =====================================================
+   GRIDS
+===================================================== */
+
+.hub-grid,
+.content-grid,
+.business-grid,
+.goals-grid,
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+}
+
+.hub-card {
+    padding: 30px;
+    min-height: 180px;
+    background: rgba(0,0,0,.72);
+    border: 2px solid rgba(255,20,147,.45);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    transition: .3s ease;
+}
+
+.hub-card:hover {
+    transform: translateY(-6px);
+    border-color: #ff1493;
+    box-shadow: 0 0 25px rgba(255,20,147,.3);
+}
+
+.hub-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+}
+
+.hub-card h3,
+.business-card h3,
+.content-card h3,
+.goal-card h3,
+.calendar-card h3 {
+    color: #ff1493;
+    margin-bottom: 10px;
+}
+
+.hub-card p,
+.business-card p,
+.content-card p,
+.goal-card p,
+.calendar-card p {
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #ff1493;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+button:hover {
+    background: #ff3ca5;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255,20,147,.4);
+}
+
+.card-button {
+    margin-top: 18px;
+}
+
+.back-button {
+    background: #111;
+    color: #ff1493;
+    border: 1px solid #ff1493;
+}
+
+.back-button:hover {
+    background: #ff1493;
+    color: white;
+}
+
+.delete-button {
+    background: #3b101f;
+    color: #ff8fab;
+    margin-left: 8px;
+}
+
+.delete-button:hover {
+    background: #b0004e;
+    color: white;
+}
+
+.small-button {
+    padding: 8px 12px;
+    font-size: .8rem;
+}
+
+/* =====================================================
+   SECTION HEADER
+===================================================== */
+
+.section-header {
+    background: rgba(0,0,0,.75);
+    border: 1px solid rgba(255,20,147,.35);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 22px;
+    backdrop-filter: blur(6px);
+}
+
+.section-header h2 {
+    color: #ff1493;
+    font-size: 2rem;
+    margin: 20px 0 8px;
+}
+
+.section-header p {
+    color: #ccc;
+}
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.content-card,
+.business-card,
+.goal-card,
+.calendar-card {
+    background: rgba(0,0,0,.78);
+    border: 1px solid rgba(255,20,147,.3);
+    border-radius: 18px;
+    padding: 25px;
+    backdrop-filter: blur(5px);
+}
+
+/* =====================================================
+   FORMS
+===================================================== */
+
+.form-card {
+    background: rgba(0,0,0,.78);
+    padding: 25px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,20,147,.3);
+    margin-bottom: 20px;
+}
+
+.form-card h3 {
+    color: #ff1493;
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.form-row.three {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+label {
+    display: block;
+    color: #ffb6d9;
+    margin-bottom: 6px;
+    font-size: .9rem;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 12px;
+    background: #151515;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 10px;
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #ff1493;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* =====================================================
+   SAVED ITEMS
+===================================================== */
+
+.saved-list {
+    margin-top: 20px;
+}
+
+.saved-item {
+    background: rgba(0,0,0,.82);
+    border-left: 4px solid #ff1493;
+    padding: 18px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+}
+
+.saved-item h4 {
+    color: #ff1493;
+    margin-bottom: 7px;
+}
+
+.saved-item p {
+    color: #ddd;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.meta {
+    color: #aaa;
+    font-size: .85rem;
+    margin-top: 8px;
+}
+
+/* =====================================================
+   TODO
+===================================================== */
+
+.todo-item {
+    background: rgba(0,0,0,.82);
+    border: 1px solid rgba(255,20,147,.25);
+    border-left: 4px solid #ff1493;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.todo-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.todo-title {
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.todo-completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.todo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #191919;
+    color: #ffb6d9;
+    font-size: .78rem;
+}
+
+.progress-wrap {
+    margin-top: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 9px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,#ff1493,#ff69b4);
+    border-radius: 10px;
+}
+
+.todo-actions {
+    margin-top: 12px;
+}
+
+/* =====================================================
+   PERIOD TRACKER
+===================================================== */
+
+.period-box {
+    text-align: center;
+}
+
+.period-status {
+    font-size: 1.15rem;
+    color: #ff69b4;
+    margin: 15px 0;
+    line-height: 1.7;
+}
+
+.period-summary {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.period-stat {
+    padding: 20px;
+    background: rgba(255,20,147,.08);
+    border: 1px solid rgba(255,20,147,.25);
+    border-radius: 15px;
+}
+
+.period-stat strong {
+    display: block;
+    color: #ff1493;
+    font-size: 1.15rem;
+    margin-top: 5px;
+}
+
+/* =====================================================
+   GALLERY
+===================================================== */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid rgba(255,20,147,.35);
+    transition: .3s ease;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.03);
+    border-color: #ff1493;
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+    background: rgba(0,0,0,.5);
+    border-radius: 15px;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+#toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 100;
+    background: #ff1493;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255,20,147,.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: .3s ease;
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px) {
+
+    header h1 {
+        font-size: 2.1rem;
+    }
+
+    .hub-grid,
+    .content-grid,
+    .business-grid,
+    .goals-grid,
+    .calendar-grid,
+    .form-row,
+    .form-row.three {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .gallery-grid img {
+        height: 160px;
+    }
+
+    .period-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .todo-top {
+        flex-direction: column;
+    }
+
+    main {
+        width: 94%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
+
+<div class="background-slideshow">
+
+    <img
+        id="bg1"
+        class="bg-slide active"
+        src="images/bibi (1).jpg"
+        alt=""
+    >
+
+    <img
+        id="bg2"
+        class="bg-slide"
+        src="images/bibi (2).jpg"
+        alt=""
+    >
+
+</div>
+
+<div class="background-overlay"></div>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <h1>🏠 THE BIBI HUB</h1>
+
+    <p>
+        Your personal space for business, life, goals & creativity 💗
+    </p>
+
+    <div id="connectionStatus">
+        Connecting to your Bibi Hub...
+    </div>
+
+</header>
+
+
+<main>
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section id="home" class="page-section active">
+
+    <div class="welcome">
+
+        <h2>Welcome back, Bibi 💗</h2>
+
+        <p>
+            Everything you need, all in one place.
+        </p>
+
+        <div class="streak-box">
+
+            🔥 Daily Streak:
+
+            <span
+                id="streakNumber"
+                class="streak-number">
+                1
+            </span>
+
+            days
+
+        </div>
+
+    </div>
+
+
+    <div class="hub-grid">
+
+        <div class="hub-card">
+
+            <div class="hub-icon">💼</div>
+
+            <h3>Business</h3>
+
+            <p>
+                Manage your ideas, clients,
+                money and business growth.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('business')">
+                Open Business
+            </button>
+
+        </div>
+
+
+        <div class="hub-card">
+
+            <div class="hub-icon">📱</div>
+
+            <h3>Content</h3>
+
+            <p>
+                Plan, organise and store
+                your content ideas.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('content')">
+                Open Content
+            </button>
+
+        </div>
+
+
+        <div class="hub-card">
+
+            <div class="hub-icon">📝</div>
+
+            <h3>To-Do List</h3>
+
+            <p>
+                Track tasks, due dates,
+                progress and completion.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('todo')">
+                Open To-Do
+            </button>
+
+        </div>
+
+
+        <div class="hub-card">
+
+            <div class="hub-icon">📅</div>
+
+            <h3>Calendar</h3>
+
+            <p>
+                Notes, periods, important dates
+                and monthly plans.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('calendar')">
+                Open Calendar
+            </button>
+
+        </div>
+
+
+        <div class="hub-card">
+
+            <div class="hub-icon">🎯</div>
+
+            <h3>Goals</h3>
+
+            <p>
+                Set goals and keep yourself
+                accountable.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('goals')">
+                Open Goals
+            </button>
+
+        </div>
+
+
+        <div class="hub-card">
+
+            <div class="hub-icon">🖼️</div>
+
+            <h3>My Gallery</h3>
+
+            <p>
+                Your personal content and
+                photo storage.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('gallery')">
+                Open Gallery
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS
+===================================================== -->
+
+<section id="business" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>💼 Business</h2>
+
+        <p>Your business command centre.</p>
+
+    </div>
+
+
+    <div class="business-grid">
+
+        <div class="business-card">
+
+            <h3>💡 Business Ideas</h3>
+
+            <p>
+                Store ideas for businesses,
+                products and opportunities.
+            </p>
+
+        </div>
+
+
+        <div class="business-card">
+
+            <h3>👥 Clients</h3>
+
+            <p>
+                Keep track of clients,
+                contacts and projects.
+            </p>
+
+        </div>
+
+
+        <div class="business-card">
+
+            <h3>💰 Money</h3>
+
+            <p>
+                Track income, expenses
+                and business money.
+            </p>
+
+        </div>
+
+
+        <div class="business-card">
+
+            <h3>📈 Growth</h3>
+
+            <p>
+                Record plans and strategies
+                for growing your business.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <h3>💡 Add Business Idea</h3>
+
+        <input
+            id="businessIdea"
+            placeholder="Business idea..."
+        >
+
+        <textarea
+            id="businessDescription"
+            placeholder="Tell me about it...">
+        </textarea>
+
+        <button onclick="saveBusinessIdea()">
+            Save Business Idea
+        </button>
+
+    </div>
+
+    <div
+        id="businessList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<section id="content" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>📱 Content</h2>
+
+        <p>Your content planning space.</p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <h3>📱 New Content Idea</h3>
+
+        <input
+            id="contentTitle"
+            placeholder="Content title"
+        >
+
+        <textarea
+            id="contentIdea"
+            placeholder="Content idea...">
+        </textarea>
+
+        <select id="contentPlatform">
+
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>YouTube</option>
+            <option>Facebook</option>
+            <option>Other</option>
+
+        </select>
+
+        <button onclick="saveContent()">
+            Save Content
+        </button>
+
+    </div>
+
+    <div
+        id="contentList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TODO
+===================================================== -->
+
+<section id="todo" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>📝 To-Do List</h2>
+
+        <p>
+            Get things done, Bibi 💗
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <h3>➕ Add New Task</h3>
+
+        <input
+            id="todoInput"
+            placeholder="What do you need to do?"
+        >
+
+        <textarea
+            id="todoDescription"
+            placeholder="Description (optional)...">
+        </textarea>
+
+        <div class="form-row">
+
+            <div>
+
+                <label for="todoDueDate">
+                    📅 Due Date
+                </label>
+
+                <input
+                    type="date"
+                    id="todoDueDate"
+                >
+
+            </div>
+
+            <div>
+
+                <label for="todoProgress">
+                    📊 Progress
+                </label>
+
+                <select id="todoProgress">
+
+                    <option value="0">
+                        0% — Not Started
+                    </option>
+
+                    <option value="25">
+                        25% — Started
+                    </option>
+
+                    <option value="50">
+                        50% — In Progress
+                    </option>
+
+                    <option value="75">
+                        75% — Almost Done
+                    </option>
+
+                    <option value="100">
+                        100% — Complete
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <label for="todoStatus">
+                Status
+            </label>
+
+            <select id="todoStatus">
+
+                <option>
+                    Not Started
+                </option>
+
+                <option>
+                    In Progress
+                </option>
+
+                <option>
+                    Waiting
+                </option>
+
+                <option>
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+        <button onclick="addTodo()">
+            Add Task
+        </button>
+
+    </div>
+
+
+    <div
+        id="todoList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CALENDAR
+===================================================== -->
+
+<section id="calendar" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>📅 Calendar</h2>
+
+        <p>Your life planning centre.</p>
+
+    </div>
+
+
+    <div class="calendar-grid">
+
+        <div class="calendar-card">
+
+            <h3>🗒️ Notes</h3>
+
+            <p>
+                Keep quick notes and thoughts.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('notes')">
+                Open Notes
+            </button>
+
+        </div>
+
+
+        <div class="calendar-card">
+
+            <h3>🌸 Period Tracker</h3>
+
+            <p>
+                Track when your period starts,
+                ends and your estimated next period.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('period')">
+                Open Tracker
+            </button>
+
+        </div>
+
+
+        <div class="calendar-card">
+
+            <h3>📌 Important Dates</h3>
+
+            <p>
+                Save birthdays, events
+                and important dates.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('events')">
+                Open Dates
+            </button>
+
+        </div>
+
+
+        <div class="calendar-card">
+
+            <h3>📆 Monthly Plans</h3>
+
+            <p>
+                Plan each month ahead.
+            </p>
+
+            <button
+                class="card-button"
+                onclick="showPage('monthly')">
+                Open Plans
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     NOTES
+===================================================== -->
+
+<section id="notes" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('calendar')">
+            ← Back Calendar
+        </button>
+
+        <h2>🗒️ Notes</h2>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <input
+            id="noteTitle"
+            placeholder="Note title"
+        >
+
+        <textarea
+            id="noteText"
+            placeholder="Write your note...">
+        </textarea>
+
+        <button onclick="saveNote()">
+            Save Note
+        </button>
+
+    </div>
+
+    <div
+        id="notesList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PERIOD TRACKER
+===================================================== -->
+
+<section id="period" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('calendar')">
+            ← Back Calendar
+        </button>
+
+        <h2>🌸 Period Tracker</h2>
+
+        <p>
+            Track your period dates and estimate
+            your next cycle.
+        </p>
+
+    </div>
+
+
+    <div class="form-card period-box">
+
+        <h3>🌸 Your Period</h3>
+
+        <div class="form-row">
+
+            <div>
+
+                <label for="periodStart">
+                    First Day / Start
+                </label>
+
+                <input
+                    type="date"
+                    id="periodStart"
+                >
+
+            </div>
+
+            <div>
+
+                <label for="periodEnd">
+                    Last Day / End
+                </label>
+
+                <input
+                    type="date"
+                    id="periodEnd"
+                >
+
+            </div>
+
+        </div>
+
+
+        <label for="cycleLength">
+            🔄 Average Cycle Length
+        </label>
+
+        <input
+            type="number"
+            id="cycleLength"
+            min="15"
+            max="60"
+            value="28"
+        >
+
+
+        <button onclick="savePeriod()">
+            Save Period
+        </button>
+
+
+        <div
+            id="periodStatus"
+            class="period-status">
+        </div>
+
+
+        <div
+            id="periodSummary"
+            class="period-summary">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     EVENTS
+===================================================== -->
+
+<section id="events" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('calendar')">
+            ← Back Calendar
+        </button>
+
+        <h2>📌 Important Dates & Events</h2>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <input
+            type="date"
+            id="eventDate"
+        >
+
+        <input
+            id="eventTitle"
+            placeholder="Event name"
+        >
+
+        <textarea
+            id="eventDescription"
+            placeholder="Details...">
+        </textarea>
+
+        <button onclick="saveEvent()">
+            Save Event
+        </button>
+
+    </div>
+
+
+    <div
+        id="eventsList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MONTHLY PLANS
+===================================================== -->
+
+<section id="monthly" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('calendar')">
+            ← Back Calendar
+        </button>
+
+        <h2>📆 Monthly Plans</h2>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <input
+            type="month"
+            id="planMonth"
+        >
+
+        <textarea
+            id="monthlyPlan"
+            placeholder="What are your plans this month?">
+        </textarea>
+
+        <button onclick="saveMonthlyPlan()">
+            Save Monthly Plan
+        </button>
+
+    </div>
+
+
+    <div
+        id="monthlyList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GOALS
+===================================================== -->
+
+<section id="goals" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>🎯 Goals</h2>
+
+        <p>
+            Dream it. Plan it. Do it. 💗
+        </p>
+
+    </div>
+
+
+    <div class="form-card">
+
+        <input
+            id="goalTitle"
+            placeholder="Your goal"
+        >
+
+        <textarea
+            id="goalDescription"
+            placeholder="How are you going to achieve it?">
+        </textarea>
+
+        <label for="goalDate">
+            Target date
+        </label>
+
+        <input
+            type="date"
+            id="goalDate"
+        >
+
+        <button onclick="saveGoal()">
+            Save Goal
+        </button>
+
+    </div>
+
+
+    <div
+        id="goalsList"
+        class="saved-list">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GALLERY
+===================================================== -->
+
+<section id="gallery" class="page-section">
+
+    <div class="section-header">
+
+        <button
+            class="back-button"
+            onclick="showPage('home')">
+            ← Back Home
+        </button>
+
+        <h2>🖼️ My Gallery / Content Storage</h2>
+
+        <p>
+            Your Bibi photo collection 💗
+        </p>
+
+    </div>
+
+
+    <div
+        class="gallery-grid"
+        id="galleryGrid">
+    </div>
+
+</section>
+
+
+</main>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://cnbfaxskzgkidbigrieu.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_46cMDS0yZ_gCkaPIh3bWVw_2CrUUD0U";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text ?? "";
+
+    return div.innerHTML;
+}
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(function() {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+}
+
+
+function formatDate(date) {
+
+    if (!date) return "Not set";
+
+    const d =
+        new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString(
+        undefined,
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+function showPage(pageId) {
+
+    const pages =
+        document.querySelectorAll(".page-section");
+
+    pages.forEach(function(page) {
+
+        page.classList.remove("active");
+
+    });
+
+    const selected =
+        document.getElementById(pageId);
+
+    if (selected) {
+
+        selected.classList.add("active");
+
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =====================================================
+   CONNECTION TEST
+===================================================== */
+
+async function testConnection() {
+
+    const status =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+    try {
+
+        const { error } =
+            await supabaseClient
+                .from("todos")
+                .select("id")
+                .limit(1);
+
+        if (error) throw error;
+
+        status.textContent =
+            "☁️ Supabase connected successfully";
+
+        status.classList.add("status-ok");
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "⚠️ Supabase connection/database permission problem";
+
+        status.classList.add("status-error");
+
+    }
+
+}
+
+
+/* =====================================================
+   BACKGROUND SLIDESHOW
+===================================================== */
+
+const backgroundImages = [];
+
+for (let i = 1; i <= 25; i++) {
+
+    backgroundImages.push(
+        `images/bibi (${i}).jpg`
+    );
+
+}
+
+let currentImage = 0;
+
+const bg1 =
+    document.getElementById("bg1");
+
+const bg2 =
+    document.getElementById("bg2");
+
+let activeBackground = bg1;
+
+
+function changeBackground() {
+
+    currentImage++;
+
+    if (
+        currentImage >=
+        backgroundImages.length
+    ) {
+        currentImage = 0;
+    }
+
+    const nextBackground =
+        activeBackground === bg1
+            ? bg2
+            : bg1;
+
+    nextBackground.src =
+        backgroundImages[currentImage];
+
+    nextBackground.classList.add("active");
+
+    activeBackground.classList.remove("active");
+
+    activeBackground =
+        nextBackground;
+}
+
+
+setInterval(
+    changeBackground,
+    5000
+);
+
+
+/* =====================================================
+   GALLERY
+===================================================== */
+
+function loadGallery() {
+
+    const gallery =
+        document.getElementById(
+            "galleryGrid"
+        );
+
+    gallery.innerHTML = "";
+
+    for (let i = 1; i <= 25; i++) {
+
+        const img =
+            document.createElement("img");
+
+        img.src =
+            `images/bibi (${i}).jpg`;
+
+        img.alt =
+            `Bibi photo ${i}`;
+
+        img.loading = "lazy";
+
+        img.onerror =
+            function() {
+                this.style.display = "none";
+            };
+
+        gallery.appendChild(img);
+    }
+
+}
+
+
+/* =====================================================
+   STREAK
+===================================================== */
+
+async function updateStreak() {
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("daily_streak")
+                .select("*")
+                .order("id", {
+                    ascending: false
+                })
+                .limit(1)
+                .maybeSingle();
+
+        if (error) throw error;
+
+        let streak = 1;
+
+        if (data) {
+
+            const previous =
+                new Date(
+                    data.last_visit +
+                    "T00:00:00"
+                );
+
+            const current =
+                new Date(
+                    today +
+                    "T00:00:00"
+                );
+
+            const difference =
+                Math.floor(
+                    (
+                        current - previous
+                    ) /
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    )
+                );
+
+            streak =
+                Number(
+                    data.streak_count || 0
+                );
+
+            if (difference === 1) {
+
+                streak++;
+
+            } else if (
+                difference > 1
+            ) {
+
+                streak = 1;
+
+            } else if (
+                difference < 0
+            ) {
+
+                streak = 1;
+
+            }
+
+            const { error: updateError } =
+                await supabaseClient
+                    .from("daily_streak")
+                    .update({
+                        streak_count: streak,
+                        last_visit: today
+                    })
+                    .eq("id", data.id);
+
+            if (updateError)
+                throw updateError;
+
+        } else {
+
+            const { error: insertError } =
+                await supabaseClient
+                    .from("daily_streak")
+                    .insert({
+                        streak_count: 1,
+                        last_visit: today
+                    });
+
+            if (insertError)
+                throw insertError;
+
+        }
+
+        document.getElementById(
+            "streakNumber"
+        ).textContent = streak;
+
+    } catch (error) {
+
+        console.error(
+            "Streak error:",
+            error
+        );
+
+        document.getElementById(
+            "streakNumber"
+        ).textContent = "—";
+
+    }
+
+}
+
+
+/* =====================================================
+   BUSINESS
+===================================================== */
+
+async function saveBusinessIdea() {
+
+    const title =
+        document.getElementById(
+            "businessIdea"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "businessDescription"
+        ).value.trim();
+
+    if (!title) {
+
+        showToast(
+            "Please enter a business idea."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("business_ideas")
+            .insert({
+                title,
+                description
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save business idea."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "businessIdea"
+    ).value = "";
+
+    document.getElementById(
+        "businessDescription"
+    ).value = "";
+
+    showToast(
+        "Business idea saved 💗"
+    );
+
+    displayBusiness();
+
+}
+
+
+async function deleteBusiness(id) {
+
+    if (!confirm(
+        "Delete this business idea?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("business_ideas")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayBusiness();
+
+}
+
+
+async function displayBusiness() {
+
+    const list =
+        document.getElementById(
+            "businessList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("business_ideas")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load business ideas.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No business ideas yet 💗
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        💡 ${escapeHTML(item.title)}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(item.description)}
+                    </p>
+
+                    <div class="meta">
+                        ${formatDate(
+                            item.created_at
+                            ?.split("T")[0]
+                        )}
+                    </div>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteBusiness(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+async function saveContent() {
+
+    const title =
+        document.getElementById(
+            "contentTitle"
+        ).value.trim();
+
+    const idea =
+        document.getElementById(
+            "contentIdea"
+        ).value.trim();
+
+    const platform =
+        document.getElementById(
+            "contentPlatform"
+        ).value;
+
+    if (!title) {
+
+        showToast(
+            "Please enter a content title."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("content_ideas")
+            .insert({
+                title,
+                idea,
+                platform
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save content."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "contentTitle"
+    ).value = "";
+
+    document.getElementById(
+        "contentIdea"
+    ).value = "";
+
+    showToast(
+        "Content idea saved 📱"
+    );
+
+    displayContent();
+
+}
+
+
+async function deleteContent(id) {
+
+    if (!confirm(
+        "Delete this content idea?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("content_ideas")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayContent();
+
+}
+
+
+async function displayContent() {
+
+    const list =
+        document.getElementById(
+            "contentList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("content_ideas")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load content.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No content ideas yet 💗
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        📱 ${escapeHTML(item.title)}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(item.idea)}
+                    </p>
+
+                    <div class="meta">
+                        Platform:
+                        ${escapeHTML(item.platform)}
+                    </div>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteContent(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   TODO
+===================================================== */
+
+async function addTodo() {
+
+    const title =
+        document.getElementById(
+            "todoInput"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "todoDescription"
+        ).value.trim();
+
+    const dueDate =
+        document.getElementById(
+            "todoDueDate"
+        ).value || null;
+
+    const progress =
+        Number(
+            document.getElementById(
+                "todoProgress"
+            ).value
+        );
+
+    let status =
+        document.getElementById(
+            "todoStatus"
+        ).value;
+
+    if (!title) {
+
+        showToast(
+            "Please enter a task."
+        );
+
+        return;
+    }
+
+    if (progress === 100) {
+
+        status = "Completed";
+
+    } else if (
+        progress > 0 &&
+        status === "Not Started"
+    ) {
+
+        status = "In Progress";
+
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("todos")
+            .insert({
+                title,
+                description,
+                completed: progress === 100,
+                due_date: dueDate,
+                progress,
+                status
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save task."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "todoInput"
+    ).value = "";
+
+    document.getElementById(
+        "todoDescription"
+    ).value = "";
+
+    document.getElementById(
+        "todoDueDate"
+    ).value = "";
+
+    document.getElementById(
+        "todoProgress"
+    ).value = "0";
+
+    document.getElementById(
+        "todoStatus"
+    ).value = "Not Started";
+
+    showToast(
+        "Task added 📝"
+    );
+
+    displayTodos();
+
+}
+
+
+async function updateTodo(
+    id,
+    completed
+) {
+
+    const newCompleted =
+        !completed;
+
+    const progress =
+        newCompleted
+            ? 100
+            : 0;
+
+    const status =
+        newCompleted
+            ? "Completed"
+            : "Not Started";
+
+    const { error } =
+        await supabaseClient
+            .from("todos")
+            .update({
+                completed: newCompleted,
+                progress,
+                status
+            })
+            .eq("id", id);
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not update task."
+        );
+
+        return;
+    }
+
+    displayTodos();
+
+}
+
+
+async function deleteTodo(id) {
+
+    if (!confirm(
+        "Delete this task?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("todos")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not delete task."
+        );
+
+        return;
+    }
+
+    showToast(
+        "Task deleted."
+    );
+
+    displayTodos();
+
+}
+
+
+async function displayTodos() {
+
+    const list =
+        document.getElementById(
+            "todoList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("todos")
+            .select("*")
+            .order("completed", {
+                ascending: true
+            })
+            .order("due_date", {
+                ascending: true,
+                nullsFirst: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load tasks.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No tasks yet. Add your first one 💗
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            const progress =
+                Number(item.progress || 0);
+
+            const due =
+                item.due_date
+                    ? formatDate(item.due_date)
+                    : "No due date";
+
+            return `
+                <div class="todo-item">
+
+                    <div class="todo-top">
+
+                        <div>
+
+                            <div class="todo-title ${
+                                item.completed
+                                    ? "todo-completed"
+                                    : ""
+                            }">
+
+                                ${
+                                    item.completed
+                                        ? "✅"
+                                        : "⬜"
+                                }
+
+                                ${escapeHTML(
+                                    item.title
+                                )}
+
+                            </div>
+
+                            ${
+                                item.description
+                                    ? `
+                                    <p class="meta">
+                                        ${escapeHTML(
+                                            item.description
+                                        )}
+                                    </p>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="todo-meta">
+
+                        <span class="badge">
+                            📅 Due:
+                            ${escapeHTML(due)}
+                        </span>
+
+                        <span class="badge">
+                            📊
+                            ${progress}%
+                        </span>
+
+                        <span class="badge">
+                            ${escapeHTML(
+                                item.status ||
+                                "Not Started"
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-wrap">
+
+                        <div class="progress-bar">
+
+                            <div
+                                class="progress-fill"
+                                style="width:${progress}%">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="todo-actions">
+
+                        <button
+                            class="small-button"
+                            onclick="updateTodo(
+                                ${item.id},
+                                ${item.completed}
+                            )">
+
+                            ${
+                                item.completed
+                                    ? "↩️ Undo"
+                                    : "✅ Complete"
+                            }
+
+                        </button>
+
+                        <button
+                            class="delete-button small-button"
+                            onclick="deleteTodo(${item.id})">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   NOTES
+===================================================== */
+
+async function saveNote() {
+
+    const title =
+        document.getElementById(
+            "noteTitle"
+        ).value.trim();
+
+    const content =
+        document.getElementById(
+            "noteText"
+        ).value.trim();
+
+    if (!title && !content) {
+
+        showToast(
+            "Write something first."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("notes")
+            .insert({
+                title,
+                content
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save note."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "noteTitle"
+    ).value = "";
+
+    document.getElementById(
+        "noteText"
+    ).value = "";
+
+    showToast(
+        "Note saved 🗒️"
+    );
+
+    displayNotes();
+
+}
+
+
+async function deleteNote(id) {
+
+    if (!confirm(
+        "Delete this note?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("notes")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayNotes();
+
+}
+
+
+async function displayNotes() {
+
+    const list =
+        document.getElementById(
+            "notesList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("notes")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load notes.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No notes yet 💗
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        🗒️ ${escapeHTML(
+                            item.title
+                        )}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(
+                            item.content
+                        )}
+                    </p>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteNote(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   PERIOD TRACKER
+===================================================== */
+
+async function savePeriod() {
+
+    const startDate =
+        document.getElementById(
+            "periodStart"
+        ).value;
+
+    const endDate =
+        document.getElementById(
+            "periodEnd"
+        ).value;
+
+    const cycleLength =
+        Number(
+            document.getElementById(
+                "cycleLength"
+            ).value
+        );
+
+    if (!startDate) {
+
+        showToast(
+            "Please select the start date."
+        );
+
+        return;
+    }
+
+    if (
+        endDate &&
+        endDate < startDate
+    ) {
+
+        showToast(
+            "End date cannot be before start date."
+        );
+
+        return;
+    }
+
+    if (
+        !cycleLength ||
+        cycleLength < 15 ||
+        cycleLength > 60
+    ) {
+
+        showToast(
+            "Cycle length should be between 15 and 60 days."
+        );
+
+        return;
+    }
+
+    const nextDate =
+        addDays(
+            startDate,
+            cycleLength
+        );
+
+    /*
+       We keep one current tracker row.
+       This avoids needing a user_id.
+    */
+
+    const {
+        data: existing,
+        error: findError
+    } =
+        await supabaseClient
+            .from("period_tracker")
+            .select("id")
+            .order("id", {
+                ascending: false
+            })
+            .limit(1)
+            .maybeSingle();
+
+    if (findError) {
+
+        console.error(findError);
+
+        showToast(
+            "Could not check period tracker."
+        );
+
+        return;
+    }
+
+
+    let error;
+
+
+    if (existing) {
+
+        const result =
+            await supabaseClient
+                .from("period_tracker")
+                .update({
+                    period_date: startDate,
+                    end_date:
+                        endDate || null,
+                    cycle_length:
+                        cycleLength,
+                    next_period_date:
+                        nextDate
+                })
+                .eq(
+                    "id",
+                    existing.id
+                );
+
+        error = result.error;
+
+    } else {
+
+        const result =
+            await supabaseClient
+                .from("period_tracker")
+                .insert({
+                    period_date: startDate,
+                    end_date:
+                        endDate || null,
+                    cycle_length:
+                        cycleLength,
+                    next_period_date:
+                        nextDate
+                });
+
+        error = result.error;
+
+    }
+
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save period information."
+        );
+
+        return;
+    }
+
+
+    showToast(
+        "Period tracker updated 🌸"
+    );
+
+    displayPeriod();
+
+}
+
+
+function addDays(
+    dateString,
+    days
+) {
+
+    const date =
+        new Date(
+            dateString + "T00:00:00"
+        );
+
+    date.setDate(
+        date.getDate() + Number(days)
+    );
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+async function displayPeriod() {
+
+    const status =
+        document.getElementById(
+            "periodStatus"
+        );
+
+    const summary =
+        document.getElementById(
+            "periodSummary"
+        );
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("period_tracker")
+            .select("*")
+            .order("id", {
+                ascending: false
+            })
+            .limit(1)
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Could not load your period tracker.";
+
+        summary.innerHTML = "";
+
+        return;
+    }
+
+
+    if (!data) {
+
+        status.innerHTML =
+            "🌸 Add your period start and end dates above.";
+
+        summary.innerHTML = "";
+
+        return;
+    }
+
+
+    document.getElementById(
+        "periodStart"
+    ).value =
+        data.period_date || "";
+
+
+    document.getElementById(
+        "periodEnd"
+    ).value =
+        data.end_date || "";
+
+
+    document.getElementById(
+        "cycleLength"
+    ).value =
+        data.cycle_length || 28;
+
+
+    const nextDate =
+        data.next_period_date ||
+        addDays(
+            data.period_date,
+            data.cycle_length || 28
+        );
+
+
+    status.innerHTML = `
+        🌸 Your period started
+        <strong>
+            ${escapeHTML(
+                formatDate(data.period_date)
+            )}
+        </strong>
+        ${
+            data.end_date
+                ? `
+                and ended
+                <strong>
+                    ${escapeHTML(
+                        formatDate(data.end_date)
+                    )}
+                </strong>.
+                `
+                : ""
+        }
+
+        <br><br>
+
+        💗 Your estimated next period is
+        <strong>
+            ${escapeHTML(
+                formatDate(nextDate)
+            )}
+        </strong>.
+    `;
+
+
+    summary.innerHTML = `
+
+        <div class="period-stat">
+
+            🌸 Start
+
+            <strong>
+                ${escapeHTML(
+                    formatDate(
+                        data.period_date
+                    )
+                )}
+            </strong>
+
+        </div>
+
+
+        <div class="period-stat">
+
+            🩷 End
+
+            <strong>
+                ${
+                    data.end_date
+                        ? escapeHTML(
+                            formatDate(
+                                data.end_date
+                            )
+                        )
+                        : "Not entered"
+                }
+            </strong>
+
+        </div>
+
+
+        <div class="period-stat">
+
+            🔄 Next
+
+            <strong>
+                ${escapeHTML(
+                    formatDate(nextDate)
+                )}
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+async function saveEvent() {
+
+    const date =
+        document.getElementById(
+            "eventDate"
+        ).value;
+
+    const title =
+        document.getElementById(
+            "eventTitle"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "eventDescription"
+        ).value.trim();
+
+    if (!date || !title) {
+
+        showToast(
+            "Please add a date and title."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("events")
+            .insert({
+                event_date: date,
+                title,
+                description
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save event."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "eventDate"
+    ).value = "";
+
+    document.getElementById(
+        "eventTitle"
+    ).value = "";
+
+    document.getElementById(
+        "eventDescription"
+    ).value = "";
+
+    showToast(
+        "Event saved 📌"
+    );
+
+    displayEvents();
+
+}
+
+
+async function deleteEvent(id) {
+
+    if (!confirm(
+        "Delete this event?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("events")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayEvents();
+
+}
+
+
+async function displayEvents() {
+
+    const list =
+        document.getElementById(
+            "eventsList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("events")
+            .select("*")
+            .order("event_date", {
+                ascending: true
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load events.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No important dates yet 📌
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        📌 ${escapeHTML(
+                            item.title
+                        )}
+                    </h4>
+
+                    <p>
+                        📅 ${escapeHTML(
+                            formatDate(
+                                item.event_date
+                            )
+                        )}
+                    </p>
+
+                    <p>
+                        ${escapeHTML(
+                            item.description
+                        )}
+                    </p>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteEvent(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   MONTHLY PLANS
+===================================================== */
+
+async function saveMonthlyPlan() {
+
+    const month =
+        document.getElementById(
+            "planMonth"
+        ).value;
+
+    const plan =
+        document.getElementById(
+            "monthlyPlan"
+        ).value.trim();
+
+    if (!month || !plan) {
+
+        showToast(
+            "Please select a month and write a plan."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("monthly_plans")
+            .insert({
+                month,
+                plan
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save monthly plan."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "planMonth"
+    ).value = "";
+
+    document.getElementById(
+        "monthlyPlan"
+    ).value = "";
+
+    showToast(
+        "Monthly plan saved 📆"
+    );
+
+    displayMonthlyPlans();
+
+}
+
+
+async function deleteMonthlyPlan(id) {
+
+    if (!confirm(
+        "Delete this monthly plan?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("monthly_plans")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayMonthlyPlans();
+
+}
+
+
+async function displayMonthlyPlans() {
+
+    const list =
+        document.getElementById(
+            "monthlyList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("monthly_plans")
+            .select("*")
+            .order("month", {
+                ascending: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load monthly plans.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No monthly plans yet 📆
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        📆 ${escapeHTML(
+                            item.month
+                        )}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(
+                            item.plan
+                        )}
+                    </p>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteMonthlyPlan(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   GOALS
+===================================================== */
+
+async function saveGoal() {
+
+    const title =
+        document.getElementById(
+            "goalTitle"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "goalDescription"
+        ).value.trim();
+
+    const targetDate =
+        document.getElementById(
+            "goalDate"
+        ).value || null;
+
+    if (!title) {
+
+        showToast(
+            "Please enter a goal."
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("goals")
+            .insert({
+                title,
+                description,
+                target_date: targetDate,
+                completed: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not save goal."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "goalTitle"
+    ).value = "";
+
+    document.getElementById(
+        "goalDescription"
+    ).value = "";
+
+    document.getElementById(
+        "goalDate"
+    ).value = "";
+
+    showToast(
+        "Goal saved 🎯"
+    );
+
+    displayGoals();
+
+}
+
+
+async function toggleGoal(
+    id,
+    completed
+) {
+
+    const { error } =
+        await supabaseClient
+            .from("goals")
+            .update({
+                completed: !completed
+            })
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not update goal."
+        );
+
+        return;
+    }
+
+    displayGoals();
+
+}
+
+
+async function deleteGoal(id) {
+
+    if (!confirm(
+        "Delete this goal?"
+    )) return;
+
+    const { error } =
+        await supabaseClient
+            .from("goals")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        showToast(
+            "Could not delete."
+        );
+
+        return;
+    }
+
+    displayGoals();
+
+}
+
+
+async function displayGoals() {
+
+    const list =
+        document.getElementById(
+            "goalsList"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("goals")
+            .select("*")
+            .order("completed", {
+                ascending: true
+            })
+            .order("target_date", {
+                ascending: true,
+                nullsFirst: false
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Could not load goals.
+            </div>`;
+
+        return;
+    }
+
+    if (!data.length) {
+
+        list.innerHTML =
+            `<div class="empty">
+                No goals yet 🎯
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        data.map(function(item) {
+
+            return `
+                <div class="saved-item">
+
+                    <h4>
+                        ${
+                            item.completed
+                                ? "✅"
+                                : "🎯"
+                        }
+
+                        ${escapeHTML(
+                            item.title
+                        )}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(
+                            item.description
+                        )}
+                    </p>
+
+                    ${
+                        item.target_date
+                            ? `
+                            <div class="meta">
+                                Target:
+                                ${escapeHTML(
+                                    formatDate(
+                                        item.target_date
+                                    )
+                                )}
+                            </div>
+                            `
+                            : ""
+                    }
+
+                    <button
+                        class="small-button"
+                        onclick="toggleGoal(
+                            ${item.id},
+                            ${item.completed}
+                        )">
+
+                        ${
+                            item.completed
+                                ? "↩️ Reopen"
+                                : "✅ Complete"
+                        }
+
+                    </button>
+
+                    <button
+                        class="delete-button small-button"
+                        onclick="deleteGoal(${item.id})">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   STARTUP
+===================================================== */
+
+async function initializeApp() {
+
+    loadGallery();
+
+    await testConnection();
+
+    await updateStreak();
+
+    await displayBusiness();
+
+    await displayContent();
+
+    await displayTodos();
+
+    await displayNotes();
+
+    await displayPeriod();
+
+    await displayEvents();
+
+    await displayMonthlyPlans();
+
+    await displayGoals();
+
+}
+
+
+initializeApp();
+
+</script>
+
+</body>
+</html>
