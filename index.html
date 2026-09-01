@@ -558,21 +558,22 @@ label {
 
 <!-- =====================================================
      BACKGROUND IMAGES
-
-     IMPORTANT:
-     Images are in the ROOT of GitHub, NOT /images/
+     
+     These are in the ROOT of the GitHub repository.
+     The filenames are URL encoded because they contain
+     spaces and parentheses.
 ===================================================== -->
 
 <div class="background-slideshow">
 
     <img id="bg1"
          class="bg-slide active"
-         src="bibi (1).jpg"
+         src="./bibi%20%281%29.jpg"
          alt="">
 
     <img id="bg2"
          class="bg-slide"
-         src="bibi (2).jpg"
+         src="./bibi%20%282%29.jpg"
          alt="">
 
 </div>
@@ -621,11 +622,8 @@ label {
     <div class="hub-grid">
 
         <div class="hub-card">
-
             <div class="hub-icon">💼</div>
-
             <h3>Business</h3>
-
             <p>
                 Manage ideas, clients, money
                 and business growth.
@@ -636,7 +634,6 @@ label {
                 onclick="showPage('business')">
                 Open Business
             </button>
-
         </div>
 
 
@@ -765,49 +762,37 @@ label {
     <div class="business-grid">
 
         <div class="business-card">
-
             <h3>💡 Business Ideas</h3>
-
             <p>
                 Store ideas for businesses,
                 products and opportunities.
             </p>
-
         </div>
 
 
         <div class="business-card">
-
             <h3>👥 Clients</h3>
-
             <p>
                 Keep track of clients,
                 contacts and projects.
             </p>
-
         </div>
 
 
         <div class="business-card">
-
             <h3>💰 Money</h3>
-
             <p>
                 Track income and expenses.
             </p>
-
         </div>
 
 
         <div class="business-card">
-
             <h3>📈 Growth</h3>
-
             <p>
                 Record plans and strategies
                 for growing your business.
             </p>
-
         </div>
 
     </div>
@@ -834,8 +819,6 @@ label {
     <div id="businessList" class="saved-list"></div>
 
 
-    <!-- CLIENTS -->
-
     <div class="form-card">
 
         <h3>👥 Add Client</h3>
@@ -859,8 +842,6 @@ label {
     <div id="clientList" class="saved-list"></div>
 
 
-    <!-- MONEY -->
-
     <div class="form-card">
 
         <h3>💰 Add Money Record</h3>
@@ -876,10 +857,8 @@ label {
             placeholder="Amount">
 
         <select id="moneyType">
-
             <option value="income">Income</option>
             <option value="expense">Expense</option>
-
         </select>
 
         <button onclick="saveMoney()">
@@ -892,8 +871,6 @@ label {
 
     <div id="moneySummary" class="saved-list"></div>
 
-
-    <!-- GROWTH -->
 
     <div class="form-card">
 
@@ -1431,19 +1408,27 @@ function showPage(pageId) {
 
 
 /* =====================================================
-   BACKGROUND SLIDESHOW
-   IMPORTANT: ROOT PATHS
+   IMAGE LIST
+     
+   IMPORTANT:
+   These are the exact files that exist in the
+   GitHub repository shown earlier.
 ===================================================== */
 
 const backgroundImages = [];
 
-for (let i = 1; i <= 25; i++) {
+for (let i = 1; i <= 18; i++) {
 
     backgroundImages.push(
-        `bibi (${i}).jpg`
+        `./bibi%20%28${i}%29.jpg`
     );
 
 }
+
+
+/* =====================================================
+   BACKGROUND SLIDESHOW
+===================================================== */
 
 let currentImage = 0;
 
@@ -1455,28 +1440,60 @@ const bg2 =
 
 let activeBackground = bg1;
 
+
+/*
+    If an image does not exist, hide it rather than
+    allowing a broken image icon to appear.
+*/
+
+bg1.onerror = function() {
+    this.style.display = "none";
+};
+
+bg2.onerror = function() {
+    this.style.display = "none";
+};
+
+
 function changeBackground() {
 
     currentImage++;
 
-    if (currentImage >= backgroundImages.length) {
+    if (
+        currentImage >=
+        backgroundImages.length
+    ) {
         currentImage = 0;
     }
 
     const nextBackground =
-        activeBackground === bg1 ? bg2 : bg1;
+        activeBackground === bg1
+            ? bg2
+            : bg1;
 
     nextBackground.src =
         backgroundImages[currentImage];
+
+    nextBackground.style.display =
+        "block";
 
     nextBackground.classList.add("active");
 
     activeBackground.classList.remove("active");
 
-    activeBackground = nextBackground;
+    activeBackground =
+        nextBackground;
 }
 
-setInterval(changeBackground, 5000);
+
+/*
+    Change background every 5 seconds.
+*/
+
+setInterval(
+    changeBackground,
+    5000
+);
 
 
 /* =====================================================
@@ -1486,23 +1503,29 @@ setInterval(changeBackground, 5000);
 const gallery =
     document.getElementById("galleryGrid");
 
-for (let i = 1; i <= 25; i++) {
+
+for (let i = 1; i <= 18; i++) {
 
     const img =
         document.createElement("img");
 
-    /* ROOT PATH — NOT images/ */
+    /*
+        GitHub-safe path.
+    */
+
     img.src =
-        `bibi (${i}).jpg`;
+        `./bibi%20%28${i}%29.jpg`;
 
     img.alt =
         `Bibi photo ${i}`;
 
-    img.loading = "lazy";
+    img.loading =
+        "lazy";
 
-    img.onerror = function() {
-        this.style.display = "none";
-    };
+    img.onerror =
+        function() {
+            this.style.display = "none";
+        };
 
     gallery.appendChild(img);
 }
@@ -1550,8 +1573,6 @@ async function loadRows(table) {
 
 /* =====================================================
    BIBI DATA TABLE
-   Used for extra data where the existing tables
-   don't contain the required columns.
 ===================================================== */
 
 async function saveBibiData(type, data) {
@@ -1598,7 +1619,9 @@ async function loadBibiData(type) {
 async function updateStreak() {
 
     const today =
-        new Date().toISOString().split("T")[0];
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
     const { data, error } =
         await supabaseClient
@@ -1615,7 +1638,12 @@ async function updateStreak() {
     }
 
     let streak = 1;
-    let row = data && data.length ? data[0] : null;
+
+    let row =
+        data && data.length
+            ? data[0]
+            : null;
+
 
     if (row) {
 
@@ -1632,13 +1660,17 @@ async function updateStreak() {
             );
 
         streak =
-            parseInt(row.streak_count || 0);
+            parseInt(
+                row.streak_count || 0
+            );
+
 
         if (row.last_visit !== today) {
 
             if (difference === 1) {
                 streak++;
-            } else if (difference > 1) {
+            }
+            else if (difference > 1) {
                 streak = 1;
             }
 
@@ -1651,7 +1683,8 @@ async function updateStreak() {
                 .eq("id", row.id);
         }
 
-    } else {
+    }
+    else {
 
         const { data: newRow } =
             await supabaseClient
@@ -1664,13 +1697,16 @@ async function updateStreak() {
                 .single();
 
         if (newRow) {
-            streak = newRow.streak_count;
+            streak =
+                newRow.streak_count;
         }
     }
 
+
     document.getElementById(
         "streakNumber"
-    ).textContent = streak;
+    ).textContent =
+        streak;
 }
 
 
@@ -1718,7 +1754,8 @@ async function saveBusinessIdea() {
 
         displayBusiness();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "businessStatus",
@@ -1737,7 +1774,9 @@ async function displayBusiness() {
         );
 
     const data =
-        await loadRows("business_ideas");
+        await loadRows(
+            "business_ideas"
+        );
 
     list.innerHTML = "";
 
@@ -1745,13 +1784,24 @@ async function displayBusiness() {
 
         list.innerHTML += `
             <div class="saved-item">
-                <h4>💡 ${escapeHTML(item.title)}</h4>
 
-                <p>${escapeHTML(item.description || "")}</p>
+                <h4>
+                    💡
+                    ${escapeHTML(item.title)}
+                </h4>
+
+                <p>
+                    ${escapeHTML(
+                        item.description || ""
+                    )}
+                </p>
 
                 <small>
-                    ${formatDate(item.created_at)}
+                    ${formatDate(
+                        item.created_at
+                    )}
                 </small>
+
             </div>
         `;
 
@@ -1761,8 +1811,6 @@ async function displayBusiness() {
 
 /* =====================================================
    CLIENTS
-   Stored safely in bibi_data because there is
-   currently no public.clients table.
 ===================================================== */
 
 async function saveClient() {
@@ -1815,7 +1863,8 @@ async function saveClient() {
 
         displayClients();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "clientStatus",
@@ -1834,25 +1883,35 @@ async function displayClients() {
         );
 
     const rows =
-        await loadBibiData("client");
+        await loadBibiData(
+            "client"
+        );
 
     list.innerHTML = "";
 
     rows.forEach(function(row) {
 
-        const item = row.data || {};
+        const item =
+            row.data || {};
 
         list.innerHTML += `
             <div class="saved-item">
 
-                <h4>👥 ${escapeHTML(item.name)}</h4>
+                <h4>
+                    👥
+                    ${escapeHTML(item.name)}
+                </h4>
 
                 <p>
-                    ${escapeHTML(item.contact || "")}
+                    ${escapeHTML(
+                        item.contact || ""
+                    )}
                 </p>
 
                 <p>
-                    ${escapeHTML(item.project || "")}
+                    ${escapeHTML(
+                        item.project || ""
+                    )}
                 </p>
 
             </div>
@@ -1885,7 +1944,10 @@ async function saveMoney() {
             "moneyType"
         ).value;
 
-    if (!title || isNaN(amount)) return;
+    if (
+        !title ||
+        isNaN(amount)
+    ) return;
 
     try {
 
@@ -1914,7 +1976,8 @@ async function saveMoney() {
 
         displayMoney();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "moneyStatus",
@@ -1933,36 +1996,59 @@ async function displayMoney() {
         );
 
     const rows =
-        await loadBibiData("money");
+        await loadBibiData(
+            "money"
+        );
 
     let income = 0;
     let expenses = 0;
-
     let html = "";
+
 
     rows.forEach(function(row) {
 
-        const item = row.data || {};
+        const item =
+            row.data || {};
 
         const amount =
-            parseFloat(item.amount || 0);
+            parseFloat(
+                item.amount || 0
+            );
 
-        if (item.type === "income") {
+
+        if (
+            item.type ===
+            "income"
+        ) {
             income += amount;
-        } else {
+        }
+        else {
             expenses += amount;
         }
+
 
         html += `
             <div class="saved-item">
 
                 <h4>
-                    ${item.type === "income" ? "💚" : "🔴"}
-                    ${escapeHTML(item.title)}
+                    ${
+                        item.type === "income"
+                        ? "💚"
+                        : "🔴"
+                    }
+
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
-                    ${item.type === "income" ? "+" : "-"}
+                    ${
+                        item.type === "income"
+                        ? "+"
+                        : "-"
+                    }
+
                     ${amount.toFixed(2)}
                 </p>
 
@@ -1970,21 +2056,30 @@ async function displayMoney() {
         `;
     });
 
+
     const balance =
         income - expenses;
+
 
     list.innerHTML = `
         <div class="saved-item">
 
             <h4>💰 Money Summary</h4>
 
-            <p>💚 Income: ${income.toFixed(2)}</p>
+            <p>
+                💚 Income:
+                ${income.toFixed(2)}
+            </p>
 
-            <p>🔴 Expenses: ${expenses.toFixed(2)}</p>
+            <p>
+                🔴 Expenses:
+                ${expenses.toFixed(2)}
+            </p>
 
             <p>
                 <strong>
-                    💗 Balance: ${balance.toFixed(2)}
+                    💗 Balance:
+                    ${balance.toFixed(2)}
                 </strong>
             </p>
 
@@ -2039,7 +2134,8 @@ async function saveGrowth() {
 
         displayGrowth();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "growthStatus",
@@ -2058,21 +2154,29 @@ async function displayGrowth() {
         );
 
     const rows =
-        await loadBibiData("growth");
+        await loadBibiData(
+            "growth"
+        );
 
     list.innerHTML = "";
 
     rows.forEach(function(row) {
 
-        const item = row.data || {};
+        const item =
+            row.data || {};
 
         list.innerHTML += `
             <div class="saved-item">
 
-                <h4>📈 ${escapeHTML(item.title)}</h4>
+                <h4>
+                    📈
+                    ${escapeHTML(item.title)}
+                </h4>
 
                 <p>
-                    ${escapeHTML(item.description || "")}
+                    ${escapeHTML(
+                        item.description || ""
+                    )}
                 </p>
 
             </div>
@@ -2132,7 +2236,8 @@ async function saveContent() {
 
         displayContent();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "contentStatusMessage",
@@ -2151,7 +2256,9 @@ async function displayContent() {
         );
 
     const data =
-        await loadRows("content");
+        await loadRows(
+            "content"
+        );
 
     list.innerHTML = "";
 
@@ -2161,19 +2268,30 @@ async function displayContent() {
             <div class="saved-item">
 
                 <h4>
-                    📱 ${escapeHTML(item.title)}
+                    📱
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
-                    ${escapeHTML(item.description || "")}
+                    ${escapeHTML(
+                        item.description || ""
+                    )}
                 </p>
 
                 <small>
                     Platform:
-                    ${escapeHTML(item.platform || "")}
+                    ${escapeHTML(
+                        item.platform || ""
+                    )}
+
                     <br>
+
                     Status:
-                    ${escapeHTML(item.status || "")}
+                    ${escapeHTML(
+                        item.status || ""
+                    )}
                 </small>
 
             </div>
@@ -2210,29 +2328,24 @@ async function addTodo() {
 
     try {
 
-        /*
-         The current todos table doesn't have
-         due_date/progress columns.
-
-         Store the extra information in bibi_data
-         while keeping the task itself in todos.
-        */
-
         const inserted =
             await insertRow(
                 "todos",
                 {
                     title,
                     description: "",
-                    completed: progress === 100
+                    completed:
+                        progress === 100
                 }
             );
+
 
         const todoId =
             inserted &&
             inserted[0]
                 ? inserted[0].id
                 : null;
+
 
         await saveBibiData(
             "todo_details",
@@ -2242,6 +2355,7 @@ async function addTodo() {
                 progress
             }
         );
+
 
         document.getElementById(
             "todoInput"
@@ -2255,15 +2369,18 @@ async function addTodo() {
             "todoProgress"
         ).value = "0";
 
+
         setStatus(
             "todoStatusMessage",
             "Task saved 💗",
             true
         );
 
+
         displayTodos();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         setStatus(
             "todoStatusMessage",
@@ -2282,12 +2399,17 @@ async function displayTodos() {
         );
 
     const todos =
-        await loadRows("todos");
+        await loadRows(
+            "todos"
+        );
 
     const details =
-        await loadBibiData("todo_details");
+        await loadBibiData(
+            "todo_details"
+        );
 
     list.innerHTML = "";
+
 
     todos.forEach(function(item) {
 
@@ -2295,48 +2417,68 @@ async function displayTodos() {
             details.find(function(row) {
 
                 return row.data &&
-                    String(row.data.todo_id) ===
+                    String(
+                        row.data.todo_id
+                    ) ===
                     String(item.id);
 
             });
+
 
         const detail =
             detailRow
                 ? detailRow.data
                 : {};
 
+
         let progress =
             parseInt(
                 detail.progress || 0
             );
 
+
         if (item.completed) {
             progress = 100;
         }
 
+
         const due =
             detail.due_date
-                ? formatDateOnly(detail.due_date)
+                ? formatDateOnly(
+                    detail.due_date
+                )
                 : "No due date";
+
 
         list.innerHTML += `
             <div class="saved-item">
 
                 <h4>
-                    ${progress === 100 ? "✅" : "⬜"}
-                    ${escapeHTML(item.title)}
+                    ${
+                        progress === 100
+                        ? "✅"
+                        : "⬜"
+                    }
+
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
+
 
                 <p>
                     📅 Due:
                     ${escapeHTML(due)}
                 </p>
 
+
                 <div class="todo-progress">
 
                     <span class="todo-status">
-                        Progress: ${progress}%
+                        Progress:
+                        ${progress}%
                     </span>
+
 
                     <div class="progress-bar">
 
@@ -2348,6 +2490,7 @@ async function displayTodos() {
                     </div>
 
                 </div>
+
 
                 <div class="item-actions">
 
@@ -2384,16 +2527,24 @@ async function displayTodos() {
 }
 
 
-async function setTodoProgress(todoId, progress) {
+async function setTodoProgress(
+    todoId,
+    progress
+) {
 
     try {
 
         await supabaseClient
             .from("todos")
             .update({
-                completed: progress === 100
+                completed:
+                    progress === 100
             })
-            .eq("id", todoId);
+            .eq(
+                "id",
+                todoId
+            );
+
 
         await saveBibiData(
             "todo_details",
@@ -2404,9 +2555,11 @@ async function setTodoProgress(todoId, progress) {
             }
         );
 
+
         displayTodos();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         console.error(error);
 
@@ -2434,7 +2587,10 @@ async function saveNote() {
             "noteText"
         ).value.trim();
 
-    if (!title && !content) return;
+    if (
+        !title &&
+        !content
+    ) return;
 
     try {
 
@@ -2456,7 +2612,8 @@ async function saveNote() {
 
         displayNotes();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         alert(
             "Could not save note: " +
@@ -2474,9 +2631,12 @@ async function displayNotes() {
         );
 
     const data =
-        await loadRows("notes");
+        await loadRows(
+            "notes"
+        );
 
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
@@ -2484,11 +2644,16 @@ async function displayNotes() {
             <div class="saved-item">
 
                 <h4>
-                    🗒️ ${escapeHTML(item.title)}
+                    🗒️
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
-                    ${escapeHTML(item.content || "")}
+                    ${escapeHTML(
+                        item.content || ""
+                    )}
                 </p>
 
             </div>
@@ -2521,6 +2686,7 @@ async function savePeriod() {
             ).value || 28
         );
 
+
     if (!startDate) {
 
         alert(
@@ -2530,39 +2696,42 @@ async function savePeriod() {
         return;
     }
 
+
     const nextDate =
         addDays(
             startDate,
             cycleLength
         );
 
-    try {
 
-        /*
-         We use period_tracker, which now has:
-         period_date
-         end_date
-         cycle_length
-         next_period_date
-        */
+    try {
 
         const { error } =
             await supabaseClient
-                .from("period_tracker")
+                .from(
+                    "period_tracker"
+                )
                 .insert({
-                    period_date: startDate,
-                    end_date: endDate || null,
-                    cycle_length: cycleLength,
-                    next_period_date: nextDate
+                    period_date:
+                        startDate,
+                    end_date:
+                        endDate || null,
+                    cycle_length:
+                        cycleLength,
+                    next_period_date:
+                        nextDate
                 });
+
 
         if (error) {
             throw error;
         }
 
+
         displayPeriod();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         alert(
             "Could not save period: " +
@@ -2584,14 +2753,21 @@ async function displayPeriod() {
             "periodInfo"
         );
 
+
     const { data, error } =
         await supabaseClient
-            .from("period_tracker")
+            .from(
+                "period_tracker"
+            )
             .select("*")
-            .order("id", {
-                ascending: false
-            })
+            .order(
+                "id",
+                {
+                    ascending: false
+                }
+            )
             .limit(1);
+
 
     if (error) {
 
@@ -2603,7 +2779,11 @@ async function displayPeriod() {
         return;
     }
 
-    if (!data || !data.length) {
+
+    if (
+        !data ||
+        !data.length
+    ) {
 
         status.textContent =
             "🌸 No period information saved yet.";
@@ -2613,8 +2793,10 @@ async function displayPeriod() {
         return;
     }
 
+
     const period =
         data[0];
+
 
     const start =
         period.period_date || "";
@@ -2627,18 +2809,28 @@ async function displayPeriod() {
 
     const next =
         period.next_period_date ||
-        addDays(start, cycle);
+        addDays(
+            start,
+            cycle
+        );
+
 
     status.innerHTML = `
-        🌸 <strong>Period saved</strong>
+        🌸
+        <strong>
+            Period saved
+        </strong>
     `;
+
 
     info.innerHTML = `
 
         <p>
             🌸 Started:
             <strong>
-                ${escapeHTML(formatDateOnly(start))}
+                ${escapeHTML(
+                    formatDateOnly(start)
+                )}
             </strong>
         </p>
 
@@ -2647,7 +2839,9 @@ async function displayPeriod() {
             <strong>
                 ${
                     end
-                    ? escapeHTML(formatDateOnly(end))
+                    ? escapeHTML(
+                        formatDateOnly(end)
+                    )
                     : "Not entered"
                 }
             </strong>
@@ -2663,7 +2857,9 @@ async function displayPeriod() {
         <p>
             📅 Next expected period:
             <strong>
-                ${escapeHTML(formatDateOnly(next))}
+                ${escapeHTML(
+                    formatDateOnly(next)
+                )}
             </strong>
         </p>
 
@@ -2692,7 +2888,12 @@ async function saveEvent() {
             "eventDescription"
         ).value.trim();
 
-    if (!date || !title) return;
+
+    if (
+        !date ||
+        !title
+    ) return;
+
 
     try {
 
@@ -2704,6 +2905,7 @@ async function saveEvent() {
                 description
             }
         );
+
 
         document.getElementById(
             "eventDate"
@@ -2717,9 +2919,11 @@ async function saveEvent() {
             "eventDescription"
         ).value = "";
 
+
         displayEvents();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         alert(
             "Could not save event: " +
@@ -2737,9 +2941,13 @@ async function displayEvents() {
         );
 
     const data =
-        await loadRows("events");
+        await loadRows(
+            "events"
+        );
+
 
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
@@ -2747,12 +2955,18 @@ async function displayEvents() {
             <div class="saved-item">
 
                 <h4>
-                    📌 ${escapeHTML(item.title)}
+                    📌
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
-                    📅 ${escapeHTML(
-                        formatDateOnly(item.event_date)
+                    📅
+                    ${escapeHTML(
+                        formatDateOnly(
+                            item.event_date
+                        )
                     )}
                 </p>
 
@@ -2785,7 +2999,12 @@ async function saveMonthlyPlan() {
             "monthlyPlan"
         ).value.trim();
 
-    if (!month || !plan) return;
+
+    if (
+        !month ||
+        !plan
+    ) return;
+
 
     try {
 
@@ -2797,6 +3016,7 @@ async function saveMonthlyPlan() {
             }
         );
 
+
         document.getElementById(
             "planMonth"
         ).value = "";
@@ -2805,9 +3025,11 @@ async function saveMonthlyPlan() {
             "monthlyPlan"
         ).value = "";
 
+
         displayMonthlyPlans();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         alert(
             "Could not save monthly plan: " +
@@ -2825,9 +3047,13 @@ async function displayMonthlyPlans() {
         );
 
     const data =
-        await loadRows("monthly_plans");
+        await loadRows(
+            "monthly_plans"
+        );
+
 
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
@@ -2835,11 +3061,16 @@ async function displayMonthlyPlans() {
             <div class="saved-item">
 
                 <h4>
-                    📆 ${escapeHTML(item.month)}
+                    📆
+                    ${escapeHTML(
+                        item.month
+                    )}
                 </h4>
 
                 <p>
-                    ${escapeHTML(item.plan)}
+                    ${escapeHTML(
+                        item.plan
+                    )}
                 </p>
 
             </div>
@@ -2870,7 +3101,9 @@ async function saveGoal() {
             "goalTargetDate"
         ).value;
 
+
     if (!title) return;
+
 
     try {
 
@@ -2885,6 +3118,7 @@ async function saveGoal() {
             }
         );
 
+
         document.getElementById(
             "goalTitle"
         ).value = "";
@@ -2897,9 +3131,11 @@ async function saveGoal() {
             "goalTargetDate"
         ).value = "";
 
+
         displayGoals();
 
-    } catch(error) {
+    }
+    catch(error) {
 
         alert(
             "Could not save goal: " +
@@ -2917,9 +3153,13 @@ async function displayGoals() {
         );
 
     const data =
-        await loadRows("goals");
+        await loadRows(
+            "goals"
+        );
+
 
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
@@ -2927,7 +3167,10 @@ async function displayGoals() {
             <div class="saved-item">
 
                 <h4>
-                    🎯 ${escapeHTML(item.title)}
+                    🎯
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
@@ -2939,14 +3182,14 @@ async function displayGoals() {
                 ${
                     item.target_date
                     ? `
-                    <small>
-                        🎯 Target:
-                        ${escapeHTML(
-                            formatDateOnly(
-                                item.target_date
-                            )
-                        )}
-                    </small>
+                        <small>
+                            🎯 Target:
+                            ${escapeHTML(
+                                formatDateOnly(
+                                    item.target_date
+                                )
+                            )}
+                        </small>
                     `
                     : ""
                 }
@@ -2965,7 +3208,9 @@ async function displayGoals() {
 function escapeHTML(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.textContent =
         text || "";
@@ -2999,39 +3244,57 @@ function formatDateOnly(dateString) {
     const parts =
         String(dateString).split("-");
 
-    if (parts.length !== 3) {
+
+    if (
+        parts.length !== 3
+    ) {
         return dateString;
     }
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    return `
+        ${parts[2]}/${parts[1]}/${parts[0]}
+    `;
 }
 
 
-function addDays(dateString, days) {
+function addDays(
+    dateString,
+    days
+) {
 
     const date =
         new Date(
-            dateString + "T00:00:00"
+            dateString +
+            "T00:00:00"
         );
 
+
     date.setDate(
-        date.getDate() + Number(days)
+        date.getDate() +
+        Number(days)
     );
+
 
     const year =
         date.getFullYear();
+
 
     const month =
         String(
             date.getMonth() + 1
         ).padStart(2, "0");
 
+
     const day =
         String(
             date.getDate()
         ).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+
+    return `
+        ${year}-${month}-${day}
+    `;
 }
 
 
@@ -3046,14 +3309,21 @@ function setStatus(
             elementId
         );
 
+
     if (!element) return;
+
 
     element.textContent =
         message;
 
+
     element.className =
         "status " +
-        (success ? "success" : "error");
+        (
+            success
+                ? "success"
+                : "error"
+        );
 }
 
 
@@ -3086,7 +3356,6 @@ async function loadEverything() {
     await displayMonthlyPlans();
 
     await displayGoals();
-
 }
 
 
