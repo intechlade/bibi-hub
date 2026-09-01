@@ -6,6 +6,7 @@
 
 <title>The Bibi Hub 💗</title>
 
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -62,7 +63,7 @@ body {
     background:
         linear-gradient(
             rgba(0,0,0,.45),
-            rgba(0,0,0,.75)
+            rgba(0,0,0,.72)
         );
     z-index: -9;
     pointer-events: none;
@@ -77,7 +78,7 @@ header {
     z-index: 2;
     text-align: center;
     padding: 35px 20px 25px;
-    background: rgba(0,0,0,.72);
+    background: rgba(0,0,0,.70);
     border-bottom: 1px solid rgba(255,20,147,.35);
 }
 
@@ -90,28 +91,6 @@ header h1 {
 header p {
     margin-top: 8px;
     color: #eee;
-}
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-#connectionStatus {
-    margin: 12px auto 0;
-    max-width: 600px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: .85rem;
-    background: rgba(255,20,147,.08);
-    color: #ffb6d9;
-}
-
-.status-ok {
-    color: #8cffc1 !important;
-}
-
-.status-error {
-    color: #ff8c9c !important;
 }
 
 /* =====================================================
@@ -141,7 +120,7 @@ main {
 }
 
 /* =====================================================
-   HOME
+   WELCOME
 ===================================================== */
 
 .welcome {
@@ -214,22 +193,14 @@ main {
     margin-bottom: 12px;
 }
 
-.hub-card h3,
-.business-card h3,
-.content-card h3,
-.goal-card h3,
-.calendar-card h3 {
+.hub-card h3 {
     color: #ff1493;
     margin-bottom: 10px;
 }
 
-.hub-card p,
-.business-card p,
-.content-card p,
-.goal-card p,
-.calendar-card p {
+.hub-card p {
     color: #ccc;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 /* =====================================================
@@ -257,31 +228,18 @@ button:hover {
     margin-top: 18px;
 }
 
-.back-button {
-    background: #111;
-    color: #ff1493;
-    border: 1px solid #ff1493;
-}
-
-.back-button:hover {
-    background: #ff1493;
-    color: white;
+.small-button {
+    padding: 8px 12px;
+    font-size: .85rem;
 }
 
 .delete-button {
-    background: #3b101f;
-    color: #ff8fab;
-    margin-left: 8px;
+    background: #3a101f;
+    border: 1px solid #ff1493;
 }
 
 .delete-button:hover {
-    background: #b0004e;
-    color: white;
-}
-
-.small-button {
-    padding: 8px 12px;
-    font-size: .8rem;
+    background: #ff1493;
 }
 
 /* =====================================================
@@ -307,6 +265,17 @@ button:hover {
     color: #ccc;
 }
 
+.back-button {
+    background: #111;
+    color: #ff1493;
+    border: 1px solid #ff1493;
+}
+
+.back-button:hover {
+    background: #ff1493;
+    color: white;
+}
+
 /* =====================================================
    CARDS
 ===================================================== */
@@ -320,6 +289,22 @@ button:hover {
     border-radius: 18px;
     padding: 25px;
     backdrop-filter: blur(5px);
+}
+
+.content-card h3,
+.business-card h3,
+.goal-card h3,
+.calendar-card h3 {
+    color: #ff1493;
+    margin-bottom: 10px;
+}
+
+.content-card p,
+.business-card p,
+.goal-card p,
+.calendar-card p {
+    color: #ccc;
+    line-height: 1.6;
 }
 
 /* =====================================================
@@ -337,23 +322,6 @@ button:hover {
 .form-card h3 {
     color: #ff1493;
     margin-bottom: 15px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.form-row.three {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-label {
-    display: block;
-    color: #ffb6d9;
-    margin-bottom: 6px;
-    font-size: .9rem;
 }
 
 input,
@@ -380,6 +348,13 @@ textarea {
     resize: vertical;
 }
 
+label {
+    display: block;
+    color: #ff69b4;
+    margin: 5px 0 7px;
+    font-weight: bold;
+}
+
 /* =====================================================
    SAVED ITEMS
 ===================================================== */
@@ -389,7 +364,7 @@ textarea {
 }
 
 .saved-item {
-    background: rgba(0,0,0,.82);
+    background: rgba(0,0,0,.8);
     border-left: 4px solid #ff1493;
     padding: 18px;
     margin-bottom: 12px;
@@ -398,7 +373,7 @@ textarea {
 
 .saved-item h4 {
     color: #ff1493;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
 }
 
 .saved-item p {
@@ -407,82 +382,49 @@ textarea {
     line-height: 1.5;
 }
 
-.meta {
+.saved-item small {
     color: #aaa;
-    font-size: .85rem;
+    display: block;
     margin-top: 8px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
 }
 
 /* =====================================================
    TODO
 ===================================================== */
 
-.todo-item {
-    background: rgba(0,0,0,.82);
-    border: 1px solid rgba(255,20,147,.25);
-    border-left: 4px solid #ff1493;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-}
-
-.todo-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    align-items: flex-start;
-}
-
-.todo-title {
-    font-size: 1.1rem;
-    color: #fff;
-}
-
-.todo-completed {
-    text-decoration: line-through;
-    color: #888;
-}
-
-.todo-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.badge {
-    display: inline-block;
-    padding: 5px 9px;
-    border-radius: 20px;
-    background: #191919;
-    color: #ffb6d9;
-    font-size: .78rem;
-}
-
-.progress-wrap {
+.todo-progress {
     margin-top: 12px;
 }
 
 .progress-bar {
     width: 100%;
-    height: 9px;
+    height: 12px;
     background: #222;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
+    margin-top: 8px;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg,#ff1493,#ff69b4);
-    border-radius: 10px;
+    transition: width .3s;
 }
 
-.todo-actions {
-    margin-top: 12px;
+.todo-status {
+    color: #ff69b4;
+    font-weight: bold;
 }
 
 /* =====================================================
-   PERIOD TRACKER
+   PERIOD
 ===================================================== */
 
 .period-box {
@@ -490,31 +432,34 @@ textarea {
 }
 
 .period-status {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: #ff69b4;
     margin: 15px 0;
-    line-height: 1.7;
+    line-height: 1.8;
 }
 
-.period-summary {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 15px;
+.period-info {
+    background: rgba(255,20,147,.08);
+    border: 1px solid rgba(255,20,147,.3);
+    border-radius: 15px;
+    padding: 20px;
     margin-top: 20px;
 }
 
-.period-stat {
-    padding: 20px;
-    background: rgba(255,20,147,.08);
-    border: 1px solid rgba(255,20,147,.25);
-    border-radius: 15px;
+/* =====================================================
+   CALENDAR
+===================================================== */
+
+.calendar-list {
+    margin-top: 20px;
 }
 
-.period-stat strong {
-    display: block;
-    color: #ff1493;
-    font-size: 1.15rem;
-    margin-top: 5px;
+.event {
+    background: rgba(0,0,0,.8);
+    border-left: 4px solid #ff1493;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 12px;
 }
 
 /* =====================================================
@@ -534,6 +479,7 @@ textarea {
     border-radius: 15px;
     border: 2px solid rgba(255,20,147,.35);
     transition: .3s ease;
+    cursor: pointer;
 }
 
 .gallery-grid img:hover {
@@ -542,40 +488,21 @@ textarea {
 }
 
 /* =====================================================
-   EMPTY
+   STATUS
 ===================================================== */
 
-.empty {
-    text-align: center;
-    color: #888;
-    padding: 30px;
-    background: rgba(0,0,0,.5);
-    border-radius: 15px;
+.status {
+    margin-top: 12px;
+    color: #aaa;
+    min-height: 20px;
 }
 
-/* =====================================================
-   TOAST
-===================================================== */
-
-#toast {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    z-index: 100;
-    background: #ff1493;
-    color: white;
-    padding: 14px 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255,20,147,.4);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-    transition: .3s ease;
+.success {
+    color: #7dffb2;
 }
 
-#toast.show {
-    opacity: 1;
-    transform: translateY(0);
+.error {
+    color: #ff7373;
 }
 
 /* =====================================================
@@ -608,9 +535,7 @@ textarea {
     .content-grid,
     .business-grid,
     .goals-grid,
-    .calendar-grid,
-    .form-row,
-    .form-row.three {
+    .calendar-grid {
         grid-template-columns: 1fr;
     }
 
@@ -620,14 +545,6 @@ textarea {
 
     .gallery-grid img {
         height: 160px;
-    }
-
-    .period-summary {
-        grid-template-columns: 1fr;
-    }
-
-    .todo-top {
-        flex-direction: column;
     }
 
     main {
@@ -640,24 +557,23 @@ textarea {
 <body>
 
 <!-- =====================================================
-     BACKGROUND
+     BACKGROUND IMAGES
+
+     IMPORTANT:
+     Images are in the ROOT of GitHub, NOT /images/
 ===================================================== -->
 
 <div class="background-slideshow">
 
-    <img
-        id="bg1"
-        class="bg-slide active"
-        src="images/bibi (1).jpg"
-        alt=""
-    >
+    <img id="bg1"
+         class="bg-slide active"
+         src="bibi (1).jpg"
+         alt="">
 
-    <img
-        id="bg2"
-        class="bg-slide"
-        src="images/bibi (2).jpg"
-        alt=""
-    >
+    <img id="bg2"
+         class="bg-slide"
+         src="bibi (2).jpg"
+         alt="">
 
 </div>
 
@@ -672,13 +588,7 @@ textarea {
 
     <h1>🏠 THE BIBI HUB</h1>
 
-    <p>
-        Your personal space for business, life, goals & creativity 💗
-    </p>
-
-    <div id="connectionStatus">
-        Connecting to your Bibi Hub...
-    </div>
+    <p>Your personal space for business, life, goals & creativity 💗</p>
 
 </header>
 
@@ -695,20 +605,12 @@ textarea {
 
         <h2>Welcome back, Bibi 💗</h2>
 
-        <p>
-            Everything you need, all in one place.
-        </p>
+        <p>Everything you need, all in one place.</p>
 
         <div class="streak-box">
 
             🔥 Daily Streak:
-
-            <span
-                id="streakNumber"
-                class="streak-number">
-                1
-            </span>
-
+            <span id="streakNumber" class="streak-number">1</span>
             days
 
         </div>
@@ -725,8 +627,8 @@ textarea {
             <h3>Business</h3>
 
             <p>
-                Manage your ideas, clients,
-                money and business growth.
+                Manage ideas, clients, money
+                and business growth.
             </p>
 
             <button
@@ -765,8 +667,8 @@ textarea {
             <h3>To-Do List</h3>
 
             <p>
-                Track tasks, due dates,
-                progress and completion.
+                Keep track of everything
+                you need to get done.
             </p>
 
             <button
@@ -825,8 +727,7 @@ textarea {
             <h3>My Gallery</h3>
 
             <p>
-                Your personal content and
-                photo storage.
+                Your personal photo collection.
             </p>
 
             <button
@@ -850,9 +751,7 @@ textarea {
 
     <div class="section-header">
 
-        <button
-            class="back-button"
-            onclick="showPage('home')">
+        <button class="back-button" onclick="showPage('home')">
             ← Back Home
         </button>
 
@@ -894,8 +793,7 @@ textarea {
             <h3>💰 Money</h3>
 
             <p>
-                Track income, expenses
-                and business money.
+                Track income and expenses.
             </p>
 
         </div>
@@ -919,26 +817,105 @@ textarea {
 
         <h3>💡 Add Business Idea</h3>
 
-        <input
-            id="businessIdea"
-            placeholder="Business idea..."
-        >
+        <input id="businessIdea" placeholder="Business idea...">
 
         <textarea
             id="businessDescription"
-            placeholder="Tell me about it...">
-        </textarea>
+            placeholder="Tell me about it..."></textarea>
 
         <button onclick="saveBusinessIdea()">
             Save Business Idea
         </button>
 
+        <div id="businessStatus" class="status"></div>
+
     </div>
 
-    <div
-        id="businessList"
-        class="saved-list">
+    <div id="businessList" class="saved-list"></div>
+
+
+    <!-- CLIENTS -->
+
+    <div class="form-card">
+
+        <h3>👥 Add Client</h3>
+
+        <input id="clientName" placeholder="Client name">
+
+        <input id="clientContact" placeholder="Email / phone">
+
+        <textarea
+            id="clientProject"
+            placeholder="Project / notes"></textarea>
+
+        <button onclick="saveClient()">
+            Save Client
+        </button>
+
+        <div id="clientStatus" class="status"></div>
+
     </div>
+
+    <div id="clientList" class="saved-list"></div>
+
+
+    <!-- MONEY -->
+
+    <div class="form-card">
+
+        <h3>💰 Add Money Record</h3>
+
+        <input
+            id="moneyTitle"
+            placeholder="Income / expense description">
+
+        <input
+            id="moneyAmount"
+            type="number"
+            step="0.01"
+            placeholder="Amount">
+
+        <select id="moneyType">
+
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+
+        </select>
+
+        <button onclick="saveMoney()">
+            Save Money Record
+        </button>
+
+        <div id="moneyStatus" class="status"></div>
+
+    </div>
+
+    <div id="moneySummary" class="saved-list"></div>
+
+
+    <!-- GROWTH -->
+
+    <div class="form-card">
+
+        <h3>📈 Growth Plan</h3>
+
+        <input
+            id="growthTitle"
+            placeholder="Growth goal">
+
+        <textarea
+            id="growthDescription"
+            placeholder="What will you do to grow?"></textarea>
+
+        <button onclick="saveGrowth()">
+            Save Growth Plan
+        </button>
+
+        <div id="growthStatus" class="status"></div>
+
+    </div>
+
+    <div id="growthList" class="saved-list"></div>
 
 </section>
 
@@ -951,9 +928,7 @@ textarea {
 
     <div class="section-header">
 
-        <button
-            class="back-button"
-            onclick="showPage('home')">
+        <button class="back-button" onclick="showPage('home')">
             ← Back Home
         </button>
 
@@ -970,13 +945,11 @@ textarea {
 
         <input
             id="contentTitle"
-            placeholder="Content title"
-        >
+            placeholder="Content title">
 
         <textarea
             id="contentIdea"
-            placeholder="Content idea...">
-        </textarea>
+            placeholder="Content idea..."></textarea>
 
         <select id="contentPlatform">
 
@@ -988,16 +961,24 @@ textarea {
 
         </select>
 
+        <select id="contentStatus">
+
+            <option>Idea</option>
+            <option>Planned</option>
+            <option>In Progress</option>
+            <option>Posted</option>
+
+        </select>
+
         <button onclick="saveContent()">
             Save Content
         </button>
 
+        <div id="contentStatusMessage" class="status"></div>
+
     </div>
 
-    <div
-        id="contentList"
-        class="saved-list">
-    </div>
+    <div id="contentList" class="saved-list"></div>
 
 </section>
 
@@ -1010,123 +991,50 @@ textarea {
 
     <div class="section-header">
 
-        <button
-            class="back-button"
-            onclick="showPage('home')">
+        <button class="back-button" onclick="showPage('home')">
             ← Back Home
         </button>
 
         <h2>📝 To-Do List</h2>
 
-        <p>
-            Get things done, Bibi 💗
-        </p>
+        <p>Get things done, Bibi 💗</p>
 
     </div>
 
 
     <div class="form-card">
 
-        <h3>➕ Add New Task</h3>
-
         <input
             id="todoInput"
-            placeholder="What do you need to do?"
-        >
+            placeholder="What do you need to do?">
 
-        <textarea
-            id="todoDescription"
-            placeholder="Description (optional)...">
-        </textarea>
+        <label>Due Date</label>
 
-        <div class="form-row">
+        <input
+            id="todoDueDate"
+            type="date">
 
-            <div>
+        <label>Progress</label>
 
-                <label for="todoDueDate">
-                    📅 Due Date
-                </label>
+        <select id="todoProgress">
 
-                <input
-                    type="date"
-                    id="todoDueDate"
-                >
+            <option value="0">Not Started</option>
+            <option value="25">25%</option>
+            <option value="50">50%</option>
+            <option value="75">75%</option>
+            <option value="100">Completed</option>
 
-            </div>
-
-            <div>
-
-                <label for="todoProgress">
-                    📊 Progress
-                </label>
-
-                <select id="todoProgress">
-
-                    <option value="0">
-                        0% — Not Started
-                    </option>
-
-                    <option value="25">
-                        25% — Started
-                    </option>
-
-                    <option value="50">
-                        50% — In Progress
-                    </option>
-
-                    <option value="75">
-                        75% — Almost Done
-                    </option>
-
-                    <option value="100">
-                        100% — Complete
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <div>
-
-            <label for="todoStatus">
-                Status
-            </label>
-
-            <select id="todoStatus">
-
-                <option>
-                    Not Started
-                </option>
-
-                <option>
-                    In Progress
-                </option>
-
-                <option>
-                    Waiting
-                </option>
-
-                <option>
-                    Completed
-                </option>
-
-            </select>
-
-        </div>
+        </select>
 
         <button onclick="addTodo()">
             Add Task
         </button>
 
+        <div id="todoStatusMessage" class="status"></div>
+
     </div>
 
-
-    <div
-        id="todoList"
-        class="saved-list">
-    </div>
+    <div id="todoList" class="saved-list"></div>
 
 </section>
 
@@ -1139,9 +1047,7 @@ textarea {
 
     <div class="section-header">
 
-        <button
-            class="back-button"
-            onclick="showPage('home')">
+        <button class="back-button" onclick="showPage('home')">
             ← Back Home
         </button>
 
@@ -1158,9 +1064,7 @@ textarea {
 
             <h3>🗒️ Notes</h3>
 
-            <p>
-                Keep quick notes and thoughts.
-            </p>
+            <p>Keep quick notes and thoughts.</p>
 
             <button
                 class="card-button"
@@ -1175,10 +1079,7 @@ textarea {
 
             <h3>🌸 Period Tracker</h3>
 
-            <p>
-                Track when your period starts,
-                ends and your estimated next period.
-            </p>
+            <p>Track your cycle dates.</p>
 
             <button
                 class="card-button"
@@ -1193,10 +1094,7 @@ textarea {
 
             <h3>📌 Important Dates</h3>
 
-            <p>
-                Save birthdays, events
-                and important dates.
-            </p>
+            <p>Save birthdays, events and important dates.</p>
 
             <button
                 class="card-button"
@@ -1211,9 +1109,7 @@ textarea {
 
             <h3>📆 Monthly Plans</h3>
 
-            <p>
-                Plan each month ahead.
-            </p>
+            <p>Plan each month ahead.</p>
 
             <button
                 class="card-button"
@@ -1251,13 +1147,11 @@ textarea {
 
         <input
             id="noteTitle"
-            placeholder="Note title"
-        >
+            placeholder="Note title">
 
         <textarea
             id="noteText"
-            placeholder="Write your note...">
-        </textarea>
+            placeholder="Write your note..."></textarea>
 
         <button onclick="saveNote()">
             Save Note
@@ -1265,10 +1159,7 @@ textarea {
 
     </div>
 
-    <div
-        id="notesList"
-        class="saved-list">
-    </div>
+    <div id="notesList" class="saved-list"></div>
 
 </section>
 
@@ -1289,10 +1180,7 @@ textarea {
 
         <h2>🌸 Period Tracker</h2>
 
-        <p>
-            Track your period dates and estimate
-            your next cycle.
-        </p>
+        <p>Track your cycle dates privately.</p>
 
     </div>
 
@@ -1301,65 +1189,34 @@ textarea {
 
         <h3>🌸 Your Period</h3>
 
-        <div class="form-row">
+        <label>When did it start?</label>
 
-            <div>
+        <input
+            type="date"
+            id="periodStart">
 
-                <label for="periodStart">
-                    First Day / Start
-                </label>
+        <label>When did it end?</label>
 
-                <input
-                    type="date"
-                    id="periodStart"
-                >
+        <input
+            type="date"
+            id="periodEnd">
 
-            </div>
-
-            <div>
-
-                <label for="periodEnd">
-                    Last Day / End
-                </label>
-
-                <input
-                    type="date"
-                    id="periodEnd"
-                >
-
-            </div>
-
-        </div>
-
-
-        <label for="cycleLength">
-            🔄 Average Cycle Length
-        </label>
+        <label>Average cycle length</label>
 
         <input
             type="number"
             id="cycleLength"
-            min="15"
-            max="60"
             value="28"
-        >
-
+            min="1"
+            max="100">
 
         <button onclick="savePeriod()">
             Save Period
         </button>
 
+        <div id="periodStatus" class="period-status"></div>
 
-        <div
-            id="periodStatus"
-            class="period-status">
-        </div>
-
-
-        <div
-            id="periodSummary"
-            class="period-summary">
-        </div>
+        <div id="periodInfo" class="period-info"></div>
 
     </div>
 
@@ -1389,18 +1246,15 @@ textarea {
 
         <input
             type="date"
-            id="eventDate"
-        >
+            id="eventDate">
 
         <input
             id="eventTitle"
-            placeholder="Event name"
-        >
+            placeholder="Event name">
 
         <textarea
             id="eventDescription"
-            placeholder="Details...">
-        </textarea>
+            placeholder="Details..."></textarea>
 
         <button onclick="saveEvent()">
             Save Event
@@ -1408,11 +1262,7 @@ textarea {
 
     </div>
 
-
-    <div
-        id="eventsList"
-        class="saved-list">
-    </div>
+    <div id="eventsList" class="saved-list"></div>
 
 </section>
 
@@ -1440,13 +1290,11 @@ textarea {
 
         <input
             type="month"
-            id="planMonth"
-        >
+            id="planMonth">
 
         <textarea
             id="monthlyPlan"
-            placeholder="What are your plans this month?">
-        </textarea>
+            placeholder="What are your plans this month?"></textarea>
 
         <button onclick="saveMonthlyPlan()">
             Save Monthly Plan
@@ -1454,11 +1302,7 @@ textarea {
 
     </div>
 
-
-    <div
-        id="monthlyList"
-        class="saved-list">
-    </div>
+    <div id="monthlyList" class="saved-list"></div>
 
 </section>
 
@@ -1479,9 +1323,7 @@ textarea {
 
         <h2>🎯 Goals</h2>
 
-        <p>
-            Dream it. Plan it. Do it. 💗
-        </p>
+        <p>Dream it. Plan it. Do it. 💗</p>
 
     </div>
 
@@ -1490,22 +1332,17 @@ textarea {
 
         <input
             id="goalTitle"
-            placeholder="Your goal"
-        >
+            placeholder="Your goal">
 
         <textarea
             id="goalDescription"
-            placeholder="How are you going to achieve it?">
-        </textarea>
+            placeholder="How are you going to achieve it?"></textarea>
 
-        <label for="goalDate">
-            Target date
-        </label>
+        <label>Target Date</label>
 
         <input
             type="date"
-            id="goalDate"
-        >
+            id="goalTargetDate">
 
         <button onclick="saveGoal()">
             Save Goal
@@ -1513,11 +1350,7 @@ textarea {
 
     </div>
 
-
-    <div
-        id="goalsList"
-        class="saved-list">
-    </div>
+    <div id="goalsList" class="saved-list"></div>
 
 </section>
 
@@ -1536,19 +1369,14 @@ textarea {
             ← Back Home
         </button>
 
-        <h2>🖼️ My Gallery / Content Storage</h2>
+        <h2>🖼️ My Gallery</h2>
 
-        <p>
-            Your Bibi photo collection 💗
-        </p>
+        <p>Your Bibi photo collection 💗</p>
 
     </div>
 
 
-    <div
-        class="gallery-grid"
-        id="galleryGrid">
-    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
 
 </section>
 
@@ -1556,77 +1384,23 @@ textarea {
 </main>
 
 
-<div id="toast"></div>
-
-
 <script>
 
 /* =====================================================
-   SUPABASE
+   SUPABASE CONNECTION
 ===================================================== */
 
 const SUPABASE_URL =
     "https://cnbfaxskzgkidbigrieu.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
+const SUPABASE_KEY =
     "sb_publishable_46cMDS0yZ_gCkaPIh3bWVw_2CrUUD0U";
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_KEY
     );
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function escapeHTML(text) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        text ?? "";
-
-    return div.innerHTML;
-}
-
-
-function showToast(message) {
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    setTimeout(function() {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-}
-
-
-function formatDate(date) {
-
-    if (!date) return "Not set";
-
-    const d =
-        new Date(date + "T00:00:00");
-
-    return d.toLocaleDateString(
-        undefined,
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }
-    );
-}
 
 
 /* =====================================================
@@ -1639,18 +1413,14 @@ function showPage(pageId) {
         document.querySelectorAll(".page-section");
 
     pages.forEach(function(page) {
-
         page.classList.remove("active");
-
     });
 
     const selected =
         document.getElementById(pageId);
 
     if (selected) {
-
         selected.classList.add("active");
-
     }
 
     window.scrollTo({
@@ -1661,47 +1431,8 @@ function showPage(pageId) {
 
 
 /* =====================================================
-   CONNECTION TEST
-===================================================== */
-
-async function testConnection() {
-
-    const status =
-        document.getElementById(
-            "connectionStatus"
-        );
-
-    try {
-
-        const { error } =
-            await supabaseClient
-                .from("todos")
-                .select("id")
-                .limit(1);
-
-        if (error) throw error;
-
-        status.textContent =
-            "☁️ Supabase connected successfully";
-
-        status.classList.add("status-ok");
-
-    } catch (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "⚠️ Supabase connection/database permission problem";
-
-        status.classList.add("status-error");
-
-    }
-
-}
-
-
-/* =====================================================
    BACKGROUND SLIDESHOW
+   IMPORTANT: ROOT PATHS
 ===================================================== */
 
 const backgroundImages = [];
@@ -1709,7 +1440,7 @@ const backgroundImages = [];
 for (let i = 1; i <= 25; i++) {
 
     backgroundImages.push(
-        `images/bibi (${i}).jpg`
+        `bibi (${i}).jpg`
     );
 
 }
@@ -1724,22 +1455,16 @@ const bg2 =
 
 let activeBackground = bg1;
 
-
 function changeBackground() {
 
     currentImage++;
 
-    if (
-        currentImage >=
-        backgroundImages.length
-    ) {
+    if (currentImage >= backgroundImages.length) {
         currentImage = 0;
     }
 
     const nextBackground =
-        activeBackground === bg1
-            ? bg2
-            : bg1;
+        activeBackground === bg1 ? bg2 : bg1;
 
     nextBackground.src =
         backgroundImages[currentImage];
@@ -1748,180 +1473,209 @@ function changeBackground() {
 
     activeBackground.classList.remove("active");
 
-    activeBackground =
-        nextBackground;
+    activeBackground = nextBackground;
 }
 
-
-setInterval(
-    changeBackground,
-    5000
-);
+setInterval(changeBackground, 5000);
 
 
 /* =====================================================
    GALLERY
 ===================================================== */
 
-function loadGallery() {
+const gallery =
+    document.getElementById("galleryGrid");
 
-    const gallery =
-        document.getElementById(
-            "galleryGrid"
-        );
+for (let i = 1; i <= 25; i++) {
 
-    gallery.innerHTML = "";
+    const img =
+        document.createElement("img");
 
-    for (let i = 1; i <= 25; i++) {
+    /* ROOT PATH — NOT images/ */
+    img.src =
+        `bibi (${i}).jpg`;
 
-        const img =
-            document.createElement("img");
+    img.alt =
+        `Bibi photo ${i}`;
 
-        img.src =
-            `images/bibi (${i}).jpg`;
+    img.loading = "lazy";
 
-        img.alt =
-            `Bibi photo ${i}`;
+    img.onerror = function() {
+        this.style.display = "none";
+    };
 
-        img.loading = "lazy";
-
-        img.onerror =
-            function() {
-                this.style.display = "none";
-            };
-
-        gallery.appendChild(img);
-    }
-
+    gallery.appendChild(img);
 }
 
 
 /* =====================================================
-   STREAK
+   GENERIC SUPABASE HELPERS
+===================================================== */
+
+async function insertRow(table, row) {
+
+    const { data, error } =
+        await supabaseClient
+            .from(table)
+            .insert(row)
+            .select();
+
+    if (error) {
+        console.error(table, error);
+        throw error;
+    }
+
+    return data;
+}
+
+
+async function loadRows(table) {
+
+    const { data, error } =
+        await supabaseClient
+            .from(table)
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+        console.error(table, error);
+        return [];
+    }
+
+    return data || [];
+}
+
+
+/* =====================================================
+   BIBI DATA TABLE
+   Used for extra data where the existing tables
+   don't contain the required columns.
+===================================================== */
+
+async function saveBibiData(type, data) {
+
+    const { error } =
+        await supabaseClient
+            .from("bibi_data")
+            .insert({
+                data_type: type,
+                data: data
+            });
+
+    if (error) {
+        console.error("bibi_data:", error);
+        throw error;
+    }
+}
+
+
+async function loadBibiData(type) {
+
+    const { data, error } =
+        await supabaseClient
+            .from("bibi_data")
+            .select("*")
+            .eq("data_type", type)
+            .order("created_at", {
+                ascending: false
+            });
+
+    if (error) {
+        console.error("bibi_data:", error);
+        return [];
+    }
+
+    return data || [];
+}
+
+
+/* =====================================================
+   DAILY STREAK
 ===================================================== */
 
 async function updateStreak() {
 
     const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
+        new Date().toISOString().split("T")[0];
 
-    try {
+    const { data, error } =
+        await supabaseClient
+            .from("daily_streak")
+            .select("*")
+            .order("id", {
+                ascending: false
+            })
+            .limit(1);
 
-        const { data, error } =
-            await supabaseClient
-                .from("daily_streak")
-                .select("*")
-                .order("id", {
-                    ascending: false
-                })
-                .limit(1)
-                .maybeSingle();
-
-        if (error) throw error;
-
-        let streak = 1;
-
-        if (data) {
-
-            const previous =
-                new Date(
-                    data.last_visit +
-                    "T00:00:00"
-                );
-
-            const current =
-                new Date(
-                    today +
-                    "T00:00:00"
-                );
-
-            const difference =
-                Math.floor(
-                    (
-                        current - previous
-                    ) /
-                    (
-                        1000 *
-                        60 *
-                        60 *
-                        24
-                    )
-                );
-
-            streak =
-                Number(
-                    data.streak_count || 0
-                );
-
-            if (difference === 1) {
-
-                streak++;
-
-            } else if (
-                difference > 1
-            ) {
-
-                streak = 1;
-
-            } else if (
-                difference < 0
-            ) {
-
-                streak = 1;
-
-            }
-
-            const { error: updateError } =
-                await supabaseClient
-                    .from("daily_streak")
-                    .update({
-                        streak_count: streak,
-                        last_visit: today
-                    })
-                    .eq("id", data.id);
-
-            if (updateError)
-                throw updateError;
-
-        } else {
-
-            const { error: insertError } =
-                await supabaseClient
-                    .from("daily_streak")
-                    .insert({
-                        streak_count: 1,
-                        last_visit: today
-                    });
-
-            if (insertError)
-                throw insertError;
-
-        }
-
-        document.getElementById(
-            "streakNumber"
-        ).textContent = streak;
-
-    } catch (error) {
-
-        console.error(
-            "Streak error:",
-            error
-        );
-
-        document.getElementById(
-            "streakNumber"
-        ).textContent = "—";
-
+    if (error) {
+        console.error(error);
+        return;
     }
 
+    let streak = 1;
+    let row = data && data.length ? data[0] : null;
+
+    if (row) {
+
+        const previous =
+            new Date(row.last_visit);
+
+        const current =
+            new Date(today);
+
+        const difference =
+            Math.floor(
+                (current - previous) /
+                (1000 * 60 * 60 * 24)
+            );
+
+        streak =
+            parseInt(row.streak_count || 0);
+
+        if (row.last_visit !== today) {
+
+            if (difference === 1) {
+                streak++;
+            } else if (difference > 1) {
+                streak = 1;
+            }
+
+            await supabaseClient
+                .from("daily_streak")
+                .update({
+                    streak_count: streak,
+                    last_visit: today
+                })
+                .eq("id", row.id);
+        }
+
+    } else {
+
+        const { data: newRow } =
+            await supabaseClient
+                .from("daily_streak")
+                .insert({
+                    streak_count: 1,
+                    last_visit: today
+                })
+                .select()
+                .single();
+
+        if (newRow) {
+            streak = newRow.streak_count;
+        }
+    }
+
+    document.getElementById(
+        "streakNumber"
+    ).textContent = streak;
 }
 
 
 /* =====================================================
-   BUSINESS
+   BUSINESS IDEAS
 ===================================================== */
 
 async function saveBusinessIdea() {
@@ -1936,74 +1690,42 @@ async function saveBusinessIdea() {
             "businessDescription"
         ).value.trim();
 
-    if (!title) {
+    if (!title) return;
 
-        showToast(
-            "Please enter a business idea."
-        );
+    try {
 
-        return;
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("business_ideas")
-            .insert({
+        await insertRow(
+            "business_ideas",
+            {
                 title,
                 description
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save business idea."
+            }
         );
 
-        return;
-    }
+        document.getElementById(
+            "businessIdea"
+        ).value = "";
 
-    document.getElementById(
-        "businessIdea"
-    ).value = "";
+        document.getElementById(
+            "businessDescription"
+        ).value = "";
 
-    document.getElementById(
-        "businessDescription"
-    ).value = "";
-
-    showToast(
-        "Business idea saved 💗"
-    );
-
-    displayBusiness();
-
-}
-
-
-async function deleteBusiness(id) {
-
-    if (!confirm(
-        "Delete this business idea?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("business_ideas")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
+        setStatus(
+            "businessStatus",
+            "Saved successfully 💗",
+            true
         );
 
-        return;
+        displayBusiness();
+
+    } catch(error) {
+
+        setStatus(
+            "businessStatus",
+            error.message,
+            false
+        );
     }
-
-    displayBusiness();
-
 }
 
 
@@ -2014,68 +1736,349 @@ async function displayBusiness() {
             "businessList"
         );
 
-    const { data, error } =
-        await supabaseClient
-            .from("business_ideas")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+    const data =
+        await loadRows("business_ideas");
 
-    if (error) {
+    list.innerHTML = "";
 
-        console.error(error);
+    data.forEach(function(item) {
 
-        list.innerHTML =
-            `<div class="empty">
-                Could not load business ideas.
-            </div>`;
+        list.innerHTML += `
+            <div class="saved-item">
+                <h4>💡 ${escapeHTML(item.title)}</h4>
 
-        return;
+                <p>${escapeHTML(item.description || "")}</p>
+
+                <small>
+                    ${formatDate(item.created_at)}
+                </small>
+            </div>
+        `;
+
+    });
+}
+
+
+/* =====================================================
+   CLIENTS
+   Stored safely in bibi_data because there is
+   currently no public.clients table.
+===================================================== */
+
+async function saveClient() {
+
+    const name =
+        document.getElementById(
+            "clientName"
+        ).value.trim();
+
+    const contact =
+        document.getElementById(
+            "clientContact"
+        ).value.trim();
+
+    const project =
+        document.getElementById(
+            "clientProject"
+        ).value.trim();
+
+    if (!name) return;
+
+    try {
+
+        await saveBibiData(
+            "client",
+            {
+                name,
+                contact,
+                project
+            }
+        );
+
+        document.getElementById(
+            "clientName"
+        ).value = "";
+
+        document.getElementById(
+            "clientContact"
+        ).value = "";
+
+        document.getElementById(
+            "clientProject"
+        ).value = "";
+
+        setStatus(
+            "clientStatus",
+            "Client saved 💗",
+            true
+        );
+
+        displayClients();
+
+    } catch(error) {
+
+        setStatus(
+            "clientStatus",
+            error.message,
+            false
+        );
     }
+}
 
-    if (!data.length) {
 
-        list.innerHTML =
-            `<div class="empty">
-                No business ideas yet 💗
-            </div>`;
+async function displayClients() {
 
-        return;
+    const list =
+        document.getElementById(
+            "clientList"
+        );
+
+    const rows =
+        await loadBibiData("client");
+
+    list.innerHTML = "";
+
+    rows.forEach(function(row) {
+
+        const item = row.data || {};
+
+        list.innerHTML += `
+            <div class="saved-item">
+
+                <h4>👥 ${escapeHTML(item.name)}</h4>
+
+                <p>
+                    ${escapeHTML(item.contact || "")}
+                </p>
+
+                <p>
+                    ${escapeHTML(item.project || "")}
+                </p>
+
+            </div>
+        `;
+
+    });
+}
+
+
+/* =====================================================
+   MONEY
+===================================================== */
+
+async function saveMoney() {
+
+    const title =
+        document.getElementById(
+            "moneyTitle"
+        ).value.trim();
+
+    const amount =
+        parseFloat(
+            document.getElementById(
+                "moneyAmount"
+            ).value
+        );
+
+    const type =
+        document.getElementById(
+            "moneyType"
+        ).value;
+
+    if (!title || isNaN(amount)) return;
+
+    try {
+
+        await saveBibiData(
+            "money",
+            {
+                title,
+                amount,
+                type
+            }
+        );
+
+        document.getElementById(
+            "moneyTitle"
+        ).value = "";
+
+        document.getElementById(
+            "moneyAmount"
+        ).value = "";
+
+        setStatus(
+            "moneyStatus",
+            "Money record saved 💗",
+            true
+        );
+
+        displayMoney();
+
+    } catch(error) {
+
+        setStatus(
+            "moneyStatus",
+            error.message,
+            false
+        );
     }
+}
 
-    list.innerHTML =
-        data.map(function(item) {
 
-            return `
-                <div class="saved-item">
+async function displayMoney() {
 
-                    <h4>
-                        💡 ${escapeHTML(item.title)}
-                    </h4>
+    const list =
+        document.getElementById(
+            "moneySummary"
+        );
 
-                    <p>
-                        ${escapeHTML(item.description)}
-                    </p>
+    const rows =
+        await loadBibiData("money");
 
-                    <div class="meta">
-                        ${formatDate(
-                            item.created_at
-                            ?.split("T")[0]
-                        )}
-                    </div>
+    let income = 0;
+    let expenses = 0;
 
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteBusiness(${item.id})">
-                        Delete
-                    </button>
+    let html = "";
 
-                </div>
-            `;
+    rows.forEach(function(row) {
 
-        }).join("");
+        const item = row.data || {};
 
+        const amount =
+            parseFloat(item.amount || 0);
+
+        if (item.type === "income") {
+            income += amount;
+        } else {
+            expenses += amount;
+        }
+
+        html += `
+            <div class="saved-item">
+
+                <h4>
+                    ${item.type === "income" ? "💚" : "🔴"}
+                    ${escapeHTML(item.title)}
+                </h4>
+
+                <p>
+                    ${item.type === "income" ? "+" : "-"}
+                    ${amount.toFixed(2)}
+                </p>
+
+            </div>
+        `;
+    });
+
+    const balance =
+        income - expenses;
+
+    list.innerHTML = `
+        <div class="saved-item">
+
+            <h4>💰 Money Summary</h4>
+
+            <p>💚 Income: ${income.toFixed(2)}</p>
+
+            <p>🔴 Expenses: ${expenses.toFixed(2)}</p>
+
+            <p>
+                <strong>
+                    💗 Balance: ${balance.toFixed(2)}
+                </strong>
+            </p>
+
+        </div>
+
+        ${html}
+    `;
+}
+
+
+/* =====================================================
+   GROWTH
+===================================================== */
+
+async function saveGrowth() {
+
+    const title =
+        document.getElementById(
+            "growthTitle"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "growthDescription"
+        ).value.trim();
+
+    if (!title) return;
+
+    try {
+
+        await saveBibiData(
+            "growth",
+            {
+                title,
+                description
+            }
+        );
+
+        document.getElementById(
+            "growthTitle"
+        ).value = "";
+
+        document.getElementById(
+            "growthDescription"
+        ).value = "";
+
+        setStatus(
+            "growthStatus",
+            "Growth plan saved 💗",
+            true
+        );
+
+        displayGrowth();
+
+    } catch(error) {
+
+        setStatus(
+            "growthStatus",
+            error.message,
+            false
+        );
+    }
+}
+
+
+async function displayGrowth() {
+
+    const list =
+        document.getElementById(
+            "growthList"
+        );
+
+    const rows =
+        await loadBibiData("growth");
+
+    list.innerHTML = "";
+
+    rows.forEach(function(row) {
+
+        const item = row.data || {};
+
+        list.innerHTML += `
+            <div class="saved-item">
+
+                <h4>📈 ${escapeHTML(item.title)}</h4>
+
+                <p>
+                    ${escapeHTML(item.description || "")}
+                </p>
+
+            </div>
+        `;
+
+    });
 }
 
 
@@ -2090,7 +2093,7 @@ async function saveContent() {
             "contentTitle"
         ).value.trim();
 
-    const idea =
+    const description =
         document.getElementById(
             "contentIdea"
         ).value.trim();
@@ -2100,75 +2103,43 @@ async function saveContent() {
             "contentPlatform"
         ).value;
 
-    if (!title) {
+    const status =
+        document.getElementById(
+            "contentStatus"
+        ).value;
 
-        showToast(
-            "Please enter a content title."
-        );
+    if (!title) return;
 
-        return;
-    }
+    try {
 
-    const { error } =
-        await supabaseClient
-            .from("content_ideas")
-            .insert({
+        await insertRow(
+            "content",
+            {
                 title,
-                idea,
-                platform
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save content."
+                description,
+                platform,
+                status
+            }
         );
 
-        return;
-    }
+        document.getElementById(
+            "contentTitle"
+        ).value = "";
 
-    document.getElementById(
-        "contentTitle"
-    ).value = "";
+        document.getElementById(
+            "contentIdea"
+        ).value = "";
 
-    document.getElementById(
-        "contentIdea"
-    ).value = "";
+        displayContent();
 
-    showToast(
-        "Content idea saved 📱"
-    );
+    } catch(error) {
 
-    displayContent();
-
-}
-
-
-async function deleteContent(id) {
-
-    if (!confirm(
-        "Delete this content idea?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("content_ideas")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
+        setStatus(
+            "contentStatusMessage",
+            error.message,
+            false
         );
-
-        return;
     }
-
-    displayContent();
-
 }
 
 
@@ -2179,66 +2150,36 @@ async function displayContent() {
             "contentList"
         );
 
-    const { data, error } =
-        await supabaseClient
-            .from("content_ideas")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+    const data =
+        await loadRows("content");
 
-    if (error) {
+    list.innerHTML = "";
 
-        console.error(error);
+    data.forEach(function(item) {
 
-        list.innerHTML =
-            `<div class="empty">
-                Could not load content.
-            </div>`;
+        list.innerHTML += `
+            <div class="saved-item">
 
-        return;
-    }
+                <h4>
+                    📱 ${escapeHTML(item.title)}
+                </h4>
 
-    if (!data.length) {
+                <p>
+                    ${escapeHTML(item.description || "")}
+                </p>
 
-        list.innerHTML =
-            `<div class="empty">
-                No content ideas yet 💗
-            </div>`;
+                <small>
+                    Platform:
+                    ${escapeHTML(item.platform || "")}
+                    <br>
+                    Status:
+                    ${escapeHTML(item.status || "")}
+                </small>
 
-        return;
-    }
+            </div>
+        `;
 
-    list.innerHTML =
-        data.map(function(item) {
-
-            return `
-                <div class="saved-item">
-
-                    <h4>
-                        📱 ${escapeHTML(item.title)}
-                    </h4>
-
-                    <p>
-                        ${escapeHTML(item.idea)}
-                    </p>
-
-                    <div class="meta">
-                        Platform:
-                        ${escapeHTML(item.platform)}
-                    </div>
-
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteContent(${item.id})">
-                        Delete
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
-
+    });
 }
 
 
@@ -2253,175 +2194,83 @@ async function addTodo() {
             "todoInput"
         ).value.trim();
 
-    const description =
-        document.getElementById(
-            "todoDescription"
-        ).value.trim();
-
     const dueDate =
         document.getElementById(
             "todoDueDate"
-        ).value || null;
+        ).value;
 
     const progress =
-        Number(
+        parseInt(
             document.getElementById(
                 "todoProgress"
             ).value
         );
 
-    let status =
-        document.getElementById(
-            "todoStatus"
-        ).value;
+    if (!title) return;
 
-    if (!title) {
+    try {
 
-        showToast(
-            "Please enter a task."
-        );
+        /*
+         The current todos table doesn't have
+         due_date/progress columns.
 
-        return;
-    }
+         Store the extra information in bibi_data
+         while keeping the task itself in todos.
+        */
 
-    if (progress === 100) {
+        const inserted =
+            await insertRow(
+                "todos",
+                {
+                    title,
+                    description: "",
+                    completed: progress === 100
+                }
+            );
 
-        status = "Completed";
+        const todoId =
+            inserted &&
+            inserted[0]
+                ? inserted[0].id
+                : null;
 
-    } else if (
-        progress > 0 &&
-        status === "Not Started"
-    ) {
-
-        status = "In Progress";
-
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("todos")
-            .insert({
-                title,
-                description,
-                completed: progress === 100,
+        await saveBibiData(
+            "todo_details",
+            {
+                todo_id: todoId,
                 due_date: dueDate,
-                progress,
-                status
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save task."
+                progress
+            }
         );
 
-        return;
-    }
+        document.getElementById(
+            "todoInput"
+        ).value = "";
 
-    document.getElementById(
-        "todoInput"
-    ).value = "";
+        document.getElementById(
+            "todoDueDate"
+        ).value = "";
 
-    document.getElementById(
-        "todoDescription"
-    ).value = "";
+        document.getElementById(
+            "todoProgress"
+        ).value = "0";
 
-    document.getElementById(
-        "todoDueDate"
-    ).value = "";
-
-    document.getElementById(
-        "todoProgress"
-    ).value = "0";
-
-    document.getElementById(
-        "todoStatus"
-    ).value = "Not Started";
-
-    showToast(
-        "Task added 📝"
-    );
-
-    displayTodos();
-
-}
-
-
-async function updateTodo(
-    id,
-    completed
-) {
-
-    const newCompleted =
-        !completed;
-
-    const progress =
-        newCompleted
-            ? 100
-            : 0;
-
-    const status =
-        newCompleted
-            ? "Completed"
-            : "Not Started";
-
-    const { error } =
-        await supabaseClient
-            .from("todos")
-            .update({
-                completed: newCompleted,
-                progress,
-                status
-            })
-            .eq("id", id);
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not update task."
+        setStatus(
+            "todoStatusMessage",
+            "Task saved 💗",
+            true
         );
 
-        return;
-    }
+        displayTodos();
 
-    displayTodos();
+    } catch(error) {
 
-}
-
-
-async function deleteTodo(id) {
-
-    if (!confirm(
-        "Delete this task?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("todos")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not delete task."
+        setStatus(
+            "todoStatusMessage",
+            error.message,
+            false
         );
-
-        return;
     }
-
-    showToast(
-        "Task deleted."
-    );
-
-    displayTodos();
-
 }
 
 
@@ -2432,161 +2281,140 @@ async function displayTodos() {
             "todoList"
         );
 
-    const { data, error } =
-        await supabaseClient
-            .from("todos")
-            .select("*")
-            .order("completed", {
-                ascending: true
-            })
-            .order("due_date", {
-                ascending: true,
-                nullsFirst: false
+    const todos =
+        await loadRows("todos");
+
+    const details =
+        await loadBibiData("todo_details");
+
+    list.innerHTML = "";
+
+    todos.forEach(function(item) {
+
+        const detailRow =
+            details.find(function(row) {
+
+                return row.data &&
+                    String(row.data.todo_id) ===
+                    String(item.id);
+
             });
 
-    if (error) {
+        const detail =
+            detailRow
+                ? detailRow.data
+                : {};
 
-        console.error(error);
+        let progress =
+            parseInt(
+                detail.progress || 0
+            );
 
-        list.innerHTML =
-            `<div class="empty">
-                Could not load tasks.
-            </div>`;
+        if (item.completed) {
+            progress = 100;
+        }
 
-        return;
-    }
+        const due =
+            detail.due_date
+                ? formatDateOnly(detail.due_date)
+                : "No due date";
 
-    if (!data.length) {
+        list.innerHTML += `
+            <div class="saved-item">
 
-        list.innerHTML =
-            `<div class="empty">
-                No tasks yet. Add your first one 💗
-            </div>`;
+                <h4>
+                    ${progress === 100 ? "✅" : "⬜"}
+                    ${escapeHTML(item.title)}
+                </h4>
 
-        return;
-    }
+                <p>
+                    📅 Due:
+                    ${escapeHTML(due)}
+                </p>
 
-    list.innerHTML =
-        data.map(function(item) {
+                <div class="todo-progress">
 
-            const progress =
-                Number(item.progress || 0);
+                    <span class="todo-status">
+                        Progress: ${progress}%
+                    </span>
 
-            const due =
-                item.due_date
-                    ? formatDate(item.due_date)
-                    : "No due date";
+                    <div class="progress-bar">
 
-            return `
-                <div class="todo-item">
-
-                    <div class="todo-top">
-
-                        <div>
-
-                            <div class="todo-title ${
-                                item.completed
-                                    ? "todo-completed"
-                                    : ""
-                            }">
-
-                                ${
-                                    item.completed
-                                        ? "✅"
-                                        : "⬜"
-                                }
-
-                                ${escapeHTML(
-                                    item.title
-                                )}
-
-                            </div>
-
-                            ${
-                                item.description
-                                    ? `
-                                    <p class="meta">
-                                        ${escapeHTML(
-                                            item.description
-                                        )}
-                                    </p>
-                                    `
-                                    : ""
-                            }
-
+                        <div
+                            class="progress-fill"
+                            style="width:${progress}%">
                         </div>
-
-                    </div>
-
-
-                    <div class="todo-meta">
-
-                        <span class="badge">
-                            📅 Due:
-                            ${escapeHTML(due)}
-                        </span>
-
-                        <span class="badge">
-                            📊
-                            ${progress}%
-                        </span>
-
-                        <span class="badge">
-                            ${escapeHTML(
-                                item.status ||
-                                "Not Started"
-                            )}
-                        </span>
-
-                    </div>
-
-
-                    <div class="progress-wrap">
-
-                        <div class="progress-bar">
-
-                            <div
-                                class="progress-fill"
-                                style="width:${progress}%">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="todo-actions">
-
-                        <button
-                            class="small-button"
-                            onclick="updateTodo(
-                                ${item.id},
-                                ${item.completed}
-                            )">
-
-                            ${
-                                item.completed
-                                    ? "↩️ Undo"
-                                    : "✅ Complete"
-                            }
-
-                        </button>
-
-                        <button
-                            class="delete-button small-button"
-                            onclick="deleteTodo(${item.id})">
-
-                            Delete
-
-                        </button>
 
                     </div>
 
                 </div>
-            `;
 
-        }).join("");
+                <div class="item-actions">
 
+                    <button
+                        class="small-button"
+                        onclick="setTodoProgress(${item.id},25)">
+                        25%
+                    </button>
+
+                    <button
+                        class="small-button"
+                        onclick="setTodoProgress(${item.id},50)">
+                        50%
+                    </button>
+
+                    <button
+                        class="small-button"
+                        onclick="setTodoProgress(${item.id},75)">
+                        75%
+                    </button>
+
+                    <button
+                        class="small-button"
+                        onclick="setTodoProgress(${item.id},100)">
+                        Complete
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+    });
+}
+
+
+async function setTodoProgress(todoId, progress) {
+
+    try {
+
+        await supabaseClient
+            .from("todos")
+            .update({
+                completed: progress === 100
+            })
+            .eq("id", todoId);
+
+        await saveBibiData(
+            "todo_details",
+            {
+                todo_id: todoId,
+                progress: progress,
+                due_date: null
+            }
+        );
+
+        displayTodos();
+
+    } catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Could not update the task: " +
+            error.message
+        );
+    }
 }
 
 
@@ -2606,74 +2434,35 @@ async function saveNote() {
             "noteText"
         ).value.trim();
 
-    if (!title && !content) {
+    if (!title && !content) return;
 
-        showToast(
-            "Write something first."
-        );
+    try {
 
-        return;
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("notes")
-            .insert({
+        await insertRow(
+            "notes",
+            {
                 title,
                 content
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save note."
+            }
         );
 
-        return;
-    }
+        document.getElementById(
+            "noteTitle"
+        ).value = "";
 
-    document.getElementById(
-        "noteTitle"
-    ).value = "";
+        document.getElementById(
+            "noteText"
+        ).value = "";
 
-    document.getElementById(
-        "noteText"
-    ).value = "";
+        displayNotes();
 
-    showToast(
-        "Note saved 🗒️"
-    );
+    } catch(error) {
 
-    displayNotes();
-
-}
-
-
-async function deleteNote(id) {
-
-    if (!confirm(
-        "Delete this note?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("notes")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
+        alert(
+            "Could not save note: " +
+            error.message
         );
-
-        return;
     }
-
-    displayNotes();
-
 }
 
 
@@ -2684,65 +2473,28 @@ async function displayNotes() {
             "notesList"
         );
 
-    const { data, error } =
-        await supabaseClient
-            .from("notes")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+    const data =
+        await loadRows("notes");
 
-    if (error) {
+    list.innerHTML = "";
 
-        console.error(error);
+    data.forEach(function(item) {
 
-        list.innerHTML =
-            `<div class="empty">
-                Could not load notes.
-            </div>`;
+        list.innerHTML += `
+            <div class="saved-item">
 
-        return;
-    }
+                <h4>
+                    🗒️ ${escapeHTML(item.title)}
+                </h4>
 
-    if (!data.length) {
+                <p>
+                    ${escapeHTML(item.content || "")}
+                </p>
 
-        list.innerHTML =
-            `<div class="empty">
-                No notes yet 💗
-            </div>`;
+            </div>
+        `;
 
-        return;
-    }
-
-    list.innerHTML =
-        data.map(function(item) {
-
-            return `
-                <div class="saved-item">
-
-                    <h4>
-                        🗒️ ${escapeHTML(
-                            item.title
-                        )}
-                    </h4>
-
-                    <p>
-                        ${escapeHTML(
-                            item.content
-                        )}
-                    </p>
-
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteNote(${item.id})">
-                        Delete
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
-
+    });
 }
 
 
@@ -2763,41 +2515,16 @@ async function savePeriod() {
         ).value;
 
     const cycleLength =
-        Number(
+        parseInt(
             document.getElementById(
                 "cycleLength"
-            ).value
+            ).value || 28
         );
 
     if (!startDate) {
 
-        showToast(
-            "Please select the start date."
-        );
-
-        return;
-    }
-
-    if (
-        endDate &&
-        endDate < startDate
-    ) {
-
-        showToast(
-            "End date cannot be before start date."
-        );
-
-        return;
-    }
-
-    if (
-        !cycleLength ||
-        cycleLength < 15 ||
-        cycleLength > 60
-    ) {
-
-        showToast(
-            "Cycle length should be between 15 and 60 days."
+        alert(
+            "Please choose the start date."
         );
 
         return;
@@ -2809,105 +2536,478 @@ async function savePeriod() {
             cycleLength
         );
 
-    /*
-       We keep one current tracker row.
-       This avoids needing a user_id.
-    */
+    try {
 
-    const {
-        data: existing,
-        error: findError
-    } =
-        await supabaseClient
-            .from("period_tracker")
-            .select("id")
-            .order("id", {
-                ascending: false
-            })
-            .limit(1)
-            .maybeSingle();
+        /*
+         We use period_tracker, which now has:
+         period_date
+         end_date
+         cycle_length
+         next_period_date
+        */
 
-    if (findError) {
-
-        console.error(findError);
-
-        showToast(
-            "Could not check period tracker."
-        );
-
-        return;
-    }
-
-
-    let error;
-
-
-    if (existing) {
-
-        const result =
-            await supabaseClient
-                .from("period_tracker")
-                .update({
-                    period_date: startDate,
-                    end_date:
-                        endDate || null,
-                    cycle_length:
-                        cycleLength,
-                    next_period_date:
-                        nextDate
-                })
-                .eq(
-                    "id",
-                    existing.id
-                );
-
-        error = result.error;
-
-    } else {
-
-        const result =
+        const { error } =
             await supabaseClient
                 .from("period_tracker")
                 .insert({
                     period_date: startDate,
-                    end_date:
-                        endDate || null,
-                    cycle_length:
-                        cycleLength,
-                    next_period_date:
-                        nextDate
+                    end_date: endDate || null,
+                    cycle_length: cycleLength,
+                    next_period_date: nextDate
                 });
 
-        error = result.error;
+        if (error) {
+            throw error;
+        }
 
+        displayPeriod();
+
+    } catch(error) {
+
+        alert(
+            "Could not save period: " +
+            error.message
+        );
     }
+}
 
+
+async function displayPeriod() {
+
+    const status =
+        document.getElementById(
+            "periodStatus"
+        );
+
+    const info =
+        document.getElementById(
+            "periodInfo"
+        );
+
+    const { data, error } =
+        await supabaseClient
+            .from("period_tracker")
+            .select("*")
+            .order("id", {
+                ascending: false
+            })
+            .limit(1);
 
     if (error) {
 
-        console.error(error);
+        status.textContent =
+            "Could not load period data.";
 
-        showToast(
-            "Could not save period information."
-        );
+        console.error(error);
 
         return;
     }
 
+    if (!data || !data.length) {
 
-    showToast(
-        "Period tracker updated 🌸"
-    );
+        status.textContent =
+            "🌸 No period information saved yet.";
 
-    displayPeriod();
+        info.innerHTML = "";
 
+        return;
+    }
+
+    const period =
+        data[0];
+
+    const start =
+        period.period_date || "";
+
+    const end =
+        period.end_date || "";
+
+    const cycle =
+        period.cycle_length || 28;
+
+    const next =
+        period.next_period_date ||
+        addDays(start, cycle);
+
+    status.innerHTML = `
+        🌸 <strong>Period saved</strong>
+    `;
+
+    info.innerHTML = `
+
+        <p>
+            🌸 Started:
+            <strong>
+                ${escapeHTML(formatDateOnly(start))}
+            </strong>
+        </p>
+
+        <p>
+            🩷 Ended:
+            <strong>
+                ${
+                    end
+                    ? escapeHTML(formatDateOnly(end))
+                    : "Not entered"
+                }
+            </strong>
+        </p>
+
+        <p>
+            🔄 Cycle length:
+            <strong>
+                ${cycle} days
+            </strong>
+        </p>
+
+        <p>
+            📅 Next expected period:
+            <strong>
+                ${escapeHTML(formatDateOnly(next))}
+            </strong>
+        </p>
+
+    `;
 }
 
 
-function addDays(
-    dateString,
-    days
-) {
+/* =====================================================
+   EVENTS
+===================================================== */
+
+async function saveEvent() {
+
+    const date =
+        document.getElementById(
+            "eventDate"
+        ).value;
+
+    const title =
+        document.getElementById(
+            "eventTitle"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "eventDescription"
+        ).value.trim();
+
+    if (!date || !title) return;
+
+    try {
+
+        await insertRow(
+            "events",
+            {
+                event_date: date,
+                title,
+                description
+            }
+        );
+
+        document.getElementById(
+            "eventDate"
+        ).value = "";
+
+        document.getElementById(
+            "eventTitle"
+        ).value = "";
+
+        document.getElementById(
+            "eventDescription"
+        ).value = "";
+
+        displayEvents();
+
+    } catch(error) {
+
+        alert(
+            "Could not save event: " +
+            error.message
+        );
+    }
+}
+
+
+async function displayEvents() {
+
+    const list =
+        document.getElementById(
+            "eventsList"
+        );
+
+    const data =
+        await loadRows("events");
+
+    list.innerHTML = "";
+
+    data.forEach(function(item) {
+
+        list.innerHTML += `
+            <div class="saved-item">
+
+                <h4>
+                    📌 ${escapeHTML(item.title)}
+                </h4>
+
+                <p>
+                    📅 ${escapeHTML(
+                        formatDateOnly(item.event_date)
+                    )}
+                </p>
+
+                <p>
+                    ${escapeHTML(
+                        item.description || ""
+                    )}
+                </p>
+
+            </div>
+        `;
+
+    });
+}
+
+
+/* =====================================================
+   MONTHLY PLANS
+===================================================== */
+
+async function saveMonthlyPlan() {
+
+    const month =
+        document.getElementById(
+            "planMonth"
+        ).value;
+
+    const plan =
+        document.getElementById(
+            "monthlyPlan"
+        ).value.trim();
+
+    if (!month || !plan) return;
+
+    try {
+
+        await insertRow(
+            "monthly_plans",
+            {
+                month,
+                plan
+            }
+        );
+
+        document.getElementById(
+            "planMonth"
+        ).value = "";
+
+        document.getElementById(
+            "monthlyPlan"
+        ).value = "";
+
+        displayMonthlyPlans();
+
+    } catch(error) {
+
+        alert(
+            "Could not save monthly plan: " +
+            error.message
+        );
+    }
+}
+
+
+async function displayMonthlyPlans() {
+
+    const list =
+        document.getElementById(
+            "monthlyList"
+        );
+
+    const data =
+        await loadRows("monthly_plans");
+
+    list.innerHTML = "";
+
+    data.forEach(function(item) {
+
+        list.innerHTML += `
+            <div class="saved-item">
+
+                <h4>
+                    📆 ${escapeHTML(item.month)}
+                </h4>
+
+                <p>
+                    ${escapeHTML(item.plan)}
+                </p>
+
+            </div>
+        `;
+
+    });
+}
+
+
+/* =====================================================
+   GOALS
+===================================================== */
+
+async function saveGoal() {
+
+    const title =
+        document.getElementById(
+            "goalTitle"
+        ).value.trim();
+
+    const description =
+        document.getElementById(
+            "goalDescription"
+        ).value.trim();
+
+    const targetDate =
+        document.getElementById(
+            "goalTargetDate"
+        ).value;
+
+    if (!title) return;
+
+    try {
+
+        await insertRow(
+            "goals",
+            {
+                title,
+                description,
+                target_date:
+                    targetDate || null,
+                completed: false
+            }
+        );
+
+        document.getElementById(
+            "goalTitle"
+        ).value = "";
+
+        document.getElementById(
+            "goalDescription"
+        ).value = "";
+
+        document.getElementById(
+            "goalTargetDate"
+        ).value = "";
+
+        displayGoals();
+
+    } catch(error) {
+
+        alert(
+            "Could not save goal: " +
+            error.message
+        );
+    }
+}
+
+
+async function displayGoals() {
+
+    const list =
+        document.getElementById(
+            "goalsList"
+        );
+
+    const data =
+        await loadRows("goals");
+
+    list.innerHTML = "";
+
+    data.forEach(function(item) {
+
+        list.innerHTML += `
+            <div class="saved-item">
+
+                <h4>
+                    🎯 ${escapeHTML(item.title)}
+                </h4>
+
+                <p>
+                    ${escapeHTML(
+                        item.description || ""
+                    )}
+                </p>
+
+                ${
+                    item.target_date
+                    ? `
+                    <small>
+                        🎯 Target:
+                        ${escapeHTML(
+                            formatDateOnly(
+                                item.target_date
+                            )
+                        )}
+                    </small>
+                    `
+                    : ""
+                }
+
+            </div>
+        `;
+
+    });
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text || "";
+
+    return div.innerHTML;
+}
+
+
+function formatDate(dateString) {
+
+    if (!dateString) return "";
+
+    const date =
+        new Date(dateString);
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+    );
+}
+
+
+function formatDateOnly(dateString) {
+
+    if (!dateString) return "";
+
+    const parts =
+        String(dateString).split("-");
+
+    if (parts.length !== 3) {
+        return dateString;
+    }
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+
+function addDays(dateString, days) {
 
     const date =
         new Date(
@@ -2935,741 +3035,43 @@ function addDays(
 }
 
 
-async function displayPeriod() {
-
-    const status =
-        document.getElementById(
-            "periodStatus"
-        );
-
-    const summary =
-        document.getElementById(
-            "periodSummary"
-        );
-
-
-    const { data, error } =
-        await supabaseClient
-            .from("period_tracker")
-            .select("*")
-            .order("id", {
-                ascending: false
-            })
-            .limit(1)
-            .maybeSingle();
-
-
-    if (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "Could not load your period tracker.";
-
-        summary.innerHTML = "";
-
-        return;
-    }
-
-
-    if (!data) {
-
-        status.innerHTML =
-            "🌸 Add your period start and end dates above.";
-
-        summary.innerHTML = "";
-
-        return;
-    }
-
-
-    document.getElementById(
-        "periodStart"
-    ).value =
-        data.period_date || "";
-
-
-    document.getElementById(
-        "periodEnd"
-    ).value =
-        data.end_date || "";
-
-
-    document.getElementById(
-        "cycleLength"
-    ).value =
-        data.cycle_length || 28;
-
-
-    const nextDate =
-        data.next_period_date ||
-        addDays(
-            data.period_date,
-            data.cycle_length || 28
-        );
-
-
-    status.innerHTML = `
-        🌸 Your period started
-        <strong>
-            ${escapeHTML(
-                formatDate(data.period_date)
-            )}
-        </strong>
-        ${
-            data.end_date
-                ? `
-                and ended
-                <strong>
-                    ${escapeHTML(
-                        formatDate(data.end_date)
-                    )}
-                </strong>.
-                `
-                : ""
-        }
-
-        <br><br>
-
-        💗 Your estimated next period is
-        <strong>
-            ${escapeHTML(
-                formatDate(nextDate)
-            )}
-        </strong>.
-    `;
-
-
-    summary.innerHTML = `
-
-        <div class="period-stat">
-
-            🌸 Start
-
-            <strong>
-                ${escapeHTML(
-                    formatDate(
-                        data.period_date
-                    )
-                )}
-            </strong>
-
-        </div>
-
-
-        <div class="period-stat">
-
-            🩷 End
-
-            <strong>
-                ${
-                    data.end_date
-                        ? escapeHTML(
-                            formatDate(
-                                data.end_date
-                            )
-                        )
-                        : "Not entered"
-                }
-            </strong>
-
-        </div>
-
-
-        <div class="period-stat">
-
-            🔄 Next
-
-            <strong>
-                ${escapeHTML(
-                    formatDate(nextDate)
-                )}
-            </strong>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   EVENTS
-===================================================== */
-
-async function saveEvent() {
-
-    const date =
-        document.getElementById(
-            "eventDate"
-        ).value;
-
-    const title =
-        document.getElementById(
-            "eventTitle"
-        ).value.trim();
-
-    const description =
-        document.getElementById(
-            "eventDescription"
-        ).value.trim();
-
-    if (!date || !title) {
-
-        showToast(
-            "Please add a date and title."
-        );
-
-        return;
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("events")
-            .insert({
-                event_date: date,
-                title,
-                description
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save event."
-        );
-
-        return;
-    }
-
-    document.getElementById(
-        "eventDate"
-    ).value = "";
-
-    document.getElementById(
-        "eventTitle"
-    ).value = "";
-
-    document.getElementById(
-        "eventDescription"
-    ).value = "";
-
-    showToast(
-        "Event saved 📌"
-    );
-
-    displayEvents();
-
-}
-
-
-async function deleteEvent(id) {
-
-    if (!confirm(
-        "Delete this event?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("events")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
-        );
-
-        return;
-    }
-
-    displayEvents();
-
-}
-
-
-async function displayEvents() {
-
-    const list =
-        document.getElementById(
-            "eventsList"
-        );
-
-    const { data, error } =
-        await supabaseClient
-            .from("events")
-            .select("*")
-            .order("event_date", {
-                ascending: true
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        list.innerHTML =
-            `<div class="empty">
-                Could not load events.
-            </div>`;
-
-        return;
-    }
-
-    if (!data.length) {
-
-        list.innerHTML =
-            `<div class="empty">
-                No important dates yet 📌
-            </div>`;
-
-        return;
-    }
-
-    list.innerHTML =
-        data.map(function(item) {
-
-            return `
-                <div class="saved-item">
-
-                    <h4>
-                        📌 ${escapeHTML(
-                            item.title
-                        )}
-                    </h4>
-
-                    <p>
-                        📅 ${escapeHTML(
-                            formatDate(
-                                item.event_date
-                            )
-                        )}
-                    </p>
-
-                    <p>
-                        ${escapeHTML(
-                            item.description
-                        )}
-                    </p>
-
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteEvent(${item.id})">
-                        Delete
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   MONTHLY PLANS
-===================================================== */
-
-async function saveMonthlyPlan() {
-
-    const month =
-        document.getElementById(
-            "planMonth"
-        ).value;
-
-    const plan =
-        document.getElementById(
-            "monthlyPlan"
-        ).value.trim();
-
-    if (!month || !plan) {
-
-        showToast(
-            "Please select a month and write a plan."
-        );
-
-        return;
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("monthly_plans")
-            .insert({
-                month,
-                plan
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save monthly plan."
-        );
-
-        return;
-    }
-
-    document.getElementById(
-        "planMonth"
-    ).value = "";
-
-    document.getElementById(
-        "monthlyPlan"
-    ).value = "";
-
-    showToast(
-        "Monthly plan saved 📆"
-    );
-
-    displayMonthlyPlans();
-
-}
-
-
-async function deleteMonthlyPlan(id) {
-
-    if (!confirm(
-        "Delete this monthly plan?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("monthly_plans")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
-        );
-
-        return;
-    }
-
-    displayMonthlyPlans();
-
-}
-
-
-async function displayMonthlyPlans() {
-
-    const list =
-        document.getElementById(
-            "monthlyList"
-        );
-
-    const { data, error } =
-        await supabaseClient
-            .from("monthly_plans")
-            .select("*")
-            .order("month", {
-                ascending: false
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        list.innerHTML =
-            `<div class="empty">
-                Could not load monthly plans.
-            </div>`;
-
-        return;
-    }
-
-    if (!data.length) {
-
-        list.innerHTML =
-            `<div class="empty">
-                No monthly plans yet 📆
-            </div>`;
-
-        return;
-    }
-
-    list.innerHTML =
-        data.map(function(item) {
-
-            return `
-                <div class="saved-item">
-
-                    <h4>
-                        📆 ${escapeHTML(
-                            item.month
-                        )}
-                    </h4>
-
-                    <p>
-                        ${escapeHTML(
-                            item.plan
-                        )}
-                    </p>
-
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteMonthlyPlan(${item.id})">
-                        Delete
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   GOALS
-===================================================== */
-
-async function saveGoal() {
-
-    const title =
-        document.getElementById(
-            "goalTitle"
-        ).value.trim();
-
-    const description =
-        document.getElementById(
-            "goalDescription"
-        ).value.trim();
-
-    const targetDate =
-        document.getElementById(
-            "goalDate"
-        ).value || null;
-
-    if (!title) {
-
-        showToast(
-            "Please enter a goal."
-        );
-
-        return;
-    }
-
-    const { error } =
-        await supabaseClient
-            .from("goals")
-            .insert({
-                title,
-                description,
-                target_date: targetDate,
-                completed: false
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        showToast(
-            "Could not save goal."
-        );
-
-        return;
-    }
-
-    document.getElementById(
-        "goalTitle"
-    ).value = "";
-
-    document.getElementById(
-        "goalDescription"
-    ).value = "";
-
-    document.getElementById(
-        "goalDate"
-    ).value = "";
-
-    showToast(
-        "Goal saved 🎯"
-    );
-
-    displayGoals();
-
-}
-
-
-async function toggleGoal(
-    id,
-    completed
+function setStatus(
+    elementId,
+    message,
+    success
 ) {
 
-    const { error } =
-        await supabaseClient
-            .from("goals")
-            .update({
-                completed: !completed
-            })
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not update goal."
-        );
-
-        return;
-    }
-
-    displayGoals();
-
-}
-
-
-async function deleteGoal(id) {
-
-    if (!confirm(
-        "Delete this goal?"
-    )) return;
-
-    const { error } =
-        await supabaseClient
-            .from("goals")
-            .delete()
-            .eq("id", id);
-
-    if (error) {
-
-        showToast(
-            "Could not delete."
-        );
-
-        return;
-    }
-
-    displayGoals();
-
-}
-
-
-async function displayGoals() {
-
-    const list =
+    const element =
         document.getElementById(
-            "goalsList"
+            elementId
         );
 
-    const { data, error } =
-        await supabaseClient
-            .from("goals")
-            .select("*")
-            .order("completed", {
-                ascending: true
-            })
-            .order("target_date", {
-                ascending: true,
-                nullsFirst: false
-            });
+    if (!element) return;
 
-    if (error) {
+    element.textContent =
+        message;
 
-        console.error(error);
-
-        list.innerHTML =
-            `<div class="empty">
-                Could not load goals.
-            </div>`;
-
-        return;
-    }
-
-    if (!data.length) {
-
-        list.innerHTML =
-            `<div class="empty">
-                No goals yet 🎯
-            </div>`;
-
-        return;
-    }
-
-    list.innerHTML =
-        data.map(function(item) {
-
-            return `
-                <div class="saved-item">
-
-                    <h4>
-                        ${
-                            item.completed
-                                ? "✅"
-                                : "🎯"
-                        }
-
-                        ${escapeHTML(
-                            item.title
-                        )}
-                    </h4>
-
-                    <p>
-                        ${escapeHTML(
-                            item.description
-                        )}
-                    </p>
-
-                    ${
-                        item.target_date
-                            ? `
-                            <div class="meta">
-                                Target:
-                                ${escapeHTML(
-                                    formatDate(
-                                        item.target_date
-                                    )
-                                )}
-                            </div>
-                            `
-                            : ""
-                    }
-
-                    <button
-                        class="small-button"
-                        onclick="toggleGoal(
-                            ${item.id},
-                            ${item.completed}
-                        )">
-
-                        ${
-                            item.completed
-                                ? "↩️ Reopen"
-                                : "✅ Complete"
-                        }
-
-                    </button>
-
-                    <button
-                        class="delete-button small-button"
-                        onclick="deleteGoal(${item.id})">
-                        Delete
-                    </button>
-
-                </div>
-            `;
-
-        }).join("");
-
+    element.className =
+        "status " +
+        (success ? "success" : "error");
 }
 
 
 /* =====================================================
-   STARTUP
+   LOAD EVERYTHING
 ===================================================== */
 
-async function initializeApp() {
-
-    loadGallery();
-
-    await testConnection();
+async function loadEverything() {
 
     await updateStreak();
 
     await displayBusiness();
+
+    await displayClients();
+
+    await displayMoney();
+
+    await displayGrowth();
 
     await displayContent();
 
@@ -3688,7 +3090,11 @@ async function initializeApp() {
 }
 
 
-initializeApp();
+/* =====================================================
+   START APP
+===================================================== */
+
+loadEverything();
 
 </script>
 
