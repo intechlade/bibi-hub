@@ -1,629 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>The Bibi Hub 💗</title>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    min-height: 100vh;
-    background: #050505;
-    overflow-x: hidden;
-}
-
-/* =====================================================
-   BACKGROUND
-===================================================== */
-
-.background-slideshow {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: -10;
-    overflow: hidden;
-    background: #000;
-}
-
-.bg-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-    filter: brightness(38%);
-}
-
-.bg-slide.active {
-    opacity: 1;
-}
-
-.background-overlay {
-    position: fixed;
-    inset: 0;
-    background:
-        linear-gradient(
-            rgba(0,0,0,.45),
-            rgba(0,0,0,.72)
-        );
-    z-index: -9;
-    pointer-events: none;
-}
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-header {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 35px 20px 25px;
-    background: rgba(0,0,0,.70);
-    border-bottom: 1px solid rgba(255,20,147,.35);
-}
-
-header h1 {
-    color: #ff1493;
-    font-size: 2.8rem;
-    text-shadow: 0 0 20px rgba(255,20,147,.5);
-}
-
-header p {
-    margin-top: 8px;
-    color: #eee;
-}
-
-/* =====================================================
-   MAIN
-===================================================== */
-
-main {
-    position: relative;
-    z-index: 2;
-    width: 92%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 25px 0 80px;
-}
-
-/* =====================================================
-   PAGES
-===================================================== */
-
-.page-section {
-    display: none;
-    animation: fadeIn .4s ease;
-}
-
-.page-section.active {
-    display: block;
-}
-
-/* =====================================================
-   WELCOME
-===================================================== */
-
-.welcome {
-    text-align: center;
-    padding: 35px 20px;
-    margin-bottom: 25px;
-    background: rgba(0,0,0,.65);
-    border: 1px solid rgba(255,20,147,.35);
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
-}
-
-.welcome h2 {
-    color: #ff1493;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-.welcome p {
-    color: #ddd;
-}
-
-.streak-box {
-    display: inline-block;
-    margin-top: 18px;
-    padding: 12px 20px;
-    border: 2px solid #ff1493;
-    border-radius: 30px;
-    background: rgba(0,0,0,.7);
-    box-shadow: 0 0 20px rgba(255,20,147,.25);
-}
-
-.streak-number {
-    color: #ff1493;
-    font-weight: bold;
-}
-
-/* =====================================================
-   GRIDS
-===================================================== */
-
-.hub-grid,
-.content-grid,
-.business-grid,
-.goals-grid,
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 20px;
-}
-
-.hub-card {
-    padding: 30px;
-    min-height: 180px;
-    background: rgba(0,0,0,.72);
-    border: 2px solid rgba(255,20,147,.45);
-    border-radius: 20px;
-    backdrop-filter: blur(6px);
-    transition: .3s ease;
-}
-
-.hub-card:hover {
-    transform: translateY(-6px);
-    border-color: #ff1493;
-    box-shadow: 0 0 25px rgba(255,20,147,.3);
-}
-
-.hub-icon {
-    font-size: 2.5rem;
-    margin-bottom: 12px;
-}
-
-.hub-card h3 {
-    color: #ff1493;
-    margin-bottom: 10px;
-}
-
-.hub-card p {
-    color: #ccc;
-    line-height: 1.5;
-}
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-button {
-    border: none;
-    padding: 12px 20px;
-    border-radius: 12px;
-    background: #ff1493;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .25s ease;
-}
-
-button:hover {
-    background: #ff3ca5;
-    transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(255,20,147,.4);
-}
-
-.card-button {
-    margin-top: 18px;
-}
-
-.small-button {
-    padding: 8px 12px;
-    font-size: .85rem;
-}
-
-.delete-button {
-    background: #3a101f;
-    border: 1px solid #ff1493;
-}
-
-.delete-button:hover {
-    background: #ff1493;
-}
-
-/* =====================================================
-   SECTION HEADER
-===================================================== */
-
-.section-header {
-    background: rgba(0,0,0,.75);
-    border: 1px solid rgba(255,20,147,.35);
-    border-radius: 20px;
-    padding: 25px;
-    margin-bottom: 22px;
-    backdrop-filter: blur(6px);
-}
-
-.section-header h2 {
-    color: #ff1493;
-    font-size: 2rem;
-    margin: 20px 0 8px;
-}
-
-.section-header p {
-    color: #ccc;
-}
-
-.back-button {
-    background: #111;
-    color: #ff1493;
-    border: 1px solid #ff1493;
-}
-
-.back-button:hover {
-    background: #ff1493;
-    color: white;
-}
-
-/* =====================================================
-   CARDS
-===================================================== */
-
-.content-card,
-.business-card,
-.goal-card,
-.calendar-card {
-    background: rgba(0,0,0,.78);
-    border: 1px solid rgba(255,20,147,.3);
-    border-radius: 18px;
-    padding: 25px;
-    backdrop-filter: blur(5px);
-}
-
-.content-card h3,
-.business-card h3,
-.goal-card h3,
-.calendar-card h3 {
-    color: #ff1493;
-    margin-bottom: 10px;
-}
-
-.content-card p,
-.business-card p,
-.goal-card p,
-.calendar-card p {
-    color: #ccc;
-    line-height: 1.6;
-}
-
-/* =====================================================
-   FORMS
-===================================================== */
-
-.form-card {
-    background: rgba(0,0,0,.78);
-    padding: 25px;
-    border-radius: 18px;
-    border: 1px solid rgba(255,20,147,.3);
-    margin-bottom: 20px;
-}
-
-.form-card h3 {
-    color: #ff1493;
-    margin-bottom: 15px;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 12px;
-    background: #151515;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 10px;
-    outline: none;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: #ff1493;
-}
-
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-label {
-    display: block;
-    color: #ff69b4;
-    margin: 5px 0 7px;
-    font-weight: bold;
-}
-
-/* =====================================================
-   SAVED ITEMS
-===================================================== */
-
-.saved-list {
-    margin-top: 20px;
-}
-
-.saved-item {
-    background: rgba(0,0,0,.8);
-    border-left: 4px solid #ff1493;
-    padding: 18px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-}
-
-.saved-item h4 {
-    color: #ff1493;
-    margin-bottom: 6px;
-}
-
-.saved-item p {
-    color: #ddd;
-    white-space: pre-wrap;
-    line-height: 1.5;
-}
-
-.saved-item small {
-    color: #aaa;
-    display: block;
-    margin-top: 8px;
-}
-
-.item-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-/* =====================================================
-   TODO
-===================================================== */
-
-.todo-progress {
-    margin-top: 12px;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 12px;
-    background: #222;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-top: 8px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg,#ff1493,#ff69b4);
-    transition: width .3s;
-}
-
-.todo-status {
-    color: #ff69b4;
-    font-weight: bold;
-}
-
-/* =====================================================
-   PERIOD
-===================================================== */
-
-.period-box {
-    text-align: center;
-}
-
-.period-status {
-    font-size: 1.2rem;
-    color: #ff69b4;
-    margin: 15px 0;
-    line-height: 1.8;
-}
-
-.period-info {
-    background: rgba(255,20,147,.08);
-    border: 1px solid rgba(255,20,147,.3);
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-/* =====================================================
-   CALENDAR
-===================================================== */
-
-.calendar-list {
-    margin-top: 20px;
-}
-
-.event {
-    background: rgba(0,0,0,.8);
-    border-left: 4px solid #ff1493;
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 12px;
-}
-
-/* =====================================================
-   GALLERY
-===================================================== */
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 15px;
-}
-
-.gallery-grid img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 15px;
-    border: 2px solid rgba(255,20,147,.35);
-    transition: .3s ease;
-    cursor: pointer;
-}
-
-.gallery-grid img:hover {
-    transform: scale(1.03);
-    border-color: #ff1493;
-}
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-.status {
-    margin-top: 12px;
-    color: #aaa;
-    min-height: 20px;
-}
-
-.success {
-    color: #7dffb2;
-}
-
-.error {
-    color: #ff7373;
-}
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:700px) {
-
-    header h1 {
-        font-size: 2.1rem;
-    }
-
-    .hub-grid,
-    .content-grid,
-    .business-grid,
-    .goals-grid,
-    .calendar-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-grid {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-    .gallery-grid img {
-        height: 160px;
-    }
-
-    main {
-        width: 94%;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Bibi Hub 🦉</title>
+
+    <!-- =====================================================
+         STYLESHEET
+         All colours/design will live in style.css
+    ====================================================== -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 
 <body>
 
-<!-- =====================================================
-     BACKGROUND IMAGES
-     
-     These are in the ROOT of the GitHub repository.
-     The filenames are URL encoded because they contain
-     spaces and parentheses.
-===================================================== -->
+<!-- =========================================================
+     BACKGROUND SLIDESHOW
+========================================================= -->
 
 <div class="background-slideshow">
 
-    <img id="bg1"
-         class="bg-slide active"
-         src="./bibi%20%281%29.jpg"
-         alt="">
+    <img
+        id="bg1"
+        class="bg-slide active"
+        src="./bibi%20%281%29.jpg"
+        alt=""
+    >
 
-    <img id="bg2"
-         class="bg-slide"
-         src="./bibi%20%282%29.jpg"
-         alt="">
+    <img
+        id="bg2"
+        class="bg-slide"
+        src="./bibi%20%282%29.jpg"
+        alt=""
+    >
 
 </div>
 
 <div class="background-overlay"></div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      HEADER
-===================================================== -->
+========================================================= -->
 
-<header>
+<header class="site-header">
 
-    <h1>🏠 THE BIBI HUB</h1>
+    <div class="header-inner">
 
-    <p>Your personal space for business, life, goals & creativity 💗</p>
+        <h1>🦉 THE BIBI HUB</h1>
+
+        <p>
+            Your personal space for business, life, goals
+            & creativity.
+        </p>
+
+    </div>
 
 </header>
 
 
+<!-- =========================================================
+     MAIN APP
+========================================================= -->
+
 <main>
 
-<!-- =====================================================
-     HOME
-===================================================== -->
 
-<section id="home" class="page-section active">
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<section
+    id="home"
+    class="page-section active"
+>
 
     <div class="welcome">
 
-        <h2>Welcome back, Bibi 💗</h2>
+        <p class="eyebrow">
+            WELCOME BACK
+        </p>
 
-        <p>Everything you need, all in one place.</p>
+        <h2>
+            Welcome back, Bibi 🩷
+        </h2>
+
+        <p>
+            Everything you need, all in one place.
+        </p>
+
+
+        <!-- DAILY STREAK -->
 
         <div class="streak-box">
 
-            🔥 Daily Streak:
-            <span id="streakNumber" class="streak-number">1</span>
-            days
+            <span class="streak-icon">
+                🐼
+            </span>
+
+            <span>
+                Daily Streak:
+            </span>
+
+            <strong
+                id="streakNumber"
+                class="streak-number"
+            >
+                1
+            </strong>
+
+            <span>
+                days
+            </span>
 
         </div>
 
     </div>
 
 
+    <!-- =====================================================
+         HUB CARDS
+    ====================================================== -->
+
     <div class="hub-grid">
 
+
+        <!-- BUSINESS -->
+
         <div class="hub-card">
-            <div class="hub-icon">💼</div>
-            <h3>Business</h3>
+
+            <div class="hub-icon">
+                💼
+            </div>
+
+            <h3>
+                Business
+            </h3>
+
             <p>
                 Manage ideas, clients, money
                 and business growth.
@@ -631,17 +151,25 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('business')">
+                onclick="showPage('business')"
+            >
                 Open Business
             </button>
+
         </div>
 
 
+        <!-- CONTENT -->
+
         <div class="hub-card">
 
-            <div class="hub-icon">📱</div>
+            <div class="hub-icon">
+                📱
+            </div>
 
-            <h3>Content</h3>
+            <h3>
+                Content
+            </h3>
 
             <p>
                 Plan, organise and store
@@ -650,18 +178,25 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('content')">
+                onclick="showPage('content')"
+            >
                 Open Content
             </button>
 
         </div>
 
 
+        <!-- TODO -->
+
         <div class="hub-card">
 
-            <div class="hub-icon">📝</div>
+            <div class="hub-icon">
+                📝
+            </div>
 
-            <h3>To-Do List</h3>
+            <h3>
+                To-Do List
+            </h3>
 
             <p>
                 Keep track of everything
@@ -670,18 +205,25 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('todo')">
+                onclick="showPage('todo')"
+            >
                 Open To-Do
             </button>
 
         </div>
 
 
+        <!-- CALENDAR -->
+
         <div class="hub-card">
 
-            <div class="hub-icon">📅</div>
+            <div class="hub-icon">
+                📅
+            </div>
 
-            <h3>Calendar</h3>
+            <h3>
+                Calendar
+            </h3>
 
             <p>
                 Notes, periods, important dates
@@ -690,18 +232,25 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('calendar')">
+                onclick="showPage('calendar')"
+            >
                 Open Calendar
             </button>
 
         </div>
 
 
+        <!-- GOALS -->
+
         <div class="hub-card">
 
-            <div class="hub-icon">🎯</div>
+            <div class="hub-icon">
+                🎯
+            </div>
 
-            <h3>Goals</h3>
+            <h3>
+                Goals
+            </h3>
 
             <p>
                 Set goals and keep yourself
@@ -710,18 +259,25 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('goals')">
+                onclick="showPage('goals')"
+            >
                 Open Goals
             </button>
 
         </div>
 
 
+        <!-- GALLERY -->
+
         <div class="hub-card">
 
-            <div class="hub-icon">🖼️</div>
+            <div class="hub-icon">
+                🖼️
+            </div>
 
-            <h3>My Gallery</h3>
+            <h3>
+                My Gallery
+            </h3>
 
             <p>
                 Your personal photo collection.
@@ -729,7 +285,8 @@ label {
 
             <button
                 class="card-button"
-                onclick="showPage('gallery')">
+                onclick="showPage('gallery')"
+            >
                 Open Gallery
             </button>
 
@@ -740,241 +297,427 @@ label {
 </section>
 
 
-<!-- =====================================================
-     BUSINESS
-===================================================== -->
 
-<section id="business" class="page-section">
+<!-- =========================================================
+     BUSINESS
+========================================================= -->
+
+<section
+    id="business"
+    class="page-section"
+>
 
     <div class="section-header">
 
-        <button class="back-button" onclick="showPage('home')">
+        <button
+            class="back-button"
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>💼 Business</h2>
+        <p class="eyebrow">
+            YOUR WORK
+        </p>
 
-        <p>Your business command centre.</p>
+        <h2>
+            💼 Business
+        </h2>
+
+        <p>
+            Your business command centre.
+        </p>
 
     </div>
 
+
+    <!-- BUSINESS CATEGORIES -->
 
     <div class="business-grid">
 
         <div class="business-card">
-            <h3>💡 Business Ideas</h3>
+
+            <h3>
+                💡 Business Ideas
+            </h3>
+
             <p>
                 Store ideas for businesses,
                 products and opportunities.
             </p>
+
         </div>
 
 
         <div class="business-card">
-            <h3>👥 Clients</h3>
+
+            <h3>
+                👥 Clients
+            </h3>
+
             <p>
                 Keep track of clients,
                 contacts and projects.
             </p>
+
         </div>
 
 
         <div class="business-card">
-            <h3>💰 Money</h3>
+
+            <h3>
+                💰 Money
+            </h3>
+
             <p>
                 Track income and expenses.
             </p>
+
         </div>
 
 
         <div class="business-card">
-            <h3>📈 Growth</h3>
+
+            <h3>
+                📈 Growth
+            </h3>
+
             <p>
                 Record plans and strategies
                 for growing your business.
             </p>
+
         </div>
 
     </div>
 
 
+    <!-- BUSINESS IDEAS -->
+
     <div class="form-card">
 
-        <h3>💡 Add Business Idea</h3>
+        <h3>
+            💡 Add Business Idea
+        </h3>
 
-        <input id="businessIdea" placeholder="Business idea...">
+        <input
+            id="businessIdea"
+            placeholder="Business idea..."
+        >
 
         <textarea
             id="businessDescription"
-            placeholder="Tell me about it..."></textarea>
+            placeholder="Tell me about it..."
+        ></textarea>
 
-        <button onclick="saveBusinessIdea()">
+        <button
+            onclick="saveBusinessIdea()"
+        >
             Save Business Idea
         </button>
 
-        <div id="businessStatus" class="status"></div>
+        <div
+            id="businessStatus"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="businessList" class="saved-list"></div>
+    <div
+        id="businessList"
+        class="saved-list"
+    ></div>
 
+
+    <!-- CLIENTS -->
 
     <div class="form-card">
 
-        <h3>👥 Add Client</h3>
+        <h3>
+            👥 Add Client
+        </h3>
 
-        <input id="clientName" placeholder="Client name">
+        <input
+            id="clientName"
+            placeholder="Client name"
+        >
 
-        <input id="clientContact" placeholder="Email / phone">
+        <input
+            id="clientContact"
+            placeholder="Email / phone"
+        >
 
         <textarea
             id="clientProject"
-            placeholder="Project / notes"></textarea>
+            placeholder="Project / notes"
+        ></textarea>
 
-        <button onclick="saveClient()">
+        <button
+            onclick="saveClient()"
+        >
             Save Client
         </button>
 
-        <div id="clientStatus" class="status"></div>
+        <div
+            id="clientStatus"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="clientList" class="saved-list"></div>
+    <div
+        id="clientList"
+        class="saved-list"
+    ></div>
 
+
+    <!-- MONEY -->
 
     <div class="form-card">
 
-        <h3>💰 Add Money Record</h3>
+        <h3>
+            💰 Add Money Record
+        </h3>
 
         <input
             id="moneyTitle"
-            placeholder="Income / expense description">
+            placeholder="Income / expense description"
+        >
 
         <input
             id="moneyAmount"
             type="number"
             step="0.01"
-            placeholder="Amount">
+            placeholder="Amount"
+        >
 
         <select id="moneyType">
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+
+            <option value="income">
+                Income
+            </option>
+
+            <option value="expense">
+                Expense
+            </option>
+
         </select>
 
-        <button onclick="saveMoney()">
+        <button
+            onclick="saveMoney()"
+        >
             Save Money Record
         </button>
 
-        <div id="moneyStatus" class="status"></div>
+        <div
+            id="moneyStatus"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="moneySummary" class="saved-list"></div>
+    <div
+        id="moneySummary"
+        class="saved-list"
+    ></div>
 
+
+    <!-- GROWTH -->
 
     <div class="form-card">
 
-        <h3>📈 Growth Plan</h3>
+        <h3>
+            📈 Growth Plan
+        </h3>
 
         <input
             id="growthTitle"
-            placeholder="Growth goal">
+            placeholder="Growth goal"
+        >
 
         <textarea
             id="growthDescription"
-            placeholder="What will you do to grow?"></textarea>
+            placeholder="What will you do to grow?"
+        ></textarea>
 
-        <button onclick="saveGrowth()">
+        <button
+            onclick="saveGrowth()"
+        >
             Save Growth Plan
         </button>
 
-        <div id="growthStatus" class="status"></div>
+        <div
+            id="growthStatus"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="growthList" class="saved-list"></div>
+    <div
+        id="growthList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     CONTENT
-===================================================== -->
 
-<section id="content" class="page-section">
+<!-- =========================================================
+     CONTENT
+========================================================= -->
+
+<section
+    id="content"
+    class="page-section"
+>
 
     <div class="section-header">
 
-        <button class="back-button" onclick="showPage('home')">
+        <button
+            class="back-button"
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>📱 Content</h2>
+        <p class="eyebrow">
+            CREATE
+        </p>
 
-        <p>Your content planning space.</p>
+        <h2>
+            📱 Content
+        </h2>
+
+        <p>
+            Your content planning space.
+        </p>
 
     </div>
 
 
     <div class="form-card">
 
-        <h3>📱 New Content Idea</h3>
+        <h3>
+            📱 New Content Idea
+        </h3>
 
         <input
             id="contentTitle"
-            placeholder="Content title">
+            placeholder="Content title"
+        >
 
         <textarea
             id="contentIdea"
-            placeholder="Content idea..."></textarea>
+            placeholder="Content idea..."
+        ></textarea>
+
+
+        <label for="contentPlatform">
+            Platform
+        </label>
 
         <select id="contentPlatform">
 
-            <option>Instagram</option>
-            <option>TikTok</option>
-            <option>YouTube</option>
-            <option>Facebook</option>
-            <option>Other</option>
+            <option>
+                Instagram
+            </option>
+
+            <option>
+                TikTok
+            </option>
+
+            <option>
+                YouTube
+            </option>
+
+            <option>
+                Facebook
+            </option>
+
+            <option>
+                Other
+            </option>
 
         </select>
+
+
+        <label for="contentStatus">
+            Status
+        </label>
 
         <select id="contentStatus">
 
-            <option>Idea</option>
-            <option>Planned</option>
-            <option>In Progress</option>
-            <option>Posted</option>
+            <option>
+                Idea
+            </option>
+
+            <option>
+                Planned
+            </option>
+
+            <option>
+                In Progress
+            </option>
+
+            <option>
+                Posted
+            </option>
 
         </select>
 
-        <button onclick="saveContent()">
+
+        <button
+            onclick="saveContent()"
+        >
             Save Content
         </button>
 
-        <div id="contentStatusMessage" class="status"></div>
+        <div
+            id="contentStatusMessage"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="contentList" class="saved-list"></div>
+
+    <div
+        id="contentList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     TODO
-===================================================== -->
 
-<section id="todo" class="page-section">
+<!-- =========================================================
+     TODO
+========================================================= -->
+
+<section
+    id="todo"
+    class="page-section"
+>
 
     <div class="section-header">
 
-        <button class="back-button" onclick="showPage('home')">
+        <button
+            class="back-button"
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>📝 To-Do List</h2>
+        <p class="eyebrow">
+            PRODUCTIVITY
+        </p>
 
-        <p>Get things done, Bibi 💗</p>
+        <h2>
+            📝 To-Do List
+        </h2>
+
+        <p>
+            Get things done, Bibi 🩷
+        </p>
 
     </div>
 
@@ -983,114 +726,189 @@ label {
 
         <input
             id="todoInput"
-            placeholder="What do you need to do?">
+            placeholder="What do you need to do?"
+        >
 
-        <label>Due Date</label>
+        <label for="todoDueDate">
+            Due Date
+        </label>
 
         <input
             id="todoDueDate"
-            type="date">
+            type="date"
+        >
 
-        <label>Progress</label>
+        <label for="todoProgress">
+            Progress
+        </label>
 
         <select id="todoProgress">
 
-            <option value="0">Not Started</option>
-            <option value="25">25%</option>
-            <option value="50">50%</option>
-            <option value="75">75%</option>
-            <option value="100">Completed</option>
+            <option value="0">
+                Not Started
+            </option>
+
+            <option value="25">
+                25%
+            </option>
+
+            <option value="50">
+                50%
+            </option>
+
+            <option value="75">
+                75%
+            </option>
+
+            <option value="100">
+                Completed
+            </option>
 
         </select>
 
-        <button onclick="addTodo()">
+        <button
+            onclick="addTodo()"
+        >
             Add Task
         </button>
 
-        <div id="todoStatusMessage" class="status"></div>
+        <div
+            id="todoStatusMessage"
+            class="status"
+        ></div>
 
     </div>
 
-    <div id="todoList" class="saved-list"></div>
+
+    <div
+        id="todoList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     CALENDAR
-===================================================== -->
 
-<section id="calendar" class="page-section">
+<!-- =========================================================
+     CALENDAR
+========================================================= -->
+
+<section
+    id="calendar"
+    class="page-section"
+>
 
     <div class="section-header">
 
-        <button class="back-button" onclick="showPage('home')">
+        <button
+            class="back-button"
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>📅 Calendar</h2>
+        <p class="eyebrow">
+            PLAN YOUR LIFE
+        </p>
 
-        <p>Your life planning centre.</p>
+        <h2>
+            📅 Calendar
+        </h2>
+
+        <p>
+            Your life planning centre.
+        </p>
 
     </div>
 
 
     <div class="calendar-grid">
 
+
+        <!-- NOTES -->
+
         <div class="calendar-card">
 
-            <h3>🗒️ Notes</h3>
+            <h3>
+                🗒️ Notes
+            </h3>
 
-            <p>Keep quick notes and thoughts.</p>
+            <p>
+                Keep quick notes and thoughts.
+            </p>
 
             <button
                 class="card-button"
-                onclick="showPage('notes')">
+                onclick="showPage('notes')"
+            >
                 Open Notes
             </button>
 
         </div>
 
 
+        <!-- PERIOD -->
+
         <div class="calendar-card">
 
-            <h3>🌸 Period Tracker</h3>
+            <h3>
+                🌸 Period Records
+            </h3>
 
-            <p>Track your cycle dates.</p>
+            <p>
+                Keep a history of your periods,
+                cycle lengths and dates.
+            </p>
 
             <button
                 class="card-button"
-                onclick="showPage('period')">
-                Open Tracker
+                onclick="showPage('period')"
+            >
+                Open Period Records
             </button>
 
         </div>
 
 
+        <!-- EVENTS -->
+
         <div class="calendar-card">
 
-            <h3>📌 Important Dates</h3>
+            <h3>
+                📌 Important Dates
+            </h3>
 
-            <p>Save birthdays, events and important dates.</p>
+            <p>
+                Save birthdays, events
+                and important dates.
+            </p>
 
             <button
                 class="card-button"
-                onclick="showPage('events')">
+                onclick="showPage('events')"
+            >
                 Open Dates
             </button>
 
         </div>
 
 
+        <!-- MONTHLY -->
+
         <div class="calendar-card">
 
-            <h3>📆 Monthly Plans</h3>
+            <h3>
+                📆 Monthly Plans
+            </h3>
 
-            <p>Plan each month ahead.</p>
+            <p>
+                Plan each month ahead.
+            </p>
 
             <button
                 class="card-button"
-                onclick="showPage('monthly')">
+                onclick="showPage('monthly')"
+            >
                 Open Plans
             </button>
 
@@ -1101,21 +919,36 @@ label {
 </section>
 
 
-<!-- =====================================================
-     NOTES
-===================================================== -->
 
-<section id="notes" class="page-section">
+<!-- =========================================================
+     NOTES
+========================================================= -->
+
+<section
+    id="notes"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('calendar')">
+            onclick="showPage('calendar')"
+        >
             ← Back Calendar
         </button>
 
-        <h2>🗒️ Notes</h2>
+        <p class="eyebrow">
+            THOUGHTS
+        </p>
+
+        <h2>
+            🗒️ Notes
+        </h2>
+
+        <p>
+            Save anything you want to remember.
+        </p>
 
     </div>
 
@@ -1124,97 +957,205 @@ label {
 
         <input
             id="noteTitle"
-            placeholder="Note title">
+            placeholder="Note title"
+        >
 
         <textarea
             id="noteText"
-            placeholder="Write your note..."></textarea>
+            placeholder="Write your note..."
+        ></textarea>
 
-        <button onclick="saveNote()">
+        <button
+            id="noteSaveButton"
+            onclick="saveNote()"
+        >
             Save Note
+        </button>
+
+        <button
+            id="noteCancelButton"
+            class="secondary-button"
+            onclick="cancelNoteEdit()"
+            style="display:none;"
+        >
+            Cancel Edit
         </button>
 
     </div>
 
-    <div id="notesList" class="saved-list"></div>
+
+    <div
+        id="notesList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     PERIOD TRACKER
-===================================================== -->
 
-<section id="period" class="page-section">
+<!-- =========================================================
+     PERIOD RECORDS
+========================================================= -->
+
+<section
+    id="period"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('calendar')">
+            onclick="showPage('calendar')"
+        >
             ← Back Calendar
         </button>
 
-        <h2>🌸 Period Tracker</h2>
+        <p class="eyebrow">
+            CYCLE RECORDS
+        </p>
 
-        <p>Track your cycle dates privately.</p>
+        <h2>
+            🌸 Period Records
+        </h2>
+
+        <p>
+            Keep a private history of your periods.
+        </p>
 
     </div>
 
 
+    <!-- PERIOD FORM -->
+
     <div class="form-card period-box">
 
-        <h3>🌸 Your Period</h3>
+        <h3>
+            🌸 Record Your Period
+        </h3>
 
-        <label>When did it start?</label>
+        <p class="form-help">
+            Add each period as a separate record.
+            Your previous records will stay here.
+        </p>
+
+
+        <label for="periodStart">
+            When did it start?
+        </label>
 
         <input
             type="date"
-            id="periodStart">
+            id="periodStart"
+        >
 
-        <label>When did it end?</label>
+
+        <label for="periodEnd">
+            When did it end?
+        </label>
 
         <input
             type="date"
-            id="periodEnd">
+            id="periodEnd"
+        >
 
-        <label>Average cycle length</label>
+
+        <label for="cycleLength">
+            Average cycle length
+        </label>
 
         <input
             type="number"
             id="cycleLength"
             value="28"
             min="1"
-            max="100">
+            max="100"
+        >
 
-        <button onclick="savePeriod()">
-            Save Period
+
+        <button
+            id="periodSaveButton"
+            onclick="savePeriod()"
+        >
+            Save Period Record
         </button>
 
-        <div id="periodStatus" class="period-status"></div>
 
-        <div id="periodInfo" class="period-info"></div>
+        <button
+            id="periodCancelButton"
+            class="secondary-button"
+            onclick="cancelPeriodEdit()"
+            style="display:none;"
+        >
+            Cancel Edit
+        </button>
+
+
+        <div
+            id="periodStatus"
+            class="period-status"
+        ></div>
 
     </div>
+
+
+    <!-- PERIOD SUMMARY -->
+
+    <div
+        id="periodInfo"
+        class="period-info"
+    ></div>
+
+
+    <!-- PERIOD HISTORY -->
+
+    <div class="saved-section-header">
+
+        <h3>
+            📖 Period History
+        </h3>
+
+        <p>
+            Your previous period records.
+        </p>
+
+    </div>
+
+
+    <div
+        id="periodHistory"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     EVENTS
-===================================================== -->
 
-<section id="events" class="page-section">
+<!-- =========================================================
+     IMPORTANT EVENTS
+========================================================= -->
+
+<section
+    id="events"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('calendar')">
+            onclick="showPage('calendar')"
+        >
             ← Back Calendar
         </button>
 
-        <h2>📌 Important Dates & Events</h2>
+        <p class="eyebrow">
+            IMPORTANT
+        </p>
+
+        <h2>
+            📌 Important Dates & Events
+        </h2>
 
     </div>
 
@@ -1223,84 +1164,147 @@ label {
 
         <input
             type="date"
-            id="eventDate">
+            id="eventDate"
+        >
 
         <input
             id="eventTitle"
-            placeholder="Event name">
+            placeholder="Event name"
+        >
 
         <textarea
             id="eventDescription"
-            placeholder="Details..."></textarea>
+            placeholder="Details..."
+        ></textarea>
 
-        <button onclick="saveEvent()">
+        <button
+            onclick="saveEvent()"
+        >
             Save Event
+        </button>
+
+        <button
+            id="eventCancelButton"
+            class="secondary-button"
+            onclick="cancelEventEdit()"
+            style="display:none;"
+        >
+            Cancel Edit
         </button>
 
     </div>
 
-    <div id="eventsList" class="saved-list"></div>
+
+    <div
+        id="eventsList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     MONTHLY PLANS
-===================================================== -->
 
-<section id="monthly" class="page-section">
+<!-- =========================================================
+     MONTHLY PLANS
+========================================================= -->
+
+<section
+    id="monthly"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('calendar')">
+            onclick="showPage('calendar')"
+        >
             ← Back Calendar
         </button>
 
-        <h2>📆 Monthly Plans</h2>
+        <p class="eyebrow">
+            PLANNING
+        </p>
+
+        <h2>
+            📆 Monthly Plans
+        </h2>
 
     </div>
 
 
     <div class="form-card">
 
+        <label for="planMonth">
+            Month
+        </label>
+
         <input
             type="month"
-            id="planMonth">
+            id="planMonth"
+        >
 
         <textarea
             id="monthlyPlan"
-            placeholder="What are your plans this month?"></textarea>
+            placeholder="What are your plans this month?"
+        ></textarea>
 
-        <button onclick="saveMonthlyPlan()">
+        <button
+            onclick="saveMonthlyPlan()"
+        >
             Save Monthly Plan
+        </button>
+
+        <button
+            id="monthlyCancelButton"
+            class="secondary-button"
+            onclick="cancelMonthlyEdit()"
+            style="display:none;"
+        >
+            Cancel Edit
         </button>
 
     </div>
 
-    <div id="monthlyList" class="saved-list"></div>
+
+    <div
+        id="monthlyList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     GOALS
-===================================================== -->
 
-<section id="goals" class="page-section">
+<!-- =========================================================
+     GOALS
+========================================================= -->
+
+<section
+    id="goals"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('home')">
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>🎯 Goals</h2>
+        <p class="eyebrow">
+            DREAM & ACHIEVE
+        </p>
 
-        <p>Dream it. Plan it. Do it. 💗</p>
+        <h2>
+            🎯 Goals
+        </h2>
+
+        <p>
+            Dream it. Plan it. Do it. 🩷
+        </p>
 
     </div>
 
@@ -1309,51 +1313,87 @@ label {
 
         <input
             id="goalTitle"
-            placeholder="Your goal">
+            placeholder="Your goal"
+        >
 
         <textarea
             id="goalDescription"
-            placeholder="How are you going to achieve it?"></textarea>
+            placeholder="How are you going to achieve it?"
+        ></textarea>
 
-        <label>Target Date</label>
+        <label for="goalTargetDate">
+            Target Date
+        </label>
 
         <input
             type="date"
-            id="goalTargetDate">
+            id="goalTargetDate"
+        >
 
-        <button onclick="saveGoal()">
+        <button
+            onclick="saveGoal()"
+        >
             Save Goal
+        </button>
+
+        <button
+            id="goalCancelButton"
+            class="secondary-button"
+            onclick="cancelGoalEdit()"
+            style="display:none;"
+        >
+            Cancel Edit
         </button>
 
     </div>
 
-    <div id="goalsList" class="saved-list"></div>
+
+    <div
+        id="goalsList"
+        class="saved-list"
+    ></div>
 
 </section>
 
 
-<!-- =====================================================
-     GALLERY
-===================================================== -->
 
-<section id="gallery" class="page-section">
+<!-- =========================================================
+     GALLERY
+========================================================= -->
+
+<section
+    id="gallery"
+    class="page-section"
+>
 
     <div class="section-header">
 
         <button
             class="back-button"
-            onclick="showPage('home')">
+            onclick="showPage('home')"
+        >
             ← Back Home
         </button>
 
-        <h2>🖼️ My Gallery</h2>
+        <p class="eyebrow">
+            MEMORIES
+        </p>
 
-        <p>Your Bibi photo collection 💗</p>
+        <h2>
+            🖼️ My Gallery
+        </h2>
+
+        <p>
+            Your Bibi photo collection 🩷
+        </p>
 
     </div>
 
 
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <div
+        class="gallery-grid"
+        id="galleryGrid"
+    ></div>
 
 </section>
 
@@ -1361,11 +1401,20 @@ label {
 </main>
 
 
+
+<!-- =========================================================
+     JAVASCRIPT
+     
+     Stage 1 keeps the application connection here.
+     We will update the functions for editing and the
+     complete period history in the next stage.
+========================================================= -->
+
 <script>
 
-/* =====================================================
+/* =========================================================
    SUPABASE CONNECTION
-===================================================== */
+========================================================= */
 
 const SUPABASE_URL =
     "https://cnbfaxskzgkidbigrieu.supabase.co";
@@ -1380,44 +1429,58 @@ const supabaseClient =
     );
 
 
-/* =====================================================
+/* =========================================================
    PAGE NAVIGATION
-===================================================== */
+========================================================= */
 
 function showPage(pageId) {
 
     const pages =
-        document.querySelectorAll(".page-section");
+        document.querySelectorAll(
+            ".page-section"
+        );
 
     pages.forEach(function(page) {
+
         page.classList.remove("active");
+
     });
+
 
     const selected =
         document.getElementById(pageId);
 
+
     if (selected) {
+
         selected.classList.add("active");
+
     }
 
+
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
+
 }
 
 
-/* =====================================================
-   IMAGE LIST
-     
-   IMPORTANT:
-   These are the exact files that exist in the
-   GitHub repository shown earlier.
-===================================================== */
+/* =========================================================
+   BACKGROUND IMAGES
+========================================================= */
 
 const backgroundImages = [];
 
-for (let i = 1; i <= 18; i++) {
+
+for (
+    let i = 1;
+    i <= 18;
+    i++
+) {
 
     backgroundImages.push(
         `./bibi%20%28${i}%29.jpg`
@@ -1426,11 +1489,12 @@ for (let i = 1; i <= 18; i++) {
 }
 
 
-/* =====================================================
+/* =========================================================
    BACKGROUND SLIDESHOW
-===================================================== */
+========================================================= */
 
 let currentImage = 0;
+
 
 const bg1 =
     document.getElementById("bg1");
@@ -1438,57 +1502,71 @@ const bg1 =
 const bg2 =
     document.getElementById("bg2");
 
-let activeBackground = bg1;
+
+let activeBackground =
+    bg1;
 
 
-/*
-    If an image does not exist, hide it rather than
-    allowing a broken image icon to appear.
-*/
+bg1.onerror =
+    function() {
 
-bg1.onerror = function() {
-    this.style.display = "none";
-};
+        this.style.display = "none";
 
-bg2.onerror = function() {
-    this.style.display = "none";
-};
+    };
+
+
+bg2.onerror =
+    function() {
+
+        this.style.display = "none";
+
+    };
 
 
 function changeBackground() {
 
     currentImage++;
 
+
     if (
         currentImage >=
         backgroundImages.length
     ) {
+
         currentImage = 0;
+
     }
+
 
     const nextBackground =
         activeBackground === bg1
             ? bg2
             : bg1;
 
+
     nextBackground.src =
         backgroundImages[currentImage];
+
 
     nextBackground.style.display =
         "block";
 
-    nextBackground.classList.add("active");
 
-    activeBackground.classList.remove("active");
+    nextBackground.classList.add(
+        "active"
+    );
+
+
+    activeBackground.classList.remove(
+        "active"
+    );
+
 
     activeBackground =
         nextBackground;
+
 }
 
-
-/*
-    Change background every 5 seconds.
-*/
 
 setInterval(
     changeBackground,
@@ -1496,125 +1574,206 @@ setInterval(
 );
 
 
-/* =====================================================
+/* =========================================================
    GALLERY
-===================================================== */
+========================================================= */
 
 const gallery =
-    document.getElementById("galleryGrid");
+    document.getElementById(
+        "galleryGrid"
+    );
 
 
-for (let i = 1; i <= 18; i++) {
+for (
+    let i = 1;
+    i <= 18;
+    i++
+) {
 
     const img =
         document.createElement("img");
 
-    /*
-        GitHub-safe path.
-    */
 
     img.src =
         `./bibi%20%28${i}%29.jpg`;
 
+
     img.alt =
         `Bibi photo ${i}`;
+
 
     img.loading =
         "lazy";
 
+
     img.onerror =
         function() {
-            this.style.display = "none";
+
+            this.style.display =
+                "none";
+
         };
 
+
     gallery.appendChild(img);
+
 }
 
 
-/* =====================================================
+/* =========================================================
    GENERIC SUPABASE HELPERS
-===================================================== */
+========================================================= */
 
-async function insertRow(table, row) {
+async function insertRow(
+    table,
+    row
+) {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from(table)
             .insert(row)
             .select();
 
+
     if (error) {
-        console.error(table, error);
+
+        console.error(
+            table,
+            error
+        );
+
         throw error;
+
     }
 
+
     return data;
+
 }
 
 
-async function loadRows(table) {
+async function loadRows(
+    table
+) {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from(table)
             .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
 
     if (error) {
-        console.error(table, error);
+
+        console.error(
+            table,
+            error
+        );
+
         return [];
+
     }
 
+
     return data || [];
+
 }
 
 
-/* =====================================================
+/* =========================================================
    BIBI DATA TABLE
-===================================================== */
+========================================================= */
 
-async function saveBibiData(type, data) {
+async function saveBibiData(
+    type,
+    data
+) {
 
-    const { error } =
+    const {
+        error
+    } =
         await supabaseClient
             .from("bibi_data")
             .insert({
-                data_type: type,
-                data: data
+
+                data_type:
+                    type,
+
+                data:
+                    data
+
             });
 
+
     if (error) {
-        console.error("bibi_data:", error);
+
+        console.error(
+            "bibi_data:",
+            error
+        );
+
         throw error;
+
     }
+
 }
 
 
-async function loadBibiData(type) {
+async function loadBibiData(
+    type
+) {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("bibi_data")
             .select("*")
-            .eq("data_type", type)
-            .order("created_at", {
-                ascending: false
-            });
+            .eq(
+                "data_type",
+                type
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
 
     if (error) {
-        console.error("bibi_data:", error);
+
+        console.error(
+            "bibi_data:",
+            error
+        );
+
         return [];
+
     }
 
+
     return data || [];
+
 }
 
 
-/* =====================================================
+/* =========================================================
    DAILY STREAK
-===================================================== */
+========================================================= */
 
 async function updateStreak() {
 
@@ -1623,24 +1782,38 @@ async function updateStreak() {
             .toISOString()
             .split("T")[0];
 
-    const { data, error } =
+
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("daily_streak")
             .select("*")
-            .order("id", {
-                ascending: false
-            })
+            .order(
+                "id",
+                {
+                    ascending: false
+                }
+            )
             .limit(1);
 
+
     if (error) {
+
         console.error(error);
+
         return;
+
     }
+
 
     let streak = 1;
 
+
     let row =
-        data && data.length
+        data &&
+        data.length
             ? data[0]
             : null;
 
@@ -1648,16 +1821,29 @@ async function updateStreak() {
     if (row) {
 
         const previous =
-            new Date(row.last_visit);
+            new Date(
+                row.last_visit
+            );
+
 
         const current =
             new Date(today);
 
+
         const difference =
             Math.floor(
-                (current - previous) /
-                (1000 * 60 * 60 * 24)
+                (
+                    current -
+                    previous
+                ) /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
             );
+
 
         streak =
             parseInt(
@@ -1665,54 +1851,106 @@ async function updateStreak() {
             );
 
 
-        if (row.last_visit !== today) {
+        if (
+            row.last_visit !==
+            today
+        ) {
 
-            if (difference === 1) {
+            if (
+                difference === 1
+            ) {
+
                 streak++;
+
             }
-            else if (difference > 1) {
+
+            else if (
+                difference > 1
+            ) {
+
                 streak = 1;
+
             }
+
 
             await supabaseClient
                 .from("daily_streak")
                 .update({
-                    streak_count: streak,
-                    last_visit: today
+
+                    streak_count:
+                        streak,
+
+                    last_visit:
+                        today
+
                 })
-                .eq("id", row.id);
+                .eq(
+                    "id",
+                    row.id
+                );
+
         }
 
     }
+
     else {
 
-        const { data: newRow } =
+        const {
+            data: newRow
+        } =
             await supabaseClient
                 .from("daily_streak")
                 .insert({
-                    streak_count: 1,
-                    last_visit: today
+
+                    streak_count:
+                        1,
+
+                    last_visit:
+                        today
+
                 })
                 .select()
                 .single();
 
+
         if (newRow) {
+
             streak =
                 newRow.streak_count;
+
         }
+
     }
 
 
-    document.getElementById(
-        "streakNumber"
-    ).textContent =
-        streak;
+    const streakElement =
+        document.getElementById(
+            "streakNumber"
+        );
+
+
+    if (streakElement) {
+
+        streakElement.textContent =
+            streak;
+
+    }
+
 }
 
 
-/* =====================================================
+/* =========================================================
+   PLACEHOLDER FOR STAGE 2
+     
+   The existing save/display functions remain compatible
+   with your current database. Stage 2 will replace these
+   with the full editable versions.
+========================================================= */
+
+
+/* =========================================================
    BUSINESS IDEAS
-===================================================== */
+========================================================= */
 
 async function saveBusinessIdea() {
 
@@ -1721,12 +1959,15 @@ async function saveBusinessIdea() {
             "businessIdea"
         ).value.trim();
 
+
     const description =
         document.getElementById(
             "businessDescription"
         ).value.trim();
 
+
     if (!title) return;
+
 
     try {
 
@@ -1738,23 +1979,28 @@ async function saveBusinessIdea() {
             }
         );
 
+
         document.getElementById(
             "businessIdea"
         ).value = "";
+
 
         document.getElementById(
             "businessDescription"
         ).value = "";
 
+
         setStatus(
             "businessStatus",
-            "Saved successfully 💗",
+            "Saved successfully 🩷",
             true
         );
+
 
         displayBusiness();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -1762,7 +2008,9 @@ async function saveBusinessIdea() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -1773,16 +2021,20 @@ async function displayBusiness() {
             "businessList"
         );
 
+
     const data =
         await loadRows(
             "business_ideas"
         );
 
+
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -1802,16 +2054,29 @@ async function displayBusiness() {
                     )}
                 </small>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editBusiness(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    CLIENTS
-===================================================== */
+========================================================= */
 
 async function saveClient() {
 
@@ -1820,17 +2085,21 @@ async function saveClient() {
             "clientName"
         ).value.trim();
 
+
     const contact =
         document.getElementById(
             "clientContact"
         ).value.trim();
+
 
     const project =
         document.getElementById(
             "clientProject"
         ).value.trim();
 
+
     if (!name) return;
+
 
     try {
 
@@ -1843,27 +2112,33 @@ async function saveClient() {
             }
         );
 
+
         document.getElementById(
             "clientName"
         ).value = "";
+
 
         document.getElementById(
             "clientContact"
         ).value = "";
 
+
         document.getElementById(
             "clientProject"
         ).value = "";
 
+
         setStatus(
             "clientStatus",
-            "Client saved 💗",
+            "Client saved 🩷",
             true
         );
+
 
         displayClients();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -1871,7 +2146,9 @@ async function saveClient() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -1882,24 +2159,31 @@ async function displayClients() {
             "clientList"
         );
 
+
     const rows =
         await loadBibiData(
             "client"
         );
 
+
     list.innerHTML = "";
+
 
     rows.forEach(function(row) {
 
         const item =
             row.data || {};
 
+
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
                     👥
-                    ${escapeHTML(item.name)}
+                    ${escapeHTML(
+                        item.name
+                    )}
                 </h4>
 
                 <p>
@@ -1914,16 +2198,29 @@ async function displayClients() {
                     )}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editBibiRecord('${row.id}','client')"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    MONEY
-===================================================== */
+========================================================= */
 
 async function saveMoney() {
 
@@ -1932,6 +2229,7 @@ async function saveMoney() {
             "moneyTitle"
         ).value.trim();
 
+
     const amount =
         parseFloat(
             document.getElementById(
@@ -1939,15 +2237,18 @@ async function saveMoney() {
             ).value
         );
 
+
     const type =
         document.getElementById(
             "moneyType"
         ).value;
 
+
     if (
         !title ||
         isNaN(amount)
     ) return;
+
 
     try {
 
@@ -1960,23 +2261,28 @@ async function saveMoney() {
             }
         );
 
+
         document.getElementById(
             "moneyTitle"
         ).value = "";
+
 
         document.getElementById(
             "moneyAmount"
         ).value = "";
 
+
         setStatus(
             "moneyStatus",
-            "Money record saved 💗",
+            "Money record saved 🩷",
             true
         );
+
 
         displayMoney();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -1984,7 +2290,9 @@ async function saveMoney() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -1995,13 +2303,17 @@ async function displayMoney() {
             "moneySummary"
         );
 
+
     const rows =
         await loadBibiData(
             "money"
         );
 
+
     let income = 0;
+
     let expenses = 0;
+
     let html = "";
 
 
@@ -2010,6 +2322,7 @@ async function displayMoney() {
         const item =
             row.data || {};
 
+
         const amount =
             parseFloat(
                 item.amount || 0
@@ -2017,24 +2330,29 @@ async function displayMoney() {
 
 
         if (
-            item.type ===
-            "income"
+            item.type === "income"
         ) {
+
             income += amount;
+
         }
+
         else {
+
             expenses += amount;
+
         }
 
 
         html += `
+
             <div class="saved-item">
 
                 <h4>
                     ${
                         item.type === "income"
-                        ? "💚"
-                        : "🔴"
+                            ? "💚"
+                            : "🔴"
                     }
 
                     ${escapeHTML(
@@ -2045,15 +2363,28 @@ async function displayMoney() {
                 <p>
                     ${
                         item.type === "income"
-                        ? "+"
-                        : "-"
+                            ? "+"
+                            : "-"
                     }
 
                     ${amount.toFixed(2)}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editBibiRecord('${row.id}','money')"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
+
     });
 
 
@@ -2062,9 +2393,12 @@ async function displayMoney() {
 
 
     list.innerHTML = `
+
         <div class="saved-item">
 
-            <h4>💰 Money Summary</h4>
+            <h4>
+                💰 Money Summary
+            </h4>
 
             <p>
                 💚 Income:
@@ -2078,7 +2412,7 @@ async function displayMoney() {
 
             <p>
                 <strong>
-                    💗 Balance:
+                    🩷 Balance:
                     ${balance.toFixed(2)}
                 </strong>
             </p>
@@ -2086,13 +2420,15 @@ async function displayMoney() {
         </div>
 
         ${html}
+
     `;
+
 }
 
 
-/* =====================================================
+/* =========================================================
    GROWTH
-===================================================== */
+========================================================= */
 
 async function saveGrowth() {
 
@@ -2101,12 +2437,15 @@ async function saveGrowth() {
             "growthTitle"
         ).value.trim();
 
+
     const description =
         document.getElementById(
             "growthDescription"
         ).value.trim();
 
+
     if (!title) return;
+
 
     try {
 
@@ -2118,23 +2457,28 @@ async function saveGrowth() {
             }
         );
 
+
         document.getElementById(
             "growthTitle"
         ).value = "";
+
 
         document.getElementById(
             "growthDescription"
         ).value = "";
 
+
         setStatus(
             "growthStatus",
-            "Growth plan saved 💗",
+            "Growth plan saved 🩷",
             true
         );
+
 
         displayGrowth();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -2142,7 +2486,9 @@ async function saveGrowth() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -2153,24 +2499,31 @@ async function displayGrowth() {
             "growthList"
         );
 
+
     const rows =
         await loadBibiData(
             "growth"
         );
 
+
     list.innerHTML = "";
+
 
     rows.forEach(function(row) {
 
         const item =
             row.data || {};
 
+
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
                     📈
-                    ${escapeHTML(item.title)}
+                    ${escapeHTML(
+                        item.title
+                    )}
                 </h4>
 
                 <p>
@@ -2179,16 +2532,29 @@ async function displayGrowth() {
                     )}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editBibiRecord('${row.id}','growth')"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    CONTENT
-===================================================== */
+========================================================= */
 
 async function saveContent() {
 
@@ -2197,22 +2563,27 @@ async function saveContent() {
             "contentTitle"
         ).value.trim();
 
+
     const description =
         document.getElementById(
             "contentIdea"
         ).value.trim();
+
 
     const platform =
         document.getElementById(
             "contentPlatform"
         ).value;
 
+
     const status =
         document.getElementById(
             "contentStatus"
         ).value;
 
+
     if (!title) return;
+
 
     try {
 
@@ -2226,17 +2597,21 @@ async function saveContent() {
             }
         );
 
+
         document.getElementById(
             "contentTitle"
         ).value = "";
+
 
         document.getElementById(
             "contentIdea"
         ).value = "";
 
+
         displayContent();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -2244,7 +2619,9 @@ async function saveContent() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -2255,16 +2632,20 @@ async function displayContent() {
             "contentList"
         );
 
+
     const data =
         await loadRows(
             "content"
         );
 
+
     list.innerHTML = "";
+
 
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -2281,6 +2662,7 @@ async function displayContent() {
                 </p>
 
                 <small>
+
                     Platform:
                     ${escapeHTML(
                         item.platform || ""
@@ -2292,18 +2674,32 @@ async function displayContent() {
                     ${escapeHTML(
                         item.status || ""
                     )}
+
                 </small>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editContent(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    TODO
-===================================================== */
+========================================================= */
 
 async function addTodo() {
 
@@ -2312,10 +2708,12 @@ async function addTodo() {
             "todoInput"
         ).value.trim();
 
+
     const dueDate =
         document.getElementById(
             "todoDueDate"
         ).value;
+
 
     const progress =
         parseInt(
@@ -2324,7 +2722,9 @@ async function addTodo() {
             ).value
         );
 
+
     if (!title) return;
+
 
     try {
 
@@ -2361,9 +2761,11 @@ async function addTodo() {
             "todoInput"
         ).value = "";
 
+
         document.getElementById(
             "todoDueDate"
         ).value = "";
+
 
         document.getElementById(
             "todoProgress"
@@ -2372,7 +2774,7 @@ async function addTodo() {
 
         setStatus(
             "todoStatusMessage",
-            "Task saved 💗",
+            "Task saved 🩷",
             true
         );
 
@@ -2380,6 +2782,7 @@ async function addTodo() {
         displayTodos();
 
     }
+
     catch(error) {
 
         setStatus(
@@ -2387,7 +2790,9 @@ async function addTodo() {
             error.message,
             false
         );
+
     }
+
 }
 
 
@@ -2398,15 +2803,18 @@ async function displayTodos() {
             "todoList"
         );
 
+
     const todos =
         await loadRows(
             "todos"
         );
 
+
     const details =
         await loadBibiData(
             "todo_details"
         );
+
 
     list.innerHTML = "";
 
@@ -2414,15 +2822,17 @@ async function displayTodos() {
     todos.forEach(function(item) {
 
         const detailRow =
-            details.find(function(row) {
+            details.find(
+                function(row) {
 
-                return row.data &&
-                    String(
-                        row.data.todo_id
-                    ) ===
-                    String(item.id);
+                    return row.data &&
+                        String(
+                            row.data.todo_id
+                        ) ===
+                        String(item.id);
 
-            });
+                }
+            );
 
 
         const detail =
@@ -2438,7 +2848,9 @@ async function displayTodos() {
 
 
         if (item.completed) {
+
             progress = 100;
+
         }
 
 
@@ -2451,18 +2863,21 @@ async function displayTodos() {
 
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
+
                     ${
                         progress === 100
-                        ? "✅"
-                        : "⬜"
+                            ? "✅"
+                            : "⬜"
                     }
 
                     ${escapeHTML(
                         item.title
                     )}
+
                 </h4>
 
 
@@ -2484,8 +2899,8 @@ async function displayTodos() {
 
                         <div
                             class="progress-fill"
-                            style="width:${progress}%">
-                        </div>
+                            style="width:${progress}%"
+                        ></div>
 
                     </div>
 
@@ -2496,34 +2911,47 @@ async function displayTodos() {
 
                     <button
                         class="small-button"
-                        onclick="setTodoProgress(${item.id},25)">
+                        onclick="setTodoProgress(${item.id},25)"
+                    >
                         25%
                     </button>
 
                     <button
                         class="small-button"
-                        onclick="setTodoProgress(${item.id},50)">
+                        onclick="setTodoProgress(${item.id},50)"
+                    >
                         50%
                     </button>
 
                     <button
                         class="small-button"
-                        onclick="setTodoProgress(${item.id},75)">
+                        onclick="setTodoProgress(${item.id},75)"
+                    >
                         75%
                     </button>
 
                     <button
                         class="small-button"
-                        onclick="setTodoProgress(${item.id},100)">
+                        onclick="setTodoProgress(${item.id},100)"
+                    >
                         Complete
+                    </button>
+
+                    <button
+                        class="small-button"
+                        onclick="editTodo(${item.id})"
+                    >
+                        Edit
                     </button>
 
                 </div>
 
             </div>
+
         `;
 
     });
+
 }
 
 
@@ -2537,8 +2965,10 @@ async function setTodoProgress(
         await supabaseClient
             .from("todos")
             .update({
+
                 completed:
                     progress === 100
+
             })
             .eq(
                 "id",
@@ -2550,7 +2980,7 @@ async function setTodoProgress(
             "todo_details",
             {
                 todo_id: todoId,
-                progress: progress,
+                progress,
                 due_date: null
             }
         );
@@ -2559,6 +2989,7 @@ async function setTodoProgress(
         displayTodos();
 
     }
+
     catch(error) {
 
         console.error(error);
@@ -2567,13 +2998,15 @@ async function setTodoProgress(
             "Could not update the task: " +
             error.message
         );
+
     }
+
 }
 
 
-/* =====================================================
+/* =========================================================
    NOTES
-===================================================== */
+========================================================= */
 
 async function saveNote() {
 
@@ -2582,15 +3015,18 @@ async function saveNote() {
             "noteTitle"
         ).value.trim();
 
+
     const content =
         document.getElementById(
             "noteText"
         ).value.trim();
 
+
     if (
         !title &&
         !content
     ) return;
+
 
     try {
 
@@ -2602,24 +3038,30 @@ async function saveNote() {
             }
         );
 
+
         document.getElementById(
             "noteTitle"
         ).value = "";
+
 
         document.getElementById(
             "noteText"
         ).value = "";
 
+
         displayNotes();
 
     }
+
     catch(error) {
 
         alert(
             "Could not save note: " +
             error.message
         );
+
     }
+
 }
 
 
@@ -2630,10 +3072,12 @@ async function displayNotes() {
             "notesList"
         );
 
+
     const data =
         await loadRows(
             "notes"
         );
+
 
     list.innerHTML = "";
 
@@ -2641,6 +3085,7 @@ async function displayNotes() {
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -2656,16 +3101,29 @@ async function displayNotes() {
                     )}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editNote(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
-   PERIOD TRACKER
-===================================================== */
+/* =========================================================
+   PERIOD RECORDS
+========================================================= */
 
 async function savePeriod() {
 
@@ -2674,10 +3132,12 @@ async function savePeriod() {
             "periodStart"
         ).value;
 
+
     const endDate =
         document.getElementById(
             "periodEnd"
         ).value;
+
 
     const cycleLength =
         parseInt(
@@ -2694,6 +3154,7 @@ async function savePeriod() {
         );
 
         return;
+
     }
 
 
@@ -2706,38 +3167,60 @@ async function savePeriod() {
 
     try {
 
-        const { error } =
+        const {
+            error
+        } =
             await supabaseClient
                 .from(
                     "period_tracker"
                 )
                 .insert({
+
                     period_date:
                         startDate,
+
                     end_date:
                         endDate || null,
+
                     cycle_length:
                         cycleLength,
+
                     next_period_date:
                         nextDate
+
                 });
 
 
         if (error) {
+
             throw error;
+
         }
+
+
+        document.getElementById(
+            "periodStart"
+        ).value = "";
+
+
+        document.getElementById(
+            "periodEnd"
+        ).value = "";
 
 
         displayPeriod();
 
     }
+
     catch(error) {
 
         alert(
             "Could not save period: " +
             error.message
         );
+
     }
+
 }
 
 
@@ -2748,13 +3231,23 @@ async function displayPeriod() {
             "periodStatus"
         );
 
+
     const info =
         document.getElementById(
             "periodInfo"
         );
 
 
-    const { data, error } =
+    const history =
+        document.getElementById(
+            "periodHistory"
+        );
+
+
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from(
                 "period_tracker"
@@ -2765,8 +3258,7 @@ async function displayPeriod() {
                 {
                     ascending: false
                 }
-            )
-            .limit(1);
+            );
 
 
     if (error) {
@@ -2777,6 +3269,7 @@ async function displayPeriod() {
         console.error(error);
 
         return;
+
     }
 
 
@@ -2790,25 +3283,31 @@ async function displayPeriod() {
 
         info.innerHTML = "";
 
+        history.innerHTML = "";
+
         return;
+
     }
 
 
-    const period =
+    const latest =
         data[0];
 
 
     const start =
-        period.period_date || "";
+        latest.period_date || "";
+
 
     const end =
-        period.end_date || "";
+        latest.end_date || "";
+
 
     const cycle =
-        period.cycle_length || 28;
+        latest.cycle_length || 28;
+
 
     const next =
-        period.next_period_date ||
+        latest.next_period_date ||
         addDays(
             start,
             cycle
@@ -2816,60 +3315,184 @@ async function displayPeriod() {
 
 
     status.innerHTML = `
+
         🌸
         <strong>
-            Period saved
+            Period record saved
         </strong>
+
     `;
 
 
     info.innerHTML = `
 
-        <p>
-            🌸 Started:
-            <strong>
-                ${escapeHTML(
-                    formatDateOnly(start)
-                )}
-            </strong>
-        </p>
+        <div class="period-summary-card">
 
-        <p>
-            🩷 Ended:
-            <strong>
-                ${
-                    end
-                    ? escapeHTML(
-                        formatDateOnly(end)
-                    )
-                    : "Not entered"
-                }
-            </strong>
-        </p>
+            <h3>
+                Latest Period
+            </h3>
 
-        <p>
-            🔄 Cycle length:
-            <strong>
-                ${cycle} days
-            </strong>
-        </p>
+            <p>
+                🌸 Started:
+                <strong>
+                    ${escapeHTML(
+                        formatDateOnly(start)
+                    )}
+                </strong>
+            </p>
 
-        <p>
-            📅 Next expected period:
-            <strong>
-                ${escapeHTML(
-                    formatDateOnly(next)
-                )}
-            </strong>
-        </p>
+            <p>
+                🩷 Ended:
+                <strong>
+                    ${
+                        end
+                            ? escapeHTML(
+                                formatDateOnly(end)
+                            )
+                            : "Not entered"
+                    }
+                </strong>
+            </p>
+
+            <p>
+                🔄 Cycle length:
+                <strong>
+                    ${cycle} days
+                </strong>
+            </p>
+
+            <p>
+                📅 Next expected period:
+                <strong>
+                    ${escapeHTML(
+                        formatDateOnly(next)
+                    )}
+                </strong>
+            </p>
+
+        </div>
 
     `;
+
+
+    history.innerHTML = "";
+
+
+    data.forEach(function(period) {
+
+        const periodStart =
+            period.period_date || "";
+
+
+        const periodEnd =
+            period.end_date || "";
+
+
+        const periodCycle =
+            period.cycle_length || 28;
+
+
+        const periodNext =
+            period.next_period_date ||
+            addDays(
+                periodStart,
+                periodCycle
+            );
+
+
+        history.innerHTML += `
+
+            <div class="saved-item period-record">
+
+                <div class="record-header">
+
+                    <h4>
+                        🌸
+                        Period Record
+                    </h4>
+
+                    <small>
+                        Record #${period.id}
+                    </small>
+
+                </div>
+
+
+                <p>
+                    <strong>
+                        Started:
+                    </strong>
+
+                    ${escapeHTML(
+                        formatDateOnly(
+                            periodStart
+                        )
+                    )}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Ended:
+                    </strong>
+
+                    ${
+                        periodEnd
+                            ? escapeHTML(
+                                formatDateOnly(
+                                    periodEnd
+                                )
+                            )
+                            : "Not entered"
+                    }
+                </p>
+
+
+                <p>
+                    <strong>
+                        Cycle:
+                    </strong>
+
+                    ${periodCycle} days
+                </p>
+
+
+                <p>
+                    <strong>
+                        Next expected:
+                    </strong>
+
+                    ${escapeHTML(
+                        formatDateOnly(
+                            periodNext
+                        )
+                    )}
+                </p>
+
+
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editPeriod(${period.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    EVENTS
-===================================================== */
+========================================================= */
 
 async function saveEvent() {
 
@@ -2878,10 +3501,12 @@ async function saveEvent() {
             "eventDate"
         ).value;
 
+
     const title =
         document.getElementById(
             "eventTitle"
         ).value.trim();
+
 
     const description =
         document.getElementById(
@@ -2900,8 +3525,11 @@ async function saveEvent() {
         await insertRow(
             "events",
             {
-                event_date: date,
+                event_date:
+                    date,
+
                 title,
+
                 description
             }
         );
@@ -2911,9 +3539,11 @@ async function saveEvent() {
             "eventDate"
         ).value = "";
 
+
         document.getElementById(
             "eventTitle"
         ).value = "";
+
 
         document.getElementById(
             "eventDescription"
@@ -2923,13 +3553,16 @@ async function saveEvent() {
         displayEvents();
 
     }
+
     catch(error) {
 
         alert(
             "Could not save event: " +
             error.message
         );
+
     }
+
 }
 
 
@@ -2939,6 +3572,7 @@ async function displayEvents() {
         document.getElementById(
             "eventsList"
         );
+
 
     const data =
         await loadRows(
@@ -2952,6 +3586,7 @@ async function displayEvents() {
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -2976,16 +3611,29 @@ async function displayEvents() {
                     )}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editEvent(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    MONTHLY PLANS
-===================================================== */
+========================================================= */
 
 async function saveMonthlyPlan() {
 
@@ -2993,6 +3641,7 @@ async function saveMonthlyPlan() {
         document.getElementById(
             "planMonth"
         ).value;
+
 
     const plan =
         document.getElementById(
@@ -3021,6 +3670,7 @@ async function saveMonthlyPlan() {
             "planMonth"
         ).value = "";
 
+
         document.getElementById(
             "monthlyPlan"
         ).value = "";
@@ -3029,13 +3679,16 @@ async function saveMonthlyPlan() {
         displayMonthlyPlans();
 
     }
+
     catch(error) {
 
         alert(
             "Could not save monthly plan: " +
             error.message
         );
+
     }
+
 }
 
 
@@ -3045,6 +3698,7 @@ async function displayMonthlyPlans() {
         document.getElementById(
             "monthlyList"
         );
+
 
     const data =
         await loadRows(
@@ -3058,6 +3712,7 @@ async function displayMonthlyPlans() {
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -3073,16 +3728,29 @@ async function displayMonthlyPlans() {
                     )}
                 </p>
 
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editMonthlyPlan(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    GOALS
-===================================================== */
+========================================================= */
 
 async function saveGoal() {
 
@@ -3091,10 +3759,12 @@ async function saveGoal() {
             "goalTitle"
         ).value.trim();
 
+
     const description =
         document.getElementById(
             "goalDescription"
         ).value.trim();
+
 
     const targetDate =
         document.getElementById(
@@ -3111,10 +3781,15 @@ async function saveGoal() {
             "goals",
             {
                 title,
+
                 description,
+
                 target_date:
                     targetDate || null,
-                completed: false
+
+                completed:
+                    false
+
             }
         );
 
@@ -3123,9 +3798,11 @@ async function saveGoal() {
             "goalTitle"
         ).value = "";
 
+
         document.getElementById(
             "goalDescription"
         ).value = "";
+
 
         document.getElementById(
             "goalTargetDate"
@@ -3135,13 +3812,16 @@ async function saveGoal() {
         displayGoals();
 
     }
+
     catch(error) {
 
         alert(
             "Could not save goal: " +
             error.message
         );
+
     }
+
 }
 
 
@@ -3151,6 +3831,7 @@ async function displayGoals() {
         document.getElementById(
             "goalsList"
         );
+
 
     const data =
         await loadRows(
@@ -3164,6 +3845,7 @@ async function displayGoals() {
     data.forEach(function(item) {
 
         list.innerHTML += `
+
             <div class="saved-item">
 
                 <h4>
@@ -3181,29 +3863,147 @@ async function displayGoals() {
 
                 ${
                     item.target_date
-                    ? `
-                        <small>
-                            🎯 Target:
-                            ${escapeHTML(
-                                formatDateOnly(
-                                    item.target_date
-                                )
-                            )}
-                        </small>
-                    `
-                    : ""
+                        ? `
+                            <small>
+                                🎯 Target:
+                                ${escapeHTML(
+                                    formatDateOnly(
+                                        item.target_date
+                                    )
+                                )}
+                            </small>
+                        `
+                        : ""
                 }
 
+
+                <div class="item-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="editGoal(${item.id})"
+                    >
+                        Edit
+                    </button>
+
+                </div>
+
             </div>
+
         `;
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
+   EDIT FUNCTION PLACEHOLDERS
+     
+   These are intentionally included now so the HTML is
+   ready for the complete editing system in Stage 2.
+========================================================= */
+
+function editBusiness(id) {
+
+    alert(
+        "Business editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editBibiRecord(
+    id,
+    type
+) {
+
+    alert(
+        "Editing " +
+        type +
+        " will be connected in Stage 2."
+    );
+
+}
+
+
+function editContent(id) {
+
+    alert(
+        "Content editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editTodo(id) {
+
+    alert(
+        "To-do editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editNote(id) {
+
+    alert(
+        "Note editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editPeriod(id) {
+
+    alert(
+        "Period editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editEvent(id) {
+
+    alert(
+        "Event editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editMonthlyPlan(id) {
+
+    alert(
+        "Monthly-plan editing will be connected in Stage 2."
+    );
+
+}
+
+
+function editGoal(id) {
+
+    alert(
+        "Goal editing will be connected in Stage 2."
+    );
+
+}
+
+
+function cancelNoteEdit() {}
+
+function cancelPeriodEdit() {}
+
+function cancelEventEdit() {}
+
+function cancelMonthlyEdit() {}
+
+function cancelGoalEdit() {}
+
+
+/* =========================================================
    HELPERS
-===================================================== */
+========================================================= */
 
 function escapeHTML(text) {
 
@@ -3212,19 +4012,28 @@ function escapeHTML(text) {
             "div"
         );
 
+
     div.textContent =
         text || "";
 
+
     return div.innerHTML;
+
 }
 
 
-function formatDate(dateString) {
+function formatDate(
+    dateString
+) {
 
     if (!dateString) return "";
 
+
     const date =
-        new Date(dateString);
+        new Date(
+            dateString
+        );
+
 
     return date.toLocaleDateString(
         undefined,
@@ -3234,27 +4043,36 @@ function formatDate(dateString) {
             day: "numeric"
         }
     );
+
 }
 
 
-function formatDateOnly(dateString) {
+function formatDateOnly(
+    dateString
+) {
 
     if (!dateString) return "";
 
+
     const parts =
-        String(dateString).split("-");
+        String(
+            dateString
+        ).split("-");
 
 
     if (
         parts.length !== 3
     ) {
+
         return dateString;
+
     }
 
 
     return `
         ${parts[2]}/${parts[1]}/${parts[0]}
     `;
+
 }
 
 
@@ -3283,18 +4101,25 @@ function addDays(
     const month =
         String(
             date.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const day =
         String(
             date.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     return `
         ${year}-${month}-${day}
     `;
+
 }
 
 
@@ -3324,12 +4149,13 @@ function setStatus(
                 ? "success"
                 : "error"
         );
+
 }
 
 
-/* =====================================================
+/* =========================================================
    LOAD EVERYTHING
-===================================================== */
+========================================================= */
 
 async function loadEverything() {
 
@@ -3356,12 +4182,13 @@ async function loadEverything() {
     await displayMonthlyPlans();
 
     await displayGoals();
+
 }
 
 
-/* =====================================================
+/* =========================================================
    START APP
-===================================================== */
+========================================================= */
 
 loadEverything();
 
