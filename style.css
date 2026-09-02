@@ -1,6 +1,15 @@
 /* =====================================================
-   THE BIBI HUB
-   BLACK + PINK DESIGN
+   THE BIBI HUB — MAIN STYLES
+   Colour palette:
+   Black        #0B0B0B
+   White        #F8F8F8
+   Rose Quartz  #E6B7C1
+   Dusty Rose   #B76E79
+   Deep Rose    #8F4E5A
+===================================================== */
+
+/* =====================================================
+   RESET
 ===================================================== */
 
 * {
@@ -15,301 +24,56 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    background: #050505;
+    color: #F8F8F8;
     min-height: 100vh;
+    background: #0B0B0B;
     overflow-x: hidden;
 }
 
 
 /* =====================================================
-   BACKGROUND PHOTO SLIDESHOW
+   BACKGROUND
 ===================================================== */
 
-body::before {
-    content: "";
+.background-slideshow {
     position: fixed;
     inset: 0;
-
-    background-image:
-        linear-gradient(
-            rgba(0, 0, 0, 0.78),
-            rgba(0, 0, 0, 0.88)
-        ),
-        url("images/image1.jpg");
-
-    background-size: cover;
-    background-position: center;
-
-    z-index: -2;
-
-    animation: backgroundSlideshow 125s infinite;
+    width: 100%;
+    height: 100vh;
+    z-index: -10;
+    overflow: hidden;
+    background: #000000;
 }
 
+.bg-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
 
-/* Dark overlay */
+    /* Makes background images elegant and readable */
+    filter: brightness(32%) saturate(75%);
+}
 
-body::after {
-    content: "";
+.bg-slide.active {
+    opacity: 1;
+}
+
+.background-overlay {
     position: fixed;
     inset: 0;
 
     background:
-        radial-gradient(
-            circle at top right,
-            rgba(255, 20, 147, 0.12),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom left,
-            rgba(255, 20, 147, 0.10),
-            transparent 35%
+        linear-gradient(
+            rgba(11, 11, 11, 0.55),
+            rgba(11, 11, 11, 0.82)
         );
 
+    z-index: -9;
     pointer-events: none;
-    z-index: -1;
-}
-
-
-/* =====================================================
-   PHOTO ANIMATION
-===================================================== */
-
-@keyframes backgroundSlideshow {
-
-    0% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image1.jpg");
-    }
-
-    4% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image2.jpg");
-    }
-
-    8% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image3.jpg");
-    }
-
-    12% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image4.jpg");
-    }
-
-    16% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image5.jpg");
-    }
-
-    20% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image6.jpg");
-    }
-
-    24% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image7.jpg");
-    }
-
-    28% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image8.jpg");
-    }
-
-    32% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image9.jpg");
-    }
-
-    36% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image10.jpg");
-    }
-
-    40% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image11.jpg");
-    }
-
-    44% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image12.jpg");
-    }
-
-    48% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image13.jpg");
-    }
-
-    52% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image14.jpg");
-    }
-
-    56% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image15.jpg");
-    }
-
-    60% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image16.jpg");
-    }
-
-    64% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image17.jpg");
-    }
-
-    68% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image18.jpg");
-    }
-
-    72% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image19.jpg");
-    }
-
-    76% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image20.jpg");
-    }
-
-    80% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image21.jpg");
-    }
-
-    84% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image22.jpg");
-    }
-
-    88% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image23.jpg");
-    }
-
-    92% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image24.jpg");
-    }
-
-    96% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image25.jpg");
-    }
-
-    100% {
-        background-image:
-            linear-gradient(
-                rgba(0, 0, 0, 0.78),
-                rgba(0, 0, 0, 0.88)
-            ),
-            url("images/image1.jpg");
-    }
 }
 
 
@@ -318,29 +82,37 @@ body::after {
 ===================================================== */
 
 header {
+    position: relative;
+    z-index: 2;
+
     text-align: center;
-    padding: 55px 20px 35px;
 
-    background: rgba(0, 0, 0, 0.82);
+    padding: 35px 20px 25px;
 
-    border-bottom: 1px solid rgba(255, 20, 147, 0.35);
+    background: rgba(11, 11, 11, 0.82);
 
-    animation: fadeDown 1s ease;
+    border-bottom: 1px solid rgba(230, 183, 193, 0.45);
+
+    backdrop-filter: blur(8px);
 }
 
 header h1 {
-    color: #ff1493;
-    font-size: 3rem;
-    margin-bottom: 10px;
+    color: #F8F8F8;
+
+    font-size: 2.8rem;
+
+    letter-spacing: 1px;
 
     text-shadow:
-        0 0 10px rgba(255, 20, 147, 0.5),
-        0 0 25px rgba(255, 20, 147, 0.25);
+        0 0 15px rgba(230, 183, 193, 0.25);
 }
 
 header p {
-    color: #f5f5f5;
-    font-size: 1.05rem;
+    margin-top: 8px;
+
+    color: #E6B7C1;
+
+    letter-spacing: 0.3px;
 }
 
 
@@ -349,10 +121,30 @@ header p {
 ===================================================== */
 
 main {
+    position: relative;
+    z-index: 2;
+
     width: 92%;
     max-width: 1200px;
+
     margin: auto;
-    padding-bottom: 80px;
+
+    padding: 25px 0 80px;
+}
+
+
+/* =====================================================
+   PAGES
+===================================================== */
+
+.page-section {
+    display: none;
+
+    animation: fadeIn 0.4s ease;
+}
+
+.page-section.active {
+    display: block;
 }
 
 
@@ -363,98 +155,127 @@ main {
 .welcome {
     text-align: center;
 
-    margin: 40px auto;
+    padding: 35px 20px;
 
-    padding: 35px 25px;
+    margin-bottom: 25px;
 
-    background: rgba(0, 0, 0, 0.78);
+    background: rgba(11, 11, 11, 0.78);
 
-    border: 1px solid rgba(255, 20, 147, 0.3);
+    border: 1px solid rgba(230, 183, 193, 0.45);
 
     border-radius: 20px;
 
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.5),
-        0 0 25px rgba(255, 20, 147, 0.08);
-
-    animation: fadeUp 1s ease;
+    backdrop-filter: blur(8px);
 }
 
 .welcome h2 {
-    color: #ff1493;
-    margin-bottom: 12px;
+    color: #E6B7C1;
+
     font-size: 2rem;
+
+    margin-bottom: 10px;
 }
 
 .welcome p {
-    color: #ddd;
-    line-height: 1.7;
+    color: #F8F8F8;
 }
 
 
 /* =====================================================
-   HUB GRID
+   STREAK
 ===================================================== */
 
-.hub-grid {
-    display: grid;
+.streak-box {
+    display: inline-block;
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    margin-top: 18px;
 
-    gap: 25px;
+    padding: 12px 20px;
 
-    margin-bottom: 40px;
+    border: 2px solid #B76E79;
+
+    border-radius: 30px;
+
+    background: rgba(11, 11, 11, 0.85);
+
+    color: #F8F8F8;
+
+    box-shadow:
+        0 0 20px rgba(183, 110, 121, 0.18);
+}
+
+.streak-number {
+    color: #E6B7C1;
+
+    font-weight: bold;
 }
 
 
 /* =====================================================
-   CARDS
+   GRIDS
+===================================================== */
+
+.hub-grid,
+.content-grid,
+.business-grid,
+.goals-grid,
+.calendar-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   HUB CARDS
 ===================================================== */
 
 .hub-card {
-    background: rgba(8, 8, 8, 0.9);
+    padding: 30px;
 
-    border: 1px solid rgba(255, 20, 147, 0.25);
+    min-height: 180px;
+
+    background: rgba(11, 11, 11, 0.80);
+
+    border: 1px solid rgba(230, 183, 193, 0.35);
 
     border-radius: 20px;
 
-    padding: 30px;
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
 
     transition:
         transform 0.3s ease,
         border-color 0.3s ease,
         box-shadow 0.3s ease;
-
-    animation: fadeUp 0.8s ease;
 }
 
 .hub-card:hover {
-    transform: translateY(-7px);
+    transform: translateY(-6px);
 
-    border-color: #ff1493;
+    border-color: #B76E79;
 
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.65),
-        0 0 25px rgba(255, 20, 147, 0.15);
+        0 0 25px rgba(183, 110, 121, 0.20);
 }
 
-.hub-card h2,
-.hub-card h3 {
-    color: #ff1493;
+.hub-icon {
+    font-size: 2.5rem;
 
     margin-bottom: 12px;
 }
 
+.hub-card h3 {
+    color: #E6B7C1;
+
+    margin-bottom: 10px;
+}
+
 .hub-card p {
-    color: #d4d4d4;
+    color: #EAEAEA;
 
-    line-height: 1.6;
-
-    margin-bottom: 22px;
+    line-height: 1.5;
 }
 
 
@@ -465,50 +286,51 @@ main {
 button {
     border: none;
 
-    background: #ff1493;
-
-    color: white;
-
     padding: 12px 20px;
 
     border-radius: 12px;
 
-    font-size: 0.95rem;
+    background: #B76E79;
+
+    color: #F8F8F8;
 
     font-weight: bold;
 
     cursor: pointer;
 
     transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 button:hover {
-    background: #ff3ca5;
+    background: #8F4E5A;
 
     transform: translateY(-2px);
 
     box-shadow:
-        0 6px 20px rgba(255, 20, 147, 0.35);
+        0 0 15px rgba(183, 110, 121, 0.30);
 }
 
-button:active {
-    transform: scale(0.96);
+.card-button {
+    margin-top: 18px;
 }
 
+.small-button {
+    padding: 8px 12px;
 
-/* =====================================================
-   HUB SECTIONS
-===================================================== */
+    font-size: 0.85rem;
+}
 
-.hub-section {
-    display: none;
+.delete-button {
+    background: #3A1F24;
 
-    padding-top: 25px;
+    border: 1px solid #B76E79;
+}
 
-    animation: fadeUp 0.5s ease;
+.delete-button:hover {
+    background: #8F4E5A;
 }
 
 
@@ -517,327 +339,387 @@ button:active {
 ===================================================== */
 
 .section-header {
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(11, 11, 11, 0.82);
 
-    padding: 30px;
+    border: 1px solid rgba(230, 183, 193, 0.40);
 
     border-radius: 20px;
 
-    border: 1px solid rgba(255, 20, 147, 0.25);
+    padding: 25px;
 
-    margin-bottom: 25px;
+    margin-bottom: 22px;
+
+    backdrop-filter: blur(8px);
 }
 
 .section-header h2 {
-    color: #ff1493;
+    color: #E6B7C1;
 
     font-size: 2rem;
 
-    margin: 20px 0 10px;
+    margin: 20px 0 8px;
 }
 
 .section-header p {
-    color: #ccc;
+    color: #EAEAEA;
 }
 
-
-/* =====================================================
-   BACK BUTTON
-===================================================== */
-
 .back-button {
-    background: #111;
+    background: transparent;
 
-    color: #ff1493;
+    color: #E6B7C1;
 
-    border: 1px solid #ff1493;
+    border: 1px solid #B76E79;
 }
 
 .back-button:hover {
-    background: #ff1493;
+    background: #B76E79;
 
-    color: white;
+    color: #F8F8F8;
 }
 
 
 /* =====================================================
-   BUSINESS OPTIONS
+   CONTENT CARDS
 ===================================================== */
 
-.business-options {
-    display: grid;
+.content-card,
+.business-card,
+.goal-card,
+.calendar-card {
+    background: rgba(11, 11, 11, 0.82);
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    border: 1px solid rgba(230, 183, 193, 0.32);
 
-    gap: 22px;
+    border-radius: 18px;
 
-    margin-bottom: 30px;
+    padding: 25px;
+
+    backdrop-filter: blur(7px);
+}
+
+.content-card h3,
+.business-card h3,
+.goal-card h3,
+.calendar-card h3 {
+    color: #E6B7C1;
+
+    margin-bottom: 10px;
+}
+
+.content-card p,
+.business-card p,
+.goal-card p,
+.calendar-card p {
+    color: #EAEAEA;
+
+    line-height: 1.6;
 }
 
 
 /* =====================================================
-   BUSINESS / CONTENT / IT / MODELLING PAGES
-===================================================== */
-
-.business-page {
-    display: none;
-
-    background: rgba(5, 5, 5, 0.93);
-
-    border: 1px solid rgba(255, 20, 147, 0.25);
-
-    border-radius: 20px;
-
-    padding: 30px;
-
-    margin-top: 25px;
-
-    animation: slideIn 0.4s ease;
-}
-
-.business-page h2 {
-    color: #ff1493;
-
-    margin: 20px 0;
-}
-
-
-/* =====================================================
-   FORM CARD
+   FORMS
 ===================================================== */
 
 .form-card {
-    display: flex;
+    background: rgba(11, 11, 11, 0.84);
 
-    flex-direction: column;
+    padding: 25px;
 
-    gap: 14px;
+    border-radius: 18px;
 
-    background: #0d0d0d;
+    border: 1px solid rgba(230, 183, 193, 0.32);
 
-    border: 1px solid #222;
+    margin-bottom: 20px;
 
-    padding: 22px;
-
-    border-radius: 16px;
-
-    margin-bottom: 25px;
+    backdrop-filter: blur(8px);
 }
 
+.form-card h3 {
+    color: #E6B7C1;
 
-/* =====================================================
-   INPUTS
-===================================================== */
+    margin-bottom: 15px;
+}
 
 input,
-select,
-textarea {
+textarea,
+select {
     width: 100%;
 
-    padding: 13px 15px;
+    padding: 13px;
+
+    margin-bottom: 12px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #F8F8F8;
+
+    border: 1px solid rgba(230, 183, 193, 0.28);
 
     border-radius: 10px;
 
-    border: 1px solid #333;
-
-    background: #151515;
-
-    color: white;
-
-    font-size: 0.95rem;
-
     outline: none;
 
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(248, 248, 248, 0.55);
 }
 
 input:focus,
-select:focus,
-textarea:focus {
-    border-color: #ff1493;
+textarea:focus,
+select:focus {
+    border-color: #B76E79;
 
     box-shadow:
-        0 0 0 3px rgba(255, 20, 147, 0.1);
+        0 0 0 3px rgba(183, 110, 121, 0.12);
 }
 
 textarea {
+    min-height: 120px;
+
     resize: vertical;
+}
+
+label {
+    display: block;
+
+    color: #E6B7C1;
+
+    margin: 5px 0 7px;
+
+    font-weight: bold;
 }
 
 
 /* =====================================================
-   LIST ITEMS
+   SAVED ITEMS
 ===================================================== */
 
-.list-item {
-    background: #0d0d0d;
+.saved-list {
+    margin-top: 20px;
+}
 
-    border-left: 4px solid #ff1493;
+.saved-item {
+    background: rgba(11, 11, 11, 0.84);
 
-    border-radius: 12px;
+    border-left: 4px solid #B76E79;
 
     padding: 18px;
 
     margin-bottom: 12px;
 
-    animation: listAppear 0.35s ease;
+    border-radius: 10px;
+
+    backdrop-filter: blur(6px);
 }
 
-.list-item h3 {
-    color: #ff1493;
+.saved-item h4 {
+    color: #E6B7C1;
 
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-.list-item p {
-    color: #ddd;
+.saved-item p {
+    color: #F8F8F8;
 
-    line-height: 1.6;
+    white-space: pre-wrap;
+
+    line-height: 1.5;
+}
+
+.saved-item small {
+    color: rgba(248, 248, 248, 0.60);
+
+    display: block;
+
+    margin-top: 8px;
+}
+
+.item-actions {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin-top: 12px;
+}
+
+
+/* =====================================================
+   TODO
+===================================================== */
+
+.todo-progress {
+    margin-top: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+
+    height: 12px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #B76E79,
+            #E6B7C1
+        );
+
+    transition: width 0.3s;
+}
+
+.todo-status {
+    color: #E6B7C1;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   PERIOD RECORDS
+===================================================== */
+
+.period-box {
+    text-align: center;
+}
+
+.period-status {
+    font-size: 1.2rem;
+
+    color: #E6B7C1;
+
+    margin: 15px 0;
+
+    line-height: 1.8;
+}
+
+.period-info {
+    background:
+        rgba(230, 183, 193, 0.08);
+
+    border:
+        1px solid rgba(230, 183, 193, 0.30);
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    margin-top: 20px;
+}
+
+
+/* =====================================================
+   CALENDAR
+===================================================== */
+
+.calendar-list {
+    margin-top: 20px;
+}
+
+.event {
+    background: rgba(11, 11, 11, 0.84);
+
+    border-left: 4px solid #B76E79;
+
+    padding: 16px;
+
+    border-radius: 10px;
 
     margin-bottom: 12px;
 }
 
-.list-item button {
-    background: #191919;
-
-    color: #ff1493;
-
-    border: 1px solid #ff1493;
-
-    padding: 8px 14px;
-
-    font-size: 0.85rem;
-}
-
-.list-item button:hover {
-    background: #ff1493;
-
-    color: white;
-}
-
 
 /* =====================================================
-   FINANCE SUMMARY
+   GALLERY
 ===================================================== */
 
-.finance-summary {
+.gallery-grid {
     display: grid;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 15px;
-
-    margin-bottom: 25px;
 }
 
-.summary-card {
-    background: #0d0d0d;
+.gallery-grid img {
+    width: 100%;
 
-    border: 1px solid rgba(255, 20, 147, 0.25);
+    height: 220px;
 
-    padding: 20px;
+    object-fit: cover;
 
     border-radius: 15px;
 
-    text-align: center;
+    border:
+        2px solid rgba(230, 183, 193, 0.35);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
+
+    cursor: pointer;
 }
 
-.summary-card p {
-    color: #aaa;
+.gallery-grid img:hover {
+    transform: scale(1.03);
 
-    margin-bottom: 8px;
-}
-
-.summary-card h3 {
-    color: #ff1493;
-
-    font-size: 1.4rem;
-}
-
-
-/* =====================================================
-   SPECIAL PINK GLOW
-===================================================== */
-
-.hub-card::before {
-    content: "";
-    display: block;
-
-    width: 35px;
-    height: 3px;
-
-    background: #ff1493;
-
-    border-radius: 5px;
-
-    margin-bottom: 18px;
-
-    box-shadow:
-        0 0 10px rgba(255, 20, 147, 0.5);
+    border-color: #B76E79;
 }
 
 
 /* =====================================================
-   ANIMATIONS
+   STATUS MESSAGES
 ===================================================== */
 
-@keyframes fadeDown {
+.status {
+    margin-top: 12px;
+
+    color: rgba(248, 248, 248, 0.60);
+
+    min-height: 20px;
+}
+
+.success {
+    color: #A8D5BA;
+}
+
+.error {
+    color: #E9A0A0;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes fadeIn {
 
     from {
         opacity: 0;
-        transform: translateY(-25px);
+        transform: translateY(15px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
 
-
-@keyframes fadeUp {
-
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-@keyframes slideIn {
-
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-
-@keyframes listAppear {
-
-    from {
-        opacity: 0;
-        transform: scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }
 
 
@@ -845,373 +727,30 @@ textarea {
    MOBILE
 ===================================================== */
 
-@media (max-width: 750px) {
-
-    header {
-        padding: 40px 15px 30px;
-    }
+@media (max-width: 700px) {
 
     header h1 {
-        font-size: 2.2rem;
+        font-size: 2.1rem;
+    }
+
+    .hub-grid,
+    .content-grid,
+    .business-grid,
+    .goals-grid,
+    .calendar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-grid img {
+        height: 160px;
     }
 
     main {
         width: 94%;
     }
 
-    .hub-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .business-options {
-        grid-template-columns: 1fr;
-    }
-
-    .finance-summary {
-        grid-template-columns: 1fr;
-    }
-
-    .hub-card {
-        padding: 23px;
-    }
-
-    .business-page {
-        padding: 22px;
-    }
-
-}
-
-
-/* =====================================================
-   VERY SMALL PHONES
-===================================================== */
-
-@media (max-width: 400px) {
-
-    header h1 {
-        font-size: 1.9rem;
-    }
-
-    .welcome h2 {
-        font-size: 1.6rem;
-    }
-
-    button {
-        width: 100%;
-    }
-
-}
-/* =====================================================
-   BIBI FULL BACKGROUND SLIDESHOW
-===================================================== */
-
-#slideshowBackground {
-    position: fixed;
-    inset: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    z-index: -10;
-
-    overflow: hidden;
-
-    background: #000;
-}
-
-
-#backgroundSlide {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-    opacity: 1;
-
-    transition: opacity 0.9s ease;
-}
-
-
-/* DARK OVERLAY */
-
-#backgroundOverlay {
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100vh;
-
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.65),
-            rgba(0, 0, 0, 0.78)
-        );
-
-    z-index: -9;
-
-    pointer-events: none;
-}
-
-
-/* KEEP EVERYTHING ABOVE THE BACKGROUND */
-
-header,
-main,
-.hub-section,
-footer {
-    position: relative;
-    z-index: 1;
-}
-
-
-/* HOME BUTTONS */
-
-.home-actions {
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    flex-wrap: wrap;
-
-    gap: 15px;
-
-    margin: 25px auto;
-}
-
-
-/* FANCY EMOJI BUTTON */
-
-.fancy-button {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    border: 2px solid #ff1493;
-
-    background: rgba(0, 0, 0, 0.78);
-
-    color: white;
-
-    padding: 12px 22px;
-
-    border-radius: 30px;
-
-    cursor: pointer;
-
-    font-weight: bold;
-
-    transition:
-        transform 0.3s ease,
-        background 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-.fancy-button:hover {
-
-    transform: translateY(-4px) scale(1.03);
-
-    background: #ff1493;
-
-    color: white;
-
-    box-shadow:
-        0 0 15px #ff1493,
-        0 0 30px rgba(255, 20, 147, 0.5);
-}
-
-
-/* HUB CARDS */
-
-.hub-card {
-
-    background:
-        rgba(0, 0, 0, 0.78) !important;
-
-    border:
-        2px solid #ff1493 !important;
-
-    color: white !important;
-
-    backdrop-filter: blur(5px);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        background 0.3s ease;
-}
-
-
-.hub-card:hover {
-
-    transform:
-        translateY(-8px);
-
-    background:
-        rgba(255, 20, 147, 0.25) !important;
-
-    box-shadow:
-        0 0 20px rgba(255, 20, 147, 0.7);
-}
-
-
-/* HUB ICON */
-
-.hub-icon {
-
-    font-size: 2.5rem;
-
-    margin-bottom: 8px;
-
-}
-
-
-/* WELCOME MESSAGE */
-
-.welcome-message {
-
-    display: inline-block;
-
-    margin: 10px auto 20px;
-
-    padding: 10px 18px;
-
-    border-radius: 30px;
-
-    background:
-        rgba(0, 0, 0, 0.7);
-
-    border:
-        1px solid #ff1493;
-
-    color: #ff69b4;
-
-}
-
-
-/* STREAK */
-
-.streak-box {
-
-    background:
-        rgba(0, 0, 0, 0.8);
-
-    border:
-        2px solid #ff1493;
-
-    border-radius: 15px;
-
-    padding: 8px 14px;
-
-    color: white;
-
-    box-shadow:
-        0 0 12px rgba(255, 20, 147, 0.4);
-
-}
-
-
-.streak-number {
-
-    color: #ff1493;
-
-    font-size: 1.2rem;
-
-    font-weight: bold;
-
-}
-
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-
-    .home-actions {
-
-        flex-direction: column;
-
-    }
-
-    .fancy-button {
-
-        width: 85%;
-
-    }
-
-    .hub-grid {
-
-        grid-template-columns:
-            1fr 1fr;
-    }
-
-    #backgroundSlide {
-
-        object-position: center;
-    }
-
-}
-/* =========================================
-   BIBI FULL BACKGROUND SLIDESHOW
-========================================= */
-
-.background-slideshow {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    z-index: -10;
-    background: #000;
-}
-
-.bg-slide {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    opacity: 0;
-
-    transition: opacity 1.5s ease-in-out;
-
-    filter: brightness(45%);
-}
-
-.bg-slide.active {
-    opacity: 1;
-}
-
-
-/* Keeps your website content above the pictures */
-
-body {
-    position: relative;
-    min-height: 100vh;
-    background: #000;
-}
-
-
-/* Make sure your actual website is visible */
-
-.welcome,
-.hub-grid,
-.hub-section,
-header,
-main,
-footer {
-    position: relative;
-    z-index: 2;
 }
