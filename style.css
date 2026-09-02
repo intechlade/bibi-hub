@@ -1,756 +1,1443 @@
-/* =====================================================
-   THE BIBI HUB — MAIN STYLES
-   Colour palette:
-   Black        #0B0B0B
-   White        #F8F8F8
-   Rose Quartz  #E6B7C1
-   Dusty Rose   #B76E79
-   Deep Rose    #8F4E5A
-===================================================== */
+/* =========================================================
+   THE BIBI HUB — STAGE 2
+   STYLE.CSS
+   ========================================================= */
 
-/* =====================================================
-   RESET
-===================================================== */
+
+/* =========================================================
+   1. COLOUR SYSTEM
+   ========================================================= */
+
+:root {
+
+    --black: #0b0b0d;
+    --black-soft: #151419;
+    --black-card: rgba(15, 15, 18, 0.88);
+
+    --white: #ffffff;
+    --white-soft: #f7f4f6;
+
+    --rose-quartz: #e8b4c8;
+    --rose-light: #f4d7e2;
+    --rose-dark: #c986a1;
+
+    --purple: #b9a7d8;
+    --purple-light: #d9cde9;
+    --purple-dark: #8872ad;
+
+    --grey: #bdb8bd;
+    --grey-dark: #777279;
+
+    --success: #a8d5ba;
+    --danger: #e5a3aa;
+
+    --shadow:
+        0 15px 40px rgba(0, 0, 0, 0.35);
+
+    --soft-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+
+    --radius: 20px;
+    --radius-small: 12px;
+
+    --transition:
+        0.25s ease;
+}
+
+
+/* =========================================================
+   2. BASIC RESET
+   ========================================================= */
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
+
 
 html {
     scroll-behavior: smooth;
 }
 
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #F8F8F8;
+
     min-height: 100vh;
-    background: #0B0B0B;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--white);
+
+    background:
+        var(--black);
+
+    line-height: 1.6;
+
     overflow-x: hidden;
 }
 
 
-/* =====================================================
-   BACKGROUND
-===================================================== */
+/* =========================================================
+   3. BACKGROUND SLIDESHOW
+   ========================================================= */
 
 .background-slideshow {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: -10;
-    overflow: hidden;
-    background: #000000;
-}
 
-.bg-slide {
-    position: absolute;
+    position: fixed;
+
     inset: 0;
+
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
 
-    /* Makes background images elegant and readable */
-    filter: brightness(32%) saturate(75%);
+    z-index: -3;
+
+    overflow: hidden;
 }
+
+
+.bg-slide {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: 0;
+
+    transition:
+        opacity 1.5s ease;
+
+    transform: scale(1.03);
+}
+
 
 .bg-slide.active {
     opacity: 1;
 }
 
+
 .background-overlay {
+
     position: fixed;
+
     inset: 0;
+
+    z-index: -2;
 
     background:
         linear-gradient(
-            rgba(11, 11, 11, 0.55),
-            rgba(11, 11, 11, 0.82)
+            135deg,
+            rgba(8, 8, 10, 0.90),
+            rgba(20, 15, 21, 0.80),
+            rgba(82, 49, 68, 0.48)
         );
 
-    z-index: -9;
     pointer-events: none;
 }
 
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* =========================================================
+   4. HEADER
+   ========================================================= */
 
 header {
-    position: relative;
-    z-index: 2;
+
+    width: min(1100px, 92%);
+
+    margin: 35px auto 25px;
+
+    padding: 30px;
 
     text-align: center;
 
-    padding: 35px 20px 25px;
+    background:
+        rgba(10, 10, 12, 0.78);
 
-    background: rgba(11, 11, 11, 0.82);
+    border:
+        1px solid rgba(232, 180, 200, 0.35);
 
-    border-bottom: 1px solid rgba(230, 183, 193, 0.45);
+    border-radius:
+        28px;
 
-    backdrop-filter: blur(8px);
+    box-shadow:
+        var(--shadow);
+
+    backdrop-filter:
+        blur(14px);
 }
+
 
 header h1 {
-    color: #F8F8F8;
 
-    font-size: 2.8rem;
+    color: var(--rose-light);
 
-    letter-spacing: 1px;
+    font-size:
+        clamp(2rem, 5vw, 3.2rem);
+
+    letter-spacing:
+        2px;
+
+    margin-bottom:
+        8px;
 
     text-shadow:
-        0 0 15px rgba(230, 183, 193, 0.25);
+        0 0 25px rgba(232, 180, 200, 0.25);
 }
+
 
 header p {
-    margin-top: 8px;
 
-    color: #E6B7C1;
+    color:
+        var(--white-soft);
 
-    letter-spacing: 0.3px;
+    font-size:
+        1rem;
 }
 
 
-/* =====================================================
-   MAIN
-===================================================== */
+/* =========================================================
+   5. MAIN
+   ========================================================= */
 
 main {
-    position: relative;
-    z-index: 2;
 
-    width: 92%;
-    max-width: 1200px;
+    width:
+        min(1100px, 92%);
 
-    margin: auto;
-
-    padding: 25px 0 80px;
+    margin:
+        0 auto 60px;
 }
 
 
-/* =====================================================
-   PAGES
-===================================================== */
+/* =========================================================
+   6. PAGE SECTIONS
+   ========================================================= */
 
 .page-section {
+
     display: none;
 
-    animation: fadeIn 0.4s ease;
+    animation:
+        fadeIn 0.4s ease;
 }
+
 
 .page-section.active {
     display: block;
 }
 
 
-/* =====================================================
-   WELCOME
-===================================================== */
-
-.welcome {
-    text-align: center;
-
-    padding: 35px 20px;
-
-    margin-bottom: 25px;
-
-    background: rgba(11, 11, 11, 0.78);
-
-    border: 1px solid rgba(230, 183, 193, 0.45);
-
-    border-radius: 20px;
-
-    backdrop-filter: blur(8px);
-}
-
-.welcome h2 {
-    color: #E6B7C1;
-
-    font-size: 2rem;
-
-    margin-bottom: 10px;
-}
-
-.welcome p {
-    color: #F8F8F8;
-}
-
-
-/* =====================================================
-   STREAK
-===================================================== */
-
-.streak-box {
-    display: inline-block;
-
-    margin-top: 18px;
-
-    padding: 12px 20px;
-
-    border: 2px solid #B76E79;
-
-    border-radius: 30px;
-
-    background: rgba(11, 11, 11, 0.85);
-
-    color: #F8F8F8;
-
-    box-shadow:
-        0 0 20px rgba(183, 110, 121, 0.18);
-}
-
-.streak-number {
-    color: #E6B7C1;
-
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   GRIDS
-===================================================== */
-
-.hub-grid,
-.content-grid,
-.business-grid,
-.goals-grid,
-.calendar-grid {
-    display: grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
-    gap: 20px;
-}
-
-
-/* =====================================================
-   HUB CARDS
-===================================================== */
-
-.hub-card {
-    padding: 30px;
-
-    min-height: 180px;
-
-    background: rgba(11, 11, 11, 0.80);
-
-    border: 1px solid rgba(230, 183, 193, 0.35);
-
-    border-radius: 20px;
-
-    backdrop-filter: blur(8px);
-
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.hub-card:hover {
-    transform: translateY(-6px);
-
-    border-color: #B76E79;
-
-    box-shadow:
-        0 0 25px rgba(183, 110, 121, 0.20);
-}
-
-.hub-icon {
-    font-size: 2.5rem;
-
-    margin-bottom: 12px;
-}
-
-.hub-card h3 {
-    color: #E6B7C1;
-
-    margin-bottom: 10px;
-}
-
-.hub-card p {
-    color: #EAEAEA;
-
-    line-height: 1.5;
-}
-
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-button {
-    border: none;
-
-    padding: 12px 20px;
-
-    border-radius: 12px;
-
-    background: #B76E79;
-
-    color: #F8F8F8;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.25s ease,
-        background 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-button:hover {
-    background: #8F4E5A;
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 0 15px rgba(183, 110, 121, 0.30);
-}
-
-.card-button {
-    margin-top: 18px;
-}
-
-.small-button {
-    padding: 8px 12px;
-
-    font-size: 0.85rem;
-}
-
-.delete-button {
-    background: #3A1F24;
-
-    border: 1px solid #B76E79;
-}
-
-.delete-button:hover {
-    background: #8F4E5A;
-}
-
-
-/* =====================================================
-   SECTION HEADER
-===================================================== */
-
-.section-header {
-    background: rgba(11, 11, 11, 0.82);
-
-    border: 1px solid rgba(230, 183, 193, 0.40);
-
-    border-radius: 20px;
-
-    padding: 25px;
-
-    margin-bottom: 22px;
-
-    backdrop-filter: blur(8px);
-}
-
-.section-header h2 {
-    color: #E6B7C1;
-
-    font-size: 2rem;
-
-    margin: 20px 0 8px;
-}
-
-.section-header p {
-    color: #EAEAEA;
-}
-
-.back-button {
-    background: transparent;
-
-    color: #E6B7C1;
-
-    border: 1px solid #B76E79;
-}
-
-.back-button:hover {
-    background: #B76E79;
-
-    color: #F8F8F8;
-}
-
-
-/* =====================================================
-   CONTENT CARDS
-===================================================== */
-
-.content-card,
-.business-card,
-.goal-card,
-.calendar-card {
-    background: rgba(11, 11, 11, 0.82);
-
-    border: 1px solid rgba(230, 183, 193, 0.32);
-
-    border-radius: 18px;
-
-    padding: 25px;
-
-    backdrop-filter: blur(7px);
-}
-
-.content-card h3,
-.business-card h3,
-.goal-card h3,
-.calendar-card h3 {
-    color: #E6B7C1;
-
-    margin-bottom: 10px;
-}
-
-.content-card p,
-.business-card p,
-.goal-card p,
-.calendar-card p {
-    color: #EAEAEA;
-
-    line-height: 1.6;
-}
-
-
-/* =====================================================
-   FORMS
-===================================================== */
-
-.form-card {
-    background: rgba(11, 11, 11, 0.84);
-
-    padding: 25px;
-
-    border-radius: 18px;
-
-    border: 1px solid rgba(230, 183, 193, 0.32);
-
-    margin-bottom: 20px;
-
-    backdrop-filter: blur(8px);
-}
-
-.form-card h3 {
-    color: #E6B7C1;
-
-    margin-bottom: 15px;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-
-    padding: 13px;
-
-    margin-bottom: 12px;
-
-    background: rgba(255, 255, 255, 0.06);
-
-    color: #F8F8F8;
-
-    border: 1px solid rgba(230, 183, 193, 0.28);
-
-    border-radius: 10px;
-
-    outline: none;
-
-    font-family: inherit;
-}
-
-input::placeholder,
-textarea::placeholder {
-    color: rgba(248, 248, 248, 0.55);
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: #B76E79;
-
-    box-shadow:
-        0 0 0 3px rgba(183, 110, 121, 0.12);
-}
-
-textarea {
-    min-height: 120px;
-
-    resize: vertical;
-}
-
-label {
-    display: block;
-
-    color: #E6B7C1;
-
-    margin: 5px 0 7px;
-
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   SAVED ITEMS
-===================================================== */
-
-.saved-list {
-    margin-top: 20px;
-}
-
-.saved-item {
-    background: rgba(11, 11, 11, 0.84);
-
-    border-left: 4px solid #B76E79;
-
-    padding: 18px;
-
-    margin-bottom: 12px;
-
-    border-radius: 10px;
-
-    backdrop-filter: blur(6px);
-}
-
-.saved-item h4 {
-    color: #E6B7C1;
-
-    margin-bottom: 6px;
-}
-
-.saved-item p {
-    color: #F8F8F8;
-
-    white-space: pre-wrap;
-
-    line-height: 1.5;
-}
-
-.saved-item small {
-    color: rgba(248, 248, 248, 0.60);
-
-    display: block;
-
-    margin-top: 8px;
-}
-
-.item-actions {
-    display: flex;
-
-    gap: 8px;
-
-    flex-wrap: wrap;
-
-    margin-top: 12px;
-}
-
-
-/* =====================================================
-   TODO
-===================================================== */
-
-.todo-progress {
-    margin-top: 12px;
-}
-
-.progress-bar {
-    width: 100%;
-
-    height: 12px;
-
-    background: rgba(255, 255, 255, 0.10);
-
-    border-radius: 20px;
-
-    overflow: hidden;
-
-    margin-top: 8px;
-}
-
-.progress-fill {
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #B76E79,
-            #E6B7C1
-        );
-
-    transition: width 0.3s;
-}
-
-.todo-status {
-    color: #E6B7C1;
-
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   PERIOD RECORDS
-===================================================== */
-
-.period-box {
-    text-align: center;
-}
-
-.period-status {
-    font-size: 1.2rem;
-
-    color: #E6B7C1;
-
-    margin: 15px 0;
-
-    line-height: 1.8;
-}
-
-.period-info {
-    background:
-        rgba(230, 183, 193, 0.08);
-
-    border:
-        1px solid rgba(230, 183, 193, 0.30);
-
-    border-radius: 15px;
-
-    padding: 20px;
-
-    margin-top: 20px;
-}
-
-
-/* =====================================================
-   CALENDAR
-===================================================== */
-
-.calendar-list {
-    margin-top: 20px;
-}
-
-.event {
-    background: rgba(11, 11, 11, 0.84);
-
-    border-left: 4px solid #B76E79;
-
-    padding: 16px;
-
-    border-radius: 10px;
-
-    margin-bottom: 12px;
-}
-
-
-/* =====================================================
-   GALLERY
-===================================================== */
-
-.gallery-grid {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 15px;
-}
-
-.gallery-grid img {
-    width: 100%;
-
-    height: 220px;
-
-    object-fit: cover;
-
-    border-radius: 15px;
-
-    border:
-        2px solid rgba(230, 183, 193, 0.35);
-
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease;
-
-    cursor: pointer;
-}
-
-.gallery-grid img:hover {
-    transform: scale(1.03);
-
-    border-color: #B76E79;
-}
-
-
-/* =====================================================
-   STATUS MESSAGES
-===================================================== */
-
-.status {
-    margin-top: 12px;
-
-    color: rgba(248, 248, 248, 0.60);
-
-    min-height: 20px;
-}
-
-.success {
-    color: #A8D5BA;
-}
-
-.error {
-    color: #E9A0A0;
-}
-
-
-/* =====================================================
-   ANIMATION
-===================================================== */
-
 @keyframes fadeIn {
 
     from {
         opacity: 0;
-        transform: translateY(15px);
+        transform: translateY(10px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* =========================================================
+   7. WELCOME AREA
+   ========================================================= */
 
-@media (max-width: 700px) {
+.welcome {
 
-    header h1 {
-        font-size: 2.1rem;
+    text-align: center;
+
+    padding:
+        35px 20px;
+
+    margin-bottom:
+        25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(232, 180, 200, 0.16),
+            rgba(185, 167, 216, 0.12)
+        );
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.30);
+
+    border-radius:
+        var(--radius);
+
+    backdrop-filter:
+        blur(12px);
+
+    box-shadow:
+        var(--soft-shadow);
+}
+
+
+.welcome h2 {
+
+    color:
+        var(--rose-light);
+
+    font-size:
+        clamp(1.7rem, 4vw, 2.4rem);
+
+    margin-bottom:
+        5px;
+}
+
+
+.welcome p {
+    color: var(--grey);
+}
+
+
+/* =========================================================
+   8. STREAK
+   ========================================================= */
+
+.streak-box {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 20px;
+
+    padding:
+        12px 22px;
+
+    background:
+        rgba(185, 167, 216, 0.16);
+
+    border:
+        1px solid
+        rgba(185, 167, 216, 0.40);
+
+    border-radius:
+        50px;
+
+    color:
+        var(--white);
+}
+
+
+.streak-number {
+
+    color:
+        var(--rose-light);
+
+    font-size:
+        1.4rem;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   9. HUB GRID
+   ========================================================= */
+
+.hub-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        20px;
+}
+
+
+.hub-card {
+
+    padding:
+        28px 22px;
+
+    text-align:
+        center;
+
+    background:
+        rgba(12, 12, 15, 0.86);
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.22);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--soft-shadow);
+
+    backdrop-filter:
+        blur(12px);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+
+.hub-card:hover {
+
+    transform:
+        translateY(-7px);
+
+    border-color:
+        var(--rose-quartz);
+
+    box-shadow:
+        0 18px 40px
+        rgba(0, 0, 0, 0.42);
+}
+
+
+.hub-icon {
+
+    font-size:
+        2.5rem;
+
+    margin-bottom:
+        10px;
+}
+
+
+.hub-card h3 {
+
+    color:
+        var(--rose-light);
+
+    margin-bottom:
+        8px;
+}
+
+
+.hub-card p {
+
+    color:
+        var(--grey);
+
+    font-size:
+        0.92rem;
+
+    margin-bottom:
+        18px;
+}
+
+
+/* =========================================================
+   10. SECTION HEADER
+   ========================================================= */
+
+.section-header {
+
+    position:
+        relative;
+
+    text-align:
+        center;
+
+    padding:
+        25px 15px 30px;
+
+    margin-bottom:
+        20px;
+}
+
+
+.section-header h2 {
+
+    color:
+        var(--rose-light);
+
+    font-size:
+        clamp(1.8rem, 4vw, 2.5rem);
+
+    margin-bottom:
+        5px;
+}
+
+
+.section-header p {
+
+    color:
+        var(--grey);
+}
+
+
+/* =========================================================
+   11. BACK BUTTON
+   ========================================================= */
+
+.back-button {
+
+    display:
+        inline-block;
+
+    margin-bottom:
+        18px;
+
+    padding:
+        10px 17px;
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.40);
+
+    border-radius:
+        50px;
+
+    background:
+        rgba(232, 180, 200, 0.10);
+
+    color:
+        var(--rose-light);
+
+    cursor:
+        pointer;
+
+    transition:
+        var(--transition);
+}
+
+
+.back-button:hover {
+
+    background:
+        var(--rose-quartz);
+
+    color:
+        var(--black);
+
+    transform:
+        translateX(-3px);
+}
+
+
+/* =========================================================
+   12. BUTTONS
+   ========================================================= */
+
+button {
+
+    font-family:
+        inherit;
+
+    border:
+        none;
+
+    cursor:
+        pointer;
+}
+
+
+.card-button,
+.form-card button {
+
+    padding:
+        11px 18px;
+
+    border-radius:
+        50px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rose-quartz),
+            var(--purple)
+        );
+
+    color:
+        var(--black);
+
+    font-weight:
+        700;
+
+    transition:
+        var(--transition);
+
+    box-shadow:
+        0 6px 18px
+        rgba(232, 180, 200, 0.18);
+}
+
+
+.card-button:hover,
+.form-card button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(232, 180, 200, 0.30);
+}
+
+
+/* =========================================================
+   13. FORM CARDS
+   ========================================================= */
+
+.form-card {
+
+    width:
+        100%;
+
+    padding:
+        25px;
+
+    margin:
+        20px 0;
+
+    background:
+        rgba(12, 12, 15, 0.88);
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.22);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--soft-shadow);
+
+    backdrop-filter:
+        blur(12px);
+}
+
+
+.form-card h3 {
+
+    color:
+        var(--rose-light);
+
+    margin-bottom:
+        18px;
+}
+
+
+/* =========================================================
+   14. INPUTS
+   ========================================================= */
+
+input,
+textarea,
+select {
+
+    width:
+        100%;
+
+    padding:
+        13px 15px;
+
+    margin-bottom:
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius:
+        var(--radius-small);
+
+    outline:
+        none;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    color:
+        var(--white);
+
+    font-family:
+        inherit;
+
+    transition:
+        var(--transition);
+}
+
+
+input::placeholder,
+textarea::placeholder {
+
+    color:
+        #a49da3;
+}
+
+
+textarea {
+
+    min-height:
+        110px;
+
+    resize:
+        vertical;
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+
+    border-color:
+        var(--rose-quartz);
+
+    background:
+        rgba(232, 180, 200, 0.08);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(232, 180, 200, 0.08);
+}
+
+
+select option {
+
+    background:
+        var(--black-soft);
+
+    color:
+        var(--white);
+}
+
+
+label {
+
+    display:
+        block;
+
+    color:
+        var(--rose-light);
+
+    font-size:
+        0.9rem;
+
+    margin:
+        4px 0 6px;
+}
+
+
+/* =========================================================
+   15. SAVED ITEMS
+   ========================================================= */
+
+.saved-list {
+
+    display:
+        grid;
+
+    gap:
+        14px;
+
+    margin:
+        20px 0;
+}
+
+
+.saved-item {
+
+    padding:
+        20px;
+
+    background:
+        rgba(13, 13, 16, 0.88);
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.18);
+
+    border-left:
+        4px solid
+        var(--rose-quartz);
+
+    border-radius:
+        15px;
+
+    box-shadow:
+        0 7px 20px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+.saved-item h4 {
+
+    color:
+        var(--rose-light);
+
+    margin-bottom:
+        7px;
+}
+
+
+.saved-item p {
+
+    color:
+        var(--white-soft);
+
+    margin:
+        4px 0;
+}
+
+
+.saved-item small {
+
+    display:
+        block;
+
+    margin-top:
+        8px;
+
+    color:
+        var(--grey-dark);
+}
+
+
+/* =========================================================
+   16. BUSINESS
+   ========================================================= */
+
+.business-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        18px;
+
+    margin-bottom:
+        25px;
+}
+
+
+.business-card {
+
+    padding:
+        22px;
+
+    background:
+        rgba(12, 12, 15, 0.84);
+
+    border:
+        1px solid
+        rgba(185, 167, 216, 0.22);
+
+    border-radius:
+        var(--radius);
+
+    transition:
+        var(--transition);
+}
+
+
+.business-card:hover {
+
+    border-color:
+        var(--purple);
+
+    transform:
+        translateY(-4px);
+}
+
+
+.business-card h3 {
+
+    color:
+        var(--purple-light);
+
+    margin-bottom:
+        7px;
+}
+
+
+.business-card p {
+
+    color:
+        var(--grey);
+}
+
+
+/* =========================================================
+   17. CALENDAR GRID
+   ========================================================= */
+
+.calendar-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        20px;
+}
+
+
+.calendar-card {
+
+    padding:
+        25px;
+
+    text-align:
+        center;
+
+    background:
+        rgba(12, 12, 15, 0.87);
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.22);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--soft-shadow);
+
+    transition:
+        var(--transition);
+}
+
+
+.calendar-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    border-color:
+        var(--rose-quartz);
+}
+
+
+.calendar-card h3 {
+
+    color:
+        var(--rose-light);
+
+    margin-bottom:
+        8px;
+}
+
+
+.calendar-card p {
+
+    color:
+        var(--grey);
+
+    margin-bottom:
+        18px;
+}
+
+
+/* =========================================================
+   18. PERIOD TRACKER
+   ========================================================= */
+
+.period-box {
+
+    max-width:
+        650px;
+
+    margin:
+        0 auto;
+}
+
+
+.period-status {
+
+    margin-top:
+        15px;
+
+    padding:
+        12px;
+
+    border-radius:
+        12px;
+
+    color:
+        var(--rose-light);
+
+    background:
+        rgba(232, 180, 200, 0.08);
+}
+
+
+.period-info {
+
+    margin-top:
+        20px;
+
+    padding:
+        18px;
+
+    background:
+        rgba(185, 167, 216, 0.08);
+
+    border:
+        1px solid
+        rgba(185, 167, 216, 0.22);
+
+    border-radius:
+        15px;
+}
+
+
+.period-info p {
+
+    margin:
+        8px 0;
+
+    color:
+        var(--white-soft);
+}
+
+
+.period-info strong {
+
+    color:
+        var(--rose-light);
+}
+
+
+/* =========================================================
+   19. TODO PROGRESS
+   ========================================================= */
+
+.todo-progress {
+
+    margin-top:
+        12px;
+}
+
+
+.todo-status {
+
+    display:
+        block;
+
+    color:
+        var(--purple-light);
+
+    margin-bottom:
+        6px;
+}
+
+
+.progress-bar {
+
+    width:
+        100%;
+
+    height:
+        9px;
+
+    overflow:
+        hidden;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    border-radius:
+        20px;
+}
+
+
+.progress-fill {
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--rose-quartz),
+            var(--purple)
+        );
+
+    border-radius:
+        20px;
+
+    transition:
+        width 0.4s ease;
+}
+
+
+.item-actions {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        7px;
+
+    margin-top:
+        14px;
+}
+
+
+.small-button {
+
+    padding:
+        7px 11px;
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.25);
+
+    border-radius:
+        30px;
+
+    background:
+        rgba(232, 180, 200, 0.08);
+
+    color:
+        var(--rose-light);
+
+    transition:
+        var(--transition);
+}
+
+
+.small-button:hover {
+
+    background:
+        var(--rose-quartz);
+
+    color:
+        var(--black);
+}
+
+
+/* =========================================================
+   20. GALLERY
+   ========================================================= */
+
+.gallery-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        15px;
+}
+
+
+.gallery-grid img {
+
+    width:
+        100%;
+
+    aspect-ratio:
+        1 / 1;
+
+    object-fit:
+        cover;
+
+    border-radius:
+        17px;
+
+    border:
+        2px solid
+        rgba(232, 180, 200, 0.18);
+
+    box-shadow:
+        var(--soft-shadow);
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition);
+}
+
+
+.gallery-grid img:hover {
+
+    transform:
+        scale(1.03);
+
+    border-color:
+        var(--rose-quartz);
+}
+
+
+/* =========================================================
+   21. STATUS MESSAGES
+   ========================================================= */
+
+.status {
+
+    margin-top:
+        12px;
+
+    font-size:
+        0.9rem;
+}
+
+
+.status.success {
+
+    color:
+        var(--success);
+}
+
+
+.status.error {
+
+    color:
+        var(--danger);
+}
+
+
+/* =========================================================
+   22. SPECIAL COLOUR DETAILS
+   ========================================================= */
+
+strong {
+    color:
+        var(--rose-light);
+}
+
+
+::selection {
+
+    background:
+        var(--rose-quartz);
+
+    color:
+        var(--black);
+}
+
+
+/* =========================================================
+   23. SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+
+::-webkit-scrollbar-track {
+
+    background:
+        var(--black);
+}
+
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        linear-gradient(
+            var(--rose-quartz),
+            var(--purple)
+        );
+
+    border-radius:
+        20px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        var(--rose-dark);
+}
+
+
+/* =========================================================
+   24. MOBILE — TABLETS
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .hub-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
-    .hub-grid,
-    .content-grid,
-    .business-grid,
-    .goals-grid,
+    .business-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
     .calendar-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
 
     .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   25. MOBILE — PHONES
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+    header {
+
+        width:
+            94%;
+
+        margin-top:
+            15px;
+
+        padding:
+            24px 15px;
+
+        border-radius:
+            20px;
     }
 
-    .gallery-grid img {
-        height: 160px;
+
+    header h1 {
+
+        font-size:
+            1.8rem;
+
+        letter-spacing:
+            1px;
     }
+
 
     main {
-        width: 94%;
+
+        width:
+            94%;
     }
 
+
+    .hub-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            15px;
+    }
+
+
+    .hub-card {
+
+        padding:
+            24px 18px;
+    }
+
+
+    .welcome {
+
+        padding:
+            28px 15px;
+    }
+
+
+    .form-card {
+
+        padding:
+            20px 16px;
+    }
+
+
+    .saved-item {
+
+        padding:
+            17px;
+    }
+
+
+    .gallery-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            9px;
+    }
+
+
+    .section-header {
+
+        padding-top:
+            15px;
+    }
+
+
+    .back-button {
+
+        font-size:
+            0.85rem;
+    }
+
+
+    .item-actions {
+
+        gap:
+            5px;
+    }
+
+
+    .small-button {
+
+        font-size:
+            0.78rem;
+
+        padding:
+            6px 9px;
+    }
+}
+
+
+/* =========================================================
+   26. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+
+        scroll-behavior:
+            auto !important;
+
+        transition:
+            none !important;
+
+        animation:
+            none !important;
+    }
 }
