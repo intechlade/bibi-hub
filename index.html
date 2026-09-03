@@ -1,4085 +1,4366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Bibi Hub 💗</title>
+  <title>The Bibi Hub</title>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Your main stylesheet -->
+  <link rel="stylesheet" href="./style.css">
 
-<!-- Main CSS -->
-<link rel="stylesheet" href="style.css">
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    /* =========================================================
+       EDIT MODAL
+       ========================================================= */
+
+    .edit-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .edit-modal.active {
+      display: flex;
+    }
+
+    .edit-modal-card {
+      width: min(650px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #120b16;
+      border: 1px solid rgba(255, 105, 180, 0.35);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.65);
+      position: relative;
+    }
+
+    .edit-modal-card h2 {
+      margin-top: 0;
+      margin-bottom: 22px;
+    }
+
+    .edit-close {
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .edit-close:hover {
+      background: rgba(255, 105, 180, 0.25);
+    }
+
+    .edit-field {
+      margin-bottom: 17px;
+    }
+
+    .edit-field label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .edit-field input,
+    .edit-field textarea,
+    .edit-field select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+      font: inherit;
+      outline: none;
+    }
+
+    .edit-field textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .edit-field input:focus,
+    .edit-field textarea:focus,
+    .edit-field select:focus {
+      border-color: #ff69b4;
+    }
+
+    .edit-field option {
+      background: #18101d;
+      color: white;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .edit-actions button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .save-edit-button {
+      background: #ff69b4;
+      color: #170b13;
+    }
+
+    .cancel-edit-button {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .danger-button {
+      background: rgba(255, 70, 90, 0.15);
+      color: #ff8c9a;
+      border: 1px solid rgba(255, 70, 90, 0.25) !important;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .small-button {
+      cursor: pointer;
+    }
+
+    .edit-button {
+      background: rgba(255, 105, 180, 0.14);
+      color: #ff9ccc;
+      border: 1px solid rgba(255, 105, 180, 0.25);
+    }
+
+    .delete-button {
+      background: rgba(255, 70, 90, 0.12);
+      color: #ff8d9a;
+      border: 1px solid rgba(255, 70, 90, 0.22);
+    }
+
+    .success-message {
+      color: #8ff0b0;
+      margin-top: 10px;
+    }
+
+    .error-message {
+      color: #ff8d9a;
+      margin-top: 10px;
+    }
+
+    .empty-message {
+      opacity: 0.65;
+      padding: 15px 0;
+    }
+
+    .loading-message {
+      opacity: 0.7;
+      padding: 15px 0;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     BACKGROUND IMAGES
-===================================================== -->
+  <!-- =========================================================
+       BACKGROUND SLIDESHOW
+       ========================================================= -->
 
-<div class="background-slideshow">
+  <div class="background-slideshow" aria-hidden="true">
+    <div class="slide" style="background-image:url('./bibi%20%281%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%282%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%283%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%284%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%285%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%286%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%287%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%288%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%289%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2810%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2811%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2812%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2813%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2814%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2815%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2816%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2817%29.jpg');"></div>
+    <div class="slide" style="background-image:url('./bibi%20%2818%29.jpg');"></div>
+  </div>
 
-    <img id="bg1"
-         class="bg-slide active"
-         src="./bibi%20%281%29.jpg"
-         alt="">
+  <div class="page-overlay"></div>
 
-    <img id="bg2"
-         class="bg-slide"
-         src="./bibi%20%282%29.jpg"
-         alt="">
+  <!-- =========================================================
+       HEADER
+       ========================================================= -->
 
-</div>
+  <header class="site-header">
+    <div class="header-inner">
 
-<div class="background-overlay"></div>
+      <div class="brand">
+        <h1>The Bibi Hub</h1>
+        <p>My little corner of the internet ✨</p>
+      </div>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
-<header>
-
-    <h1>🦉 THE BIBI HUB</h1>
-
-    <p>Your personal space for business, life, goals & creativity 💗</p>
-
-</header>
-
-
-<main>
-
-
-<!-- =====================================================
-     HOME
-===================================================== -->
-
-<section id="home" class="page-section active">
-
-    <div class="welcome">
-
-        <h2>Welcome back, Bibi 💗</h2>
-
-        <p>Everything you need, all in one place.</p>
-
-        <div class="streak-box">
-
-            🐼 Streak:
-            <span id="streakNumber" class="streak-number">1</span>
-            days
-
-        </div>
+      <nav class="main-nav">
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('business')">Business</button>
+        <button onclick="showSection('content')">Content</button>
+        <button onclick="showSection('todo')">To-Do</button>
+        <button onclick="showSection('calendar')">Calendar</button>
+        <button onclick="showSection('goals')">Goals</button>
+        <button onclick="showSection('gallery')">Gallery</button>
+      </nav>
 
     </div>
+  </header>
 
+  <main>
 
-    <div class="hub-grid">
+    <!-- =======================================================
+         HOME
+         ======================================================= -->
 
-        <div class="hub-card">
+    <section id="home" class="page-section active-section">
 
-            <div class="hub-icon">💼</div>
-
-            <h3>Business</h3>
-
-            <p>
-                Manage ideas, clients, money
-                and business growth.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('business')">
-                Open Business
-            </button>
-
-        </div>
-
-
-        <div class="hub-card">
-
-            <div class="hub-icon">📱</div>
-
-            <h3>Content</h3>
-
-            <p>
-                Plan, organise and store
-                your content ideas.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('content')">
-                Open Content
-            </button>
-
-        </div>
-
-
-        <div class="hub-card">
-
-            <div class="hub-icon">📝</div>
-
-            <h3>To-Do List</h3>
-
-            <p>
-                Keep track of everything
-                you need to get done.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('todo')">
-                Open To-Do
-            </button>
-
-        </div>
-
-
-        <div class="hub-card">
-
-            <div class="hub-icon">📅</div>
-
-            <h3>Calendar</h3>
-
-            <p>
-                Notes, periods, important dates
-                and monthly plans.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('calendar')">
-                Open Calendar
-            </button>
-
-        </div>
-
-
-        <div class="hub-card">
-
-            <div class="hub-icon">🎯</div>
-
-            <h3>Goals</h3>
-
-            <p>
-                Set goals and keep yourself
-                accountable.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('goals')">
-                Open Goals
-            </button>
-
-        </div>
-
-
-        <div class="hub-card">
-
-            <div class="hub-icon">🖼️</div>
-
-            <h3>My Gallery</h3>
-
-            <p>
-                Your personal photo collection.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('gallery')">
-                Open Gallery
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     BUSINESS
-===================================================== -->
-
-<section id="business" class="page-section">
-
-    <div class="section-header">
-
-        <button class="back-button" onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>💼 Business</h2>
-
-        <p>Your business command centre.</p>
-
-    </div>
-
-
-    <div class="business-grid">
-
-        <div class="business-card">
-            <h3>💡 Business Ideas</h3>
-            <p>
-                Store ideas for businesses,
-                products and opportunities.
-            </p>
-        </div>
-
-
-        <div class="business-card">
-            <h3>👥 Clients</h3>
-            <p>
-                Keep track of clients,
-                contacts and projects.
-            </p>
-        </div>
-
-
-        <div class="business-card">
-            <h3>💰 Money</h3>
-            <p>
-                Track income and expenses.
-            </p>
-        </div>
-
-
-        <div class="business-card">
-            <h3>📈 Growth</h3>
-            <p>
-                Record plans and strategies
-                for growing your business.
-            </p>
-        </div>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <h3>💡 Add Business Idea</h3>
-
-        <input
-            id="businessIdea"
-            placeholder="Business idea...">
-
-        <textarea
-            id="businessDescription"
-            placeholder="Tell me about it..."></textarea>
-
-        <button onclick="saveBusinessIdea()">
-            Save Business Idea
-        </button>
-
-        <div id="businessStatus" class="status"></div>
-
-    </div>
-
-    <div id="businessList" class="saved-list"></div>
-
-
-    <div class="form-card">
-
-        <h3>👥 Add Client</h3>
-
-        <input
-            id="clientName"
-            placeholder="Client name">
-
-        <input
-            id="clientContact"
-            placeholder="Email / phone">
-
-        <textarea
-            id="clientProject"
-            placeholder="Project / notes"></textarea>
-
-        <button onclick="saveClient()">
-            Save Client
-        </button>
-
-        <div id="clientStatus" class="status"></div>
-
-    </div>
-
-    <div id="clientList" class="saved-list"></div>
-
-
-    <div class="form-card">
-
-        <h3>💰 Add Money Record</h3>
-
-        <input
-            id="moneyTitle"
-            placeholder="Income / expense description">
-
-        <input
-            id="moneyAmount"
-            type="number"
-            step="0.01"
-            placeholder="Amount">
-
-        <select id="moneyType">
-
-            <option value="income">
-                Income
-            </option>
-
-            <option value="expense">
-                Expense
-            </option>
-
-        </select>
-
-        <button onclick="saveMoney()">
-            Save Money Record
-        </button>
-
-        <div id="moneyStatus" class="status"></div>
-
-    </div>
-
-    <div id="moneySummary" class="saved-list"></div>
-
-
-    <div class="form-card">
-
-        <h3>📈 Growth Plan</h3>
-
-        <input
-            id="growthTitle"
-            placeholder="Growth goal">
-
-        <textarea
-            id="growthDescription"
-            placeholder="What will you do to grow?"></textarea>
-
-        <button onclick="saveGrowth()">
-            Save Growth Plan
-        </button>
-
-        <div id="growthStatus" class="status"></div>
-
-    </div>
-
-    <div id="growthList" class="saved-list"></div>
-
-</section>
-
-
-<!-- =====================================================
-     CONTENT
-===================================================== -->
-
-<section id="content" class="page-section">
-
-    <div class="section-header">
-
-        <button class="back-button" onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>📱 Content</h2>
-
-        <p>Your content planning space.</p>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <h3>📱 New Content Idea</h3>
-
-        <input
-            id="contentTitle"
-            placeholder="Content title">
-
-        <textarea
-            id="contentIdea"
-            placeholder="Content idea..."></textarea>
-
-        <select id="contentPlatform">
-
-            <option>Instagram</option>
-            <option>TikTok</option>
-            <option>YouTube</option>
-            <option>Facebook</option>
-            <option>Other</option>
-
-        </select>
-
-        <select id="contentStatus">
-
-            <option>Idea</option>
-            <option>Planned</option>
-            <option>In Progress</option>
-            <option>Posted</option>
-
-        </select>
-
-        <button onclick="saveContent()">
-            Save Content
-        </button>
-
-        <div
-            id="contentStatusMessage"
-            class="status">
-        </div>
-
-    </div>
-
-    <div id="contentList" class="saved-list"></div>
-
-</section>
-
-
-<!-- =====================================================
-     TODO
-===================================================== -->
-
-<section id="todo" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>📝 To-Do List</h2>
-
-        <p>Get things done, Bibi 💗</p>
-
-    </div>
-
-
-    <!-- ADD TODO -->
-
-    <div class="form-card">
-
-        <h3>➕ Add a Task</h3>
-
-        <input
-            id="todoInput"
-            placeholder="What do you need to do?">
-
-        <label>
-            Due Date
-        </label>
-
-        <input
-            id="todoDueDate"
-            type="date">
-
-        <label>
-            Progress
-        </label>
-
-        <select id="todoProgress">
-
-            <option value="0">
-                Not Started
-            </option>
-
-            <option value="25">
-                25%
-            </option>
-
-            <option value="50">
-                50%
-            </option>
-
-            <option value="75">
-                75%
-            </option>
-
-            <option value="100">
-                Completed
-            </option>
-
-        </select>
-
-        <button onclick="addTodo()">
-            Add Task
-        </button>
-
-        <div
-            id="todoStatusMessage"
-            class="status">
-        </div>
-
-    </div>
-
-
-    <!-- TODO LIST -->
-
-    <div id="todoList" class="saved-list"></div>
-
-
-    <!-- EDIT TODO FORM -->
-
-    <div
-        id="todoEditBox"
-        class="form-card"
-        style="display:none;">
-
-        <h3>✏️ Edit Task</h3>
-
-        <input
-            id="editTodoTitle"
-            placeholder="Task">
-
-        <label>
-            Due Date
-        </label>
-
-        <input
-            id="editTodoDueDate"
-            type="date">
-
-        <label>
-            Progress
-        </label>
-
-        <select id="editTodoProgress">
-
-            <option value="0">
-                Not Started
-            </option>
-
-            <option value="25">
-                25%
-            </option>
-
-            <option value="50">
-                50%
-            </option>
-
-            <option value="75">
-                75%
-            </option>
-
-            <option value="100">
-                Completed
-            </option>
-
-        </select>
-
-        <input
-            type="hidden"
-            id="editingTodoId">
-
-        <button onclick="updateTodo()">
-            💾 Save Changes
-        </button>
-
-        <button
-            class="small-button"
-            onclick="cancelTodoEdit()">
-            Cancel
-        </button>
-
-        <div
-            id="todoEditStatus"
-            class="status">
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     CALENDAR
-===================================================== -->
-
-<section id="calendar" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>📅 Calendar</h2>
-
-        <p>Your life planning centre.</p>
-
-    </div>
-
-
-    <div class="calendar-grid">
-
-        <div class="calendar-card">
-
-            <h3>🗒️ Notes</h3>
-
-            <p>
-                Keep quick notes and thoughts.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('notes')">
-                Open Notes
-            </button>
-
-        </div>
-
-
-        <div class="calendar-card">
-
-            <h3>🌸 Period Tracker</h3>
-
-            <p>
-                Keep a history of your cycle dates.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('period')">
-                Open Tracker
-            </button>
-
-        </div>
-
-
-        <div class="calendar-card">
-
-            <h3>📌 Important Dates</h3>
-
-            <p>
-                Save birthdays, events and important dates.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('events')">
-                Open Dates
-            </button>
-
-        </div>
-
-
-        <div class="calendar-card">
-
-            <h3>📆 Monthly Plans</h3>
-
-            <p>
-                Plan each month ahead.
-            </p>
-
-            <button
-                class="card-button"
-                onclick="showPage('monthly')">
-                Open Plans
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     NOTES
-===================================================== -->
-
-<section id="notes" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('calendar')">
-            ← Back Calendar
-        </button>
-
-        <h2>🗒️ Notes</h2>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <input
-            id="noteTitle"
-            placeholder="Note title">
-
-        <textarea
-            id="noteText"
-            placeholder="Write your note..."></textarea>
-
-        <button onclick="saveNote()">
-            Save Note
-        </button>
-
-    </div>
-
-    <div id="notesList" class="saved-list"></div>
-
-</section>
-
-
-<!-- =====================================================
-     PERIOD TRACKER
-===================================================== -->
-
-<section id="period" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('calendar')">
-            ← Back Calendar
-        </button>
-
-        <h2>🌸 Period Tracker</h2>
-
+      <div class="hero">
+        <p class="eyebrow">WELCOME TO</p>
+        <h2>The Bibi Hub</h2>
         <p>
-            Keep a private history of your periods.
+          A private little space for my ideas, plans, goals,
+          content, memories and everything in between.
         </p>
+      </div>
 
-    </div>
+      <div class="hub-grid">
 
-
-    <div class="form-card period-box">
-
-        <h3>🌸 Record Your Period</h3>
-
-        <label>
-            When did it start?
-        </label>
-
-        <input
-            type="date"
-            id="periodStart">
-
-        <label>
-            When did it end?
-        </label>
-
-        <input
-            type="date"
-            id="periodEnd">
-
-        <label>
-            Average cycle length
-        </label>
-
-        <input
-            type="number"
-            id="cycleLength"
-            value="28"
-            min="1"
-            max="100">
-
-        <button onclick="savePeriod()">
-            Save Period Record
+        <button class="hub-card" onclick="showSection('business')">
+          <span>💼</span>
+          <h3>Business</h3>
+          <p>Ideas, clients, money and growth.</p>
         </button>
 
-        <div
-            id="periodStatus"
-            class="period-status">
+        <button class="hub-card" onclick="showSection('content')">
+          <span>🎬</span>
+          <h3>Content</h3>
+          <p>Keep track of content ideas and plans.</p>
+        </button>
+
+        <button class="hub-card" onclick="showSection('todo')">
+          <span>✅</span>
+          <h3>To-Do</h3>
+          <p>Tasks, deadlines and progress.</p>
+        </button>
+
+        <button class="hub-card" onclick="showSection('calendar')">
+          <span>📅</span>
+          <h3>Calendar</h3>
+          <p>Notes, dates and monthly plans.</p>
+        </button>
+
+        <button class="hub-card" onclick="showSection('goals')">
+          <span>🎯</span>
+          <h3>Goals</h3>
+          <p>Things I want to achieve.</p>
+        </button>
+
+        <button class="hub-card" onclick="showSection('gallery')">
+          <span>📸</span>
+          <h3>Gallery</h3>
+          <p>My favourite memories.</p>
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         BUSINESS
+         ======================================================= -->
+
+    <section id="business" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">BUILDING MY FUTURE</p>
+        <h2>Business</h2>
+      </div>
+
+      <div class="content-grid">
+
+        <!-- Business Ideas -->
+        <div class="form-card">
+          <h3>💡 Business Idea</h3>
+
+          <form id="businessIdeaForm">
+
+            <div class="form-group">
+              <label for="businessIdeaTitle">Title</label>
+              <input id="businessIdeaTitle" required>
+            </div>
+
+            <div class="form-group">
+              <label for="businessIdeaDescription">Description</label>
+              <textarea id="businessIdeaDescription"></textarea>
+            </div>
+
+            <button type="submit">Save Idea</button>
+
+          </form>
+
+          <p id="businessIdeaMessage"></p>
         </div>
 
-        <div
-            id="periodInfo"
-            class="period-info">
+        <div class="form-card">
+          <h3>👥 Client</h3>
+
+          <form id="clientForm">
+
+            <div class="form-group">
+              <label for="clientName">Client Name</label>
+              <input id="clientName" required>
+            </div>
+
+            <div class="form-group">
+              <label for="clientProject">Project</label>
+              <input id="clientProject">
+            </div>
+
+            <div class="form-group">
+              <label for="clientStatus">Status</label>
+              <select id="clientStatus">
+                <option value="Lead">Lead</option>
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+                <option value="Paused">Paused</option>
+              </select>
+            </div>
+
+            <button type="submit">Save Client</button>
+
+          </form>
+
+          <p id="clientMessage"></p>
         </div>
 
-    </div>
+        <div class="form-card">
+          <h3>💰 Money</h3>
 
-</section>
+          <form id="moneyForm">
 
+            <div class="form-group">
+              <label for="moneyAmount">Amount</label>
+              <input id="moneyAmount" type="number" step="0.01">
+            </div>
 
-<!-- =====================================================
-     EVENTS
-===================================================== -->
+            <div class="form-group">
+              <label for="moneyType">Type</label>
+              <select id="moneyType">
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+                <option value="Savings">Savings</option>
+              </select>
+            </div>
 
-<section id="events" class="page-section">
+            <div class="form-group">
+              <label for="moneyDescription">Description</label>
+              <input id="moneyDescription">
+            </div>
 
-    <div class="section-header">
+            <button type="submit">Save Money Entry</button>
 
-        <button
-            class="back-button"
-            onclick="showPage('calendar')">
-            ← Back Calendar
+          </form>
+
+          <p id="moneyMessage"></p>
+        </div>
+
+        <div class="form-card">
+          <h3>📈 Growth</h3>
+
+          <form id="growthForm">
+
+            <div class="form-group">
+              <label for="growthMetric">Metric</label>
+              <input id="growthMetric" placeholder="Followers, clients, sales...">
+            </div>
+
+            <div class="form-group">
+              <label for="growthValue">Value</label>
+              <input id="growthValue" type="number" step="0.01">
+            </div>
+
+            <div class="form-group">
+              <label for="growthNotes">Notes</label>
+              <textarea id="growthNotes"></textarea>
+            </div>
+
+            <button type="submit">Save Growth</button>
+
+          </form>
+
+          <p id="growthMessage"></p>
+        </div>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Saved Business Ideas</h3>
+        <div id="businessIdeasList"></div>
+      </div>
+
+      <div class="saved-section">
+        <h3>Saved Clients</h3>
+        <div id="clientsList"></div>
+      </div>
+
+      <div class="saved-section">
+        <h3>Money Entries</h3>
+        <div id="moneyList"></div>
+      </div>
+
+      <div class="saved-section">
+        <h3>Growth Entries</h3>
+        <div id="growthList"></div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         CONTENT
+         ======================================================= -->
+
+    <section id="content" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">CREATE & ORGANISE</p>
+        <h2>Content</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="contentForm">
+
+          <div class="form-group">
+            <label for="contentTitle">Title</label>
+            <input id="contentTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contentDescription">Description</label>
+            <textarea id="contentDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="contentPlatform">Platform</label>
+            <select id="contentPlatform">
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="YouTube">YouTube</option>
+              <option value="Pinterest">Pinterest</option>
+              <option value="Blog">Blog</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contentStatus">Status</label>
+            <select id="contentStatus">
+              <option value="Idea">Idea</option>
+              <option value="Planned">Planned</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Posted">Posted</option>
+            </select>
+          </div>
+
+          <button type="submit">Save Content</button>
+
+        </form>
+
+        <p id="contentStatusMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Saved Content</h3>
+        <div id="contentList"></div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         TODO
+         ======================================================= -->
+
+    <section id="todo" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">GET THINGS DONE</p>
+        <h2>To-Do</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="todoForm">
+
+          <div class="form-group">
+            <label for="todoTitle">Task</label>
+            <input id="todoTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="todoDescription">Description</label>
+            <textarea id="todoDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="todoDueDate">Due Date</label>
+            <input id="todoDueDate" type="date">
+          </div>
+
+          <div class="form-group">
+            <label for="todoProgress">Progress</label>
+            <select id="todoProgress">
+              <option value="0">Not Started</option>
+              <option value="25">25%</option>
+              <option value="50">50%</option>
+              <option value="75">75%</option>
+              <option value="100">Completed</option>
+            </select>
+          </div>
+
+          <button type="submit">Save Task</button>
+
+        </form>
+
+        <p id="todoMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>My Tasks</h3>
+        <div id="todoList"></div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         CALENDAR
+         ======================================================= -->
+
+    <section id="calendar" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">MY TIME & PLANS</p>
+        <h2>Calendar</h2>
+      </div>
+
+      <div class="hub-grid calendar-grid">
+
+        <button class="hub-card" onclick="showSection('notes')">
+          <span>📝</span>
+          <h3>Notes</h3>
+          <p>Quick notes and thoughts.</p>
         </button>
 
-        <h2>📌 Important Dates & Events</h2>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <input
-            type="date"
-            id="eventDate">
-
-        <input
-            id="eventTitle"
-            placeholder="Event name">
-
-        <textarea
-            id="eventDescription"
-            placeholder="Details..."></textarea>
-
-        <button onclick="saveEvent()">
-            Save Event
+        <button class="hub-card" onclick="showSection('period')">
+          <span>🌸</span>
+          <h3>Period Tracker</h3>
+          <p>Keep track of dates.</p>
         </button>
 
-    </div>
-
-    <div
-        id="eventsList"
-        class="saved-list">
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     MONTHLY PLANS
-===================================================== -->
-
-<section id="monthly" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('calendar')">
-            ← Back Calendar
+        <button class="hub-card" onclick="showSection('events')">
+          <span>⭐</span>
+          <h3>Important Dates</h3>
+          <p>Never forget an important date.</p>
         </button>
 
-        <h2>📆 Monthly Plans</h2>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <input
-            type="month"
-            id="planMonth">
-
-        <textarea
-            id="monthlyPlan"
-            placeholder="What are your plans this month?"></textarea>
-
-        <button onclick="saveMonthlyPlan()">
-            Save Monthly Plan
+        <button class="hub-card" onclick="showSection('monthly')">
+          <span>📆</span>
+          <h3>Monthly Plans</h3>
+          <p>Plan each month.</p>
         </button>
 
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         NOTES
+         ======================================================= -->
+
+    <section id="notes" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">THOUGHTS & IDEAS</p>
+        <h2>Notes</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="notesForm">
+
+          <div class="form-group">
+            <label for="noteTitle">Title</label>
+            <input id="noteTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="noteContent">Note</label>
+            <textarea id="noteContent" required></textarea>
+          </div>
+
+          <button type="submit">Save Note</button>
+
+        </form>
+
+        <p id="notesMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Saved Notes</h3>
+        <div id="notesList"></div>
+      </div>
+
+      <button class="small-button" onclick="showSection('calendar')">
+        ← Back to Calendar
+      </button>
+
+    </section>
+
+    <!-- =======================================================
+         PERIOD TRACKER
+         ======================================================= -->
+
+    <section id="period" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">PERSONAL TRACKING</p>
+        <h2>Period Tracker</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="periodForm">
+
+          <div class="form-group">
+            <label for="periodDate">Period Start</label>
+            <input id="periodDate" type="date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="periodEndDate">Period End</label>
+            <input id="periodEndDate" type="date">
+          </div>
+
+          <div class="form-group">
+            <label for="cycleLength">Cycle Length</label>
+            <input id="cycleLength" type="number" min="1">
+          </div>
+
+          <div class="form-group">
+            <label for="nextPeriodDate">Next Period Date</label>
+            <input id="nextPeriodDate" type="date">
+          </div>
+
+          <button type="submit">Save Period</button>
+
+        </form>
+
+        <p id="periodMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Period History</h3>
+        <div id="periodList"></div>
+      </div>
+
+      <button class="small-button" onclick="showSection('calendar')">
+        ← Back to Calendar
+      </button>
+
+    </section>
+
+    <!-- =======================================================
+         IMPORTANT DATES
+         ======================================================= -->
+
+    <section id="events" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">DON'T FORGET</p>
+        <h2>Important Dates</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="eventForm">
+
+          <div class="form-group">
+            <label for="eventDate">Date</label>
+            <input id="eventDate" type="date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="eventTitle">Title</label>
+            <input id="eventTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="eventDescription">Description</label>
+            <textarea id="eventDescription"></textarea>
+          </div>
+
+          <button type="submit">Save Date</button>
+
+        </form>
+
+        <p id="eventMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Important Dates</h3>
+        <div id="eventsList"></div>
+      </div>
+
+      <button class="small-button" onclick="showSection('calendar')">
+        ← Back to Calendar
+      </button>
+
+    </section>
+
+    <!-- =======================================================
+         MONTHLY PLANS
+         ======================================================= -->
+
+    <section id="monthly" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">PLAN AHEAD</p>
+        <h2>Monthly Plans</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="monthlyForm">
+
+          <div class="form-group">
+            <label for="monthlyMonth">Month</label>
+            <input id="monthlyMonth" type="month" required>
+          </div>
+
+          <div class="form-group">
+            <label for="monthlyPlan">Plan</label>
+            <textarea id="monthlyPlan" required></textarea>
+          </div>
+
+          <button type="submit">Save Monthly Plan</button>
+
+        </form>
+
+        <p id="monthlyMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>Monthly Plans</h3>
+        <div id="monthlyList"></div>
+      </div>
+
+      <button class="small-button" onclick="showSection('calendar')">
+        ← Back to Calendar
+      </button>
+
+    </section>
+
+    <!-- =======================================================
+         GOALS
+         ======================================================= -->
+
+    <section id="goals" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">MY FUTURE</p>
+        <h2>Goals</h2>
+      </div>
+
+      <div class="form-card">
+
+        <form id="goalForm">
+
+          <div class="form-group">
+            <label for="goalTitle">Goal</label>
+            <input id="goalTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="goalDescription">Description</label>
+            <textarea id="goalDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="goalTargetDate">Target Date</label>
+            <input id="goalTargetDate" type="date">
+          </div>
+
+          <button type="submit">Save Goal</button>
+
+        </form>
+
+        <p id="goalMessage"></p>
+
+      </div>
+
+      <div class="saved-section">
+        <h3>My Goals</h3>
+        <div id="goalsList"></div>
+      </div>
+
+    </section>
+
+    <!-- =======================================================
+         GALLERY
+         ======================================================= -->
+
+    <section id="gallery" class="page-section">
+
+      <div class="section-heading">
+        <p class="eyebrow">MEMORIES</p>
+        <h2>Gallery</h2>
+      </div>
+
+      <div class="gallery-grid">
+
+        <img src="./bibi%20%281%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%282%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%283%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%284%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%285%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%286%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%287%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%288%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%289%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2810%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2811%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2812%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2813%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2814%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2815%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2816%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2817%29.jpg" alt="Bibi memory">
+        <img src="./bibi%20%2818%29.jpg" alt="Bibi memory">
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       EDIT MODAL
+       ========================================================= -->
+
+  <div
+    id="editModal"
+    class="edit-modal"
+    aria-hidden="true"
+    onclick="handleModalBackgroundClick(event)"
+  >
+
+    <div class="edit-modal-card">
+
+      <button
+        type="button"
+        class="edit-close"
+        onclick="closeEditModal()"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+      <h2 id="editModalTitle">Edit</h2>
+
+      <div id="editModalBody"></div>
+
     </div>
 
-    <div
-        id="monthlyList"
-        class="saved-list">
-    </div>
+  </div>
 
-</section>
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
 
+  <script>
 
-<!-- =====================================================
-     GOALS
-===================================================== -->
+    /* =========================================================
+       SUPABASE
+       ========================================================= */
 
-<section id="goals" class="page-section">
+    const SUPABASE_URL =
+      "https://cnbfaxskzgkidbigrieu.supabase.co";
 
-    <div class="section-header">
+    const SUPABASE_KEY =
+      "sb_publishable_46cMDS0yZ_gCkaPIh3bWVw_2CrUUD0U";
 
-        <button
-            class="back-button"
-            onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>🎯 Goals</h2>
-
-        <p>
-            Dream it. Plan it. Do it. 💗
-        </p>
-
-    </div>
-
-
-    <div class="form-card">
-
-        <input
-            id="goalTitle"
-            placeholder="Your goal">
-
-        <textarea
-            id="goalDescription"
-            placeholder="How are you going to achieve it?"></textarea>
-
-        <label>
-            Target Date
-        </label>
-
-        <input
-            type="date"
-            id="goalTargetDate">
-
-        <button onclick="saveGoal()">
-            Save Goal
-        </button>
-
-    </div>
-
-    <div
-        id="goalsList"
-        class="saved-list">
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     GALLERY
-===================================================== -->
-
-<section id="gallery" class="page-section">
-
-    <div class="section-header">
-
-        <button
-            class="back-button"
-            onclick="showPage('home')">
-            ← Back Home
-        </button>
-
-        <h2>🖼️ My Gallery</h2>
-
-        <p>
-            Your Bibi photo collection 💗
-        </p>
-
-    </div>
-
-
-    <div
-        class="gallery-grid"
-        id="galleryGrid">
-    </div>
-
-</section>
-
-
-</main>
-
-
-<script>
-
-/* =====================================================
-   SUPABASE CONNECTION
-===================================================== */
-
-const SUPABASE_URL =
-    "https://cnbfaxskzgkidbigrieu.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_46cMDS0yZ_gCkaPIh3bWVw_2CrUUD0U";
-
-const supabaseClient =
-    window.supabase.createClient(
+    const supabaseClient =
+      window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
-    );
+      );
 
 
-/* =====================================================
-   PAGE NAVIGATION
-===================================================== */
+    /* =========================================================
+       EDIT STATE
+       ========================================================= */
 
-function showPage(pageId) {
-
-    const pages =
-        document.querySelectorAll(
-            ".page-section"
-        );
-
-    pages.forEach(function(page) {
-
-        page.classList.remove("active");
-
-    });
-
-
-    const selected =
-        document.getElementById(pageId);
-
-
-    if (selected) {
-
-        selected.classList.add("active");
-
-    }
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-/* =====================================================
-   BACKGROUND IMAGES
-===================================================== */
-
-const backgroundImages = [];
-
-for (
-    let i = 1;
-    i <= 18;
-    i++
-) {
-
-    backgroundImages.push(
-        `./bibi%20%28${i}%29.jpg`
-    );
-
-}
-
-
-let currentImage = 0;
-
-const bg1 =
-    document.getElementById("bg1");
-
-const bg2 =
-    document.getElementById("bg2");
-
-let activeBackground = bg1;
-
-
-bg1.onerror = function() {
-
-    this.style.display = "none";
-
-};
-
-
-bg2.onerror = function() {
-
-    this.style.display = "none";
-
-};
-
-
-function changeBackground() {
-
-    currentImage++;
-
-    if (
-        currentImage >=
-        backgroundImages.length
-    ) {
-
-        currentImage = 0;
-
-    }
-
-
-    const nextBackground =
-        activeBackground === bg1
-            ? bg2
-            : bg1;
-
-
-    nextBackground.src =
-        backgroundImages[currentImage];
-
-
-    nextBackground.style.display =
-        "block";
-
-
-    nextBackground.classList.add(
-        "active"
-    );
-
-
-    activeBackground.classList.remove(
-        "active"
-    );
-
-
-    activeBackground =
-        nextBackground;
-}
-
-
-setInterval(
-    changeBackground,
-    5000
-);
-
-
-/* =====================================================
-   GALLERY
-===================================================== */
-
-const gallery =
-    document.getElementById(
-        "galleryGrid"
-    );
-
-
-for (
-    let i = 1;
-    i <= 18;
-    i++
-) {
-
-    const img =
-        document.createElement("img");
-
-
-    img.src =
-        `./bibi%20%28${i}%29.jpg`;
-
-
-    img.alt =
-        `Bibi photo ${i}`;
-
-
-    img.loading =
-        "lazy";
-
-
-    img.onerror =
-        function() {
-
-            this.style.display =
-                "none";
-
-        };
-
-
-    gallery.appendChild(img);
-
-}
-
-
-/* =====================================================
-   GENERIC SUPABASE HELPERS
-===================================================== */
-
-async function insertRow(
-    table,
-    row
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from(table)
-            .insert(row)
-            .select();
-
-
-    if (error) {
-
-        console.error(
-            table,
-            error
-        );
-
-        throw error;
-
-    }
-
-
-    return data;
-}
-
-
-async function loadRows(
-    table
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from(table)
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            table,
-            error
-        );
-
-        return [];
-
-    }
-
-
-    return data || [];
-}
-
-
-/* =====================================================
-   BIBI DATA TABLE
-===================================================== */
-
-async function saveBibiData(
-    type,
-    data
-) {
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("bibi_data")
-            .insert({
-                data_type: type,
-                data: data
-            });
-
-
-    if (error) {
-
-        console.error(
-            "bibi_data:",
-            error
-        );
-
-        throw error;
-
-    }
-
-}
-
-
-async function loadBibiData(
-    type
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("bibi_data")
-            .select("*")
-            .eq(
-                "data_type",
-                type
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            "bibi_data:",
-            error
-        );
-
-        return [];
-
-    }
-
-
-    return data || [];
-}
-
-
-/* =====================================================
-   DAILY STREAK
-===================================================== */
-
-async function updateStreak() {
-
-    const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("daily_streak")
-            .select("*")
-            .order(
-                "id",
-                {
-                    ascending: false
-                }
-            )
-            .limit(1);
-
-
-    if (error) {
-
-        console.error(error);
-
-        return;
-
-    }
-
-
-    let streak = 1;
-
-
-    let row =
-        data && data.length
-            ? data[0]
-            : null;
-
-
-    if (row) {
-
-        const previous =
-            new Date(
-                row.last_visit
-            );
-
-
-        const current =
-            new Date(today);
-
-
-        const difference =
-            Math.floor(
-                (
-                    current -
-                    previous
-                ) /
-                (
-                    1000 *
-                    60 *
-                    60 *
-                    24
-                )
-            );
-
-
-        streak =
-            parseInt(
-                row.streak_count || 0
-            );
-
-
-        if (
-            row.last_visit !==
-            today
-        ) {
-
-            if (
-                difference === 1
-            ) {
-
-                streak++;
-
-            }
-            else if (
-                difference > 1
-            ) {
-
-                streak = 1;
-
-            }
-
-
-            await supabaseClient
-                .from("daily_streak")
-                .update({
-                    streak_count:
-                        streak,
-
-                    last_visit:
-                        today
-                })
-                .eq(
-                    "id",
-                    row.id
-                );
-
-        }
-
-    }
-    else {
-
-        const {
-            data: newRow
-        } =
-            await supabaseClient
-                .from("daily_streak")
-                .insert({
-                    streak_count: 1,
-                    last_visit: today
-                })
-                .select()
-                .single();
-
-
-        if (newRow) {
-
-            streak =
-                newRow.streak_count;
-
-        }
-
-    }
-
-
-    document.getElementById(
-        "streakNumber"
-    ).textContent =
-        streak;
-}
-
-
-/* =====================================================
-   BUSINESS IDEAS
-===================================================== */
-
-async function saveBusinessIdea() {
-
-    const title =
-        document.getElementById(
-            "businessIdea"
-        ).value.trim();
-
-
-    const description =
-        document.getElementById(
-            "businessDescription"
-        ).value.trim();
-
-
-    if (!title) return;
-
-
-    try {
-
-        await insertRow(
-            "business_ideas",
-            {
-                title,
-                description
-            }
-        );
-
-
-        document.getElementById(
-            "businessIdea"
-        ).value = "";
-
-
-        document.getElementById(
-            "businessDescription"
-        ).value = "";
-
-
-        setStatus(
-            "businessStatus",
-            "Saved successfully 💗",
-            true
-        );
-
-
-        displayBusiness();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "businessStatus",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-async function displayBusiness() {
-
-    const list =
-        document.getElementById(
-            "businessList"
-        );
-
-
-    const data =
-        await loadRows(
-            "business_ideas"
-        );
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(function(item) {
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-                    💡
-                    ${escapeHTML(
-                        item.title
-                    )}
-                </h4>
-
-                <p>
-                    ${escapeHTML(
-                        item.description || ""
-                    )}
-                </p>
-
-                <small>
-                    ${formatDate(
-                        item.created_at
-                    )}
-                </small>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   CLIENTS
-===================================================== */
-
-async function saveClient() {
-
-    const name =
-        document.getElementById(
-            "clientName"
-        ).value.trim();
-
-
-    const contact =
-        document.getElementById(
-            "clientContact"
-        ).value.trim();
-
-
-    const project =
-        document.getElementById(
-            "clientProject"
-        ).value.trim();
-
-
-    if (!name) return;
-
-
-    try {
-
-        await saveBibiData(
-            "client",
-            {
-                name,
-                contact,
-                project
-            }
-        );
-
-
-        document.getElementById(
-            "clientName"
-        ).value = "";
-
-
-        document.getElementById(
-            "clientContact"
-        ).value = "";
-
-
-        document.getElementById(
-            "clientProject"
-        ).value = "";
-
-
-        setStatus(
-            "clientStatus",
-            "Client saved 💗",
-            true
-        );
-
-
-        displayClients();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "clientStatus",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-async function displayClients() {
-
-    const list =
-        document.getElementById(
-            "clientList"
-        );
-
-
-    const rows =
-        await loadBibiData(
-            "client"
-        );
-
-
-    list.innerHTML = "";
-
-
-    rows.forEach(function(row) {
-
-        const item =
-            row.data || {};
-
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-                    👥
-                    ${escapeHTML(
-                        item.name
-                    )}
-                </h4>
-
-                <p>
-                    ${escapeHTML(
-                        item.contact || ""
-                    )}
-                </p>
-
-                <p>
-                    ${escapeHTML(
-                        item.project || ""
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   MONEY
-===================================================== */
-
-async function saveMoney() {
-
-    const title =
-        document.getElementById(
-            "moneyTitle"
-        ).value.trim();
-
-
-    const amount =
-        parseFloat(
-            document.getElementById(
-                "moneyAmount"
-            ).value
-        );
-
-
-    const type =
-        document.getElementById(
-            "moneyType"
-        ).value;
-
-
-    if (
-        !title ||
-        isNaN(amount)
-    ) return;
-
-
-    try {
-
-        await saveBibiData(
-            "money",
-            {
-                title,
-                amount,
-                type
-            }
-        );
-
-
-        document.getElementById(
-            "moneyTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "moneyAmount"
-        ).value = "";
-
-
-        setStatus(
-            "moneyStatus",
-            "Money record saved 💗",
-            true
-        );
-
-
-        displayMoney();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "moneyStatus",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-async function displayMoney() {
-
-    const list =
-        document.getElementById(
-            "moneySummary"
-        );
-
-
-    const rows =
-        await loadBibiData(
-            "money"
-        );
-
-
-    let income = 0;
-
-    let expenses = 0;
-
-    let html = "";
-
-
-    rows.forEach(function(row) {
-
-        const item =
-            row.data || {};
-
-
-        const amount =
-            parseFloat(
-                item.amount || 0
-            );
-
-
-        if (
-            item.type ===
-            "income"
-        ) {
-
-            income += amount;
-
-        }
-        else {
-
-            expenses += amount;
-
-        }
-
-
-        html += `
-
-            <div class="saved-item">
-
-                <h4>
-
-                    ${
-                        item.type ===
-                        "income"
-                        ? "💚"
-                        : "🔴"
-                    }
-
-                    ${escapeHTML(
-                        item.title
-                    )}
-
-                </h4>
-
-                <p>
-
-                    ${
-                        item.type ===
-                        "income"
-                        ? "+"
-                        : "-"
-                    }
-
-                    ${amount.toFixed(2)}
-
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-
-    const balance =
-        income - expenses;
-
-
-    list.innerHTML = `
-
-        <div class="saved-item">
-
-            <h4>
-                💰 Money Summary
-            </h4>
-
-            <p>
-                💚 Income:
-                ${income.toFixed(2)}
-            </p>
-
-            <p>
-                🔴 Expenses:
-                ${expenses.toFixed(2)}
-            </p>
-
-            <p>
-
-                <strong>
-                    💗 Balance:
-                    ${balance.toFixed(2)}
-                </strong>
-
-            </p>
-
-        </div>
-
-        ${html}
-
-    `;
-}
-
-
-/* =====================================================
-   GROWTH
-===================================================== */
-
-async function saveGrowth() {
-
-    const title =
-        document.getElementById(
-            "growthTitle"
-        ).value.trim();
-
-
-    const description =
-        document.getElementById(
-            "growthDescription"
-        ).value.trim();
-
-
-    if (!title) return;
-
-
-    try {
-
-        await saveBibiData(
-            "growth",
-            {
-                title,
-                description
-            }
-        );
-
-
-        document.getElementById(
-            "growthTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "growthDescription"
-        ).value = "";
-
-
-        setStatus(
-            "growthStatus",
-            "Growth plan saved 💗",
-            true
-        );
-
-
-        displayGrowth();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "growthStatus",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-async function displayGrowth() {
-
-    const list =
-        document.getElementById(
-            "growthList"
-        );
-
-
-    const rows =
-        await loadBibiData(
-            "growth"
-        );
-
-
-    list.innerHTML = "";
-
-
-    rows.forEach(function(row) {
-
-        const item =
-            row.data || {};
-
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-                    📈
-                    ${escapeHTML(
-                        item.title
-                    )}
-                </h4>
-
-                <p>
-                    ${escapeHTML(
-                        item.description || ""
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   CONTENT
-===================================================== */
-
-async function saveContent() {
-
-    const title =
-        document.getElementById(
-            "contentTitle"
-        ).value.trim();
-
-
-    const description =
-        document.getElementById(
-            "contentIdea"
-        ).value.trim();
-
-
-    const platform =
-        document.getElementById(
-            "contentPlatform"
-        ).value;
-
-
-    const status =
-        document.getElementById(
-            "contentStatus"
-        ).value;
-
-
-    if (!title) return;
-
-
-    try {
-
-        await insertRow(
-            "content",
-            {
-                title,
-                description,
-                platform,
-                status
-            }
-        );
-
-
-        document.getElementById(
-            "contentTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "contentIdea"
-        ).value = "";
-
-
-        displayContent();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "contentStatusMessage",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-async function displayContent() {
-
-    const list =
-        document.getElementById(
-            "contentList"
-        );
-
-
-    const data =
-        await loadRows(
-            "content"
-        );
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(function(item) {
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-                    📱
-                    ${escapeHTML(
-                        item.title
-                    )}
-                </h4>
-
-                <p>
-                    ${escapeHTML(
-                        item.description || ""
-                    )}
-                </p>
-
-                <small>
-
-                    Platform:
-                    ${escapeHTML(
-                        item.platform || ""
-                    )}
-
-                    <br>
-
-                    Status:
-                    ${escapeHTML(
-                        item.status || ""
-                    )}
-
-                </small>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   TODO — ADD
-===================================================== */
-
-async function addTodo() {
-
-    const title =
-        document.getElementById(
-            "todoInput"
-        ).value.trim();
-
-
-    const dueDate =
-        document.getElementById(
-            "todoDueDate"
-        ).value;
-
-
-    const progress =
-        parseInt(
-            document.getElementById(
-                "todoProgress"
-            ).value
-        );
-
-
-    if (!title) {
-
-        setStatus(
-            "todoStatusMessage",
-            "Please enter a task.",
-            false
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const inserted =
-            await insertRow(
-                "todos",
-                {
-                    title,
-                    description: "",
-                    completed:
-                        progress === 100
-                }
-            );
-
-
-        const todoId =
-            inserted &&
-            inserted[0]
-                ? inserted[0].id
-                : null;
-
-
-        if (todoId) {
-
-            await insertRow(
-                "bibi_data",
-                {
-                    data_type:
-                        "todo_details",
-
-                    data: {
-                        todo_id:
-                            todoId,
-
-                        due_date:
-                            dueDate || null,
-
-                        progress:
-                            progress
-                    }
-                }
-            );
-
-        }
-
-
-        document.getElementById(
-            "todoInput"
-        ).value = "";
-
-
-        document.getElementById(
-            "todoDueDate"
-        ).value = "";
-
-
-        document.getElementById(
-            "todoProgress"
-        ).value = "0";
-
-
-        setStatus(
-            "todoStatusMessage",
-            "Task saved 💗",
-            true
-        );
-
-
-        displayTodos();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "todoStatusMessage",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-/* =====================================================
-   TODO — DISPLAY
-===================================================== */
-
-async function displayTodos() {
-
-    const list =
-        document.getElementById(
-            "todoList"
-        );
-
-
-    const todos =
-        await loadRows(
-            "todos"
-        );
-
-
-    const details =
-        await loadBibiData(
-            "todo_details"
-        );
-
-
-    list.innerHTML = "";
-
-
-    todos.forEach(function(item) {
-
-        const detailRow =
-            details.find(
-                function(row) {
-
-                    return row.data &&
-                        String(
-                            row.data.todo_id
-                        ) ===
-                        String(item.id);
-
-                }
-            );
-
-
-        const detail =
-            detailRow
-                ? detailRow.data
-                : {};
-
-
-        let progress =
-            parseInt(
-                detail.progress || 0
-            );
-
-
-        if (item.completed) {
-
-            progress = 100;
-
-        }
-
-
-        const due =
-            detail.due_date
-                ? formatDateOnly(
-                    detail.due_date
-                )
-                : "No due date";
-
-
-        const safeTitle =
-            escapeHTML(
-                item.title
-            );
-
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-
-                    ${
-                        progress === 100
-                        ? "✅"
-                        : "⬜"
-                    }
-
-                    ${safeTitle}
-
-                </h4>
-
-
-                <p>
-
-                    📅 Due:
-                    ${escapeHTML(due)}
-
-                </p>
-
-
-                <div class="todo-progress">
-
-                    <span class="todo-status">
-
-                        Progress:
-                        ${progress}%
-
-                    </span>
-
-
-                    <div class="progress-bar">
-
-                        <div
-                            class="progress-fill"
-                            style="width:${progress}%">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="item-actions">
-
-                    <button
-                        class="small-button"
-                        onclick="editTodo(${item.id})">
-                        ✏️ Edit
-                    </button>
-
-
-                    <button
-                        class="small-button"
-                        onclick="deleteTodo(${item.id})">
-                        🗑️ Delete
-                    </button>
-
-
-                    <button
-                        class="small-button"
-                        onclick="setTodoProgress(${item.id},25)">
-                        25%
-                    </button>
-
-
-                    <button
-                        class="small-button"
-                        onclick="setTodoProgress(${item.id},50)">
-                        50%
-                    </button>
-
-
-                    <button
-                        class="small-button"
-                        onclick="setTodoProgress(${item.id},75)">
-                        75%
-                    </button>
-
-
-                    <button
-                        class="small-button"
-                        onclick="setTodoProgress(${item.id},100)">
-                        Complete
-                    </button>
-
-                </div>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   TODO — EDIT
-===================================================== */
-
-async function editTodo(todoId) {
-
-    try {
-
-        const {
-            data: todo,
-            error
-        } =
-            await supabaseClient
-                .from("todos")
-                .select("*")
-                .eq(
-                    "id",
-                    todoId
-                )
-                .single();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        const {
-            data: detailRows
-        } =
-            await supabaseClient
-                .from("bibi_data")
-                .select("*")
-                .eq(
-                    "data_type",
-                    "todo_details"
-                );
-
-
-        const detailRow =
-            (detailRows || []).find(
-                function(row) {
-
-                    return row.data &&
-                        String(
-                            row.data.todo_id
-                        ) ===
-                        String(todoId);
-
-                }
-            );
-
-
-        const detail =
-            detailRow
-                ? detailRow.data
-                : {};
-
-
-        document.getElementById(
-            "editingTodoId"
-        ).value =
-            todoId;
-
-
-        document.getElementById(
-            "editTodoTitle"
-        ).value =
-            todo.title || "";
-
-
-        document.getElementById(
-            "editTodoDueDate"
-        ).value =
-            detail.due_date || "";
-
-
-        document.getElementById(
-            "editTodoProgress"
-        ).value =
-            todo.completed
-                ? "100"
-                : String(
-                    detail.progress || 0
-                );
-
-
-        const editBox =
-            document.getElementById(
-                "todoEditBox"
-            );
-
-
-        editBox.style.display =
-            "block";
-
-
-        editBox.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-    }
-    catch(error) {
-
-        alert(
-            "Could not load task: " +
-            error.message
-        );
-
-    }
-}
-
-
-/* =====================================================
-   TODO — UPDATE
-===================================================== */
-
-async function updateTodo() {
-
-    const todoId =
-        document.getElementById(
-            "editingTodoId"
-        ).value;
-
-
-    const title =
-        document.getElementById(
-            "editTodoTitle"
-        ).value.trim();
-
-
-    const dueDate =
-        document.getElementById(
-            "editTodoDueDate"
-        ).value;
-
-
-    const progress =
-        parseInt(
-            document.getElementById(
-                "editTodoProgress"
-            ).value
-        );
-
-
-    if (!todoId) {
-
-        return;
-
-    }
-
-
-    if (!title) {
-
-        setStatus(
-            "todoEditStatus",
-            "Please enter a task name.",
-            false
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("todos")
-                .update({
-
-                    title,
-
-                    completed:
-                        progress === 100
-
-                })
-                .eq(
-                    "id",
-                    todoId
-                );
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        await updateTodoDetails(
-            todoId,
-            dueDate,
-            progress
-        );
-
-
-        setStatus(
-            "todoEditStatus",
-            "Task updated successfully 💗",
-            true
-        );
-
-
-        setTimeout(
-            function() {
-
-                cancelTodoEdit();
-
-            },
-            500
-        );
-
-
-        displayTodos();
-
-    }
-    catch(error) {
-
-        setStatus(
-            "todoEditStatus",
-            error.message,
-            false
-        );
-
-    }
-}
-
-
-/* =====================================================
-   TODO — UPDATE DETAILS
-===================================================== */
-
-async function updateTodoDetails(
-    todoId,
-    dueDate,
-    progress
-) {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("bibi_data")
-            .select("*")
-            .eq(
-                "data_type",
-                "todo_details"
-            );
-
-
-    if (error) {
-        throw error;
-    }
-
-
-    const existing =
-        (data || []).find(
-            function(row) {
-
-                return row.data &&
-                    String(
-                        row.data.todo_id
-                    ) ===
-                    String(todoId);
-
-            }
-        );
-
-
-    const newData = {
-
-        todo_id:
-            todoId,
-
-        due_date:
-            dueDate || null,
-
-        progress:
-            progress
-
+    let editState = {
+      type: null,
+      id: null,
+      todoDetailId: null
     };
 
 
-    if (existing) {
+    /* =========================================================
+       GENERAL HELPERS
+       ========================================================= */
 
-        const {
-            error: updateError
-        } =
-            await supabaseClient
-                .from("bibi_data")
-                .update({
-                    data: newData
-                })
-                .eq(
-                    "id",
-                    existing.id
-                );
+    function escapeHTML(value) {
 
+      if (value === null || value === undefined) {
+        return "";
+      }
 
-        if (updateError) {
-
-            throw updateError;
-
-        }
-
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
-    else {
-
-        const {
-            error: insertError
-        } =
-            await supabaseClient
-                .from("bibi_data")
-                .insert({
-
-                    data_type:
-                        "todo_details",
-
-                    data:
-                        newData
-
-                });
 
 
-        if (insertError) {
+    function formatDate(value) {
 
-            throw insertError;
+      if (!value) {
+        return "No date";
+      }
 
+      const date = new Date(value + "T00:00:00");
+
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
+
+      return date.toLocaleDateString(
+        undefined,
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
         }
-
+      );
     }
-}
 
 
-/* =====================================================
-   TODO — QUICK PROGRESS UPDATE
-===================================================== */
+    function formatMonth(value) {
 
-async function setTodoProgress(
-    todoId,
-    progress
-) {
+      if (!value) {
+        return "No month";
+      }
 
-    try {
+      const date = new Date(value + "-01T00:00:00");
 
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("todos")
-                .update({
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
 
-                    completed:
-                        progress === 100
-
-                })
-                .eq(
-                    "id",
-                    todoId
-                );
+      return date.toLocaleDateString(
+        undefined,
+        {
+          year: "numeric",
+          month: "long"
+        }
+      );
+    }
 
 
-        if (error) {
+    function showMessage(elementId, message, type = "success") {
 
-            throw error;
+      const element = document.getElementById(elementId);
+
+      if (!element) {
+        return;
+      }
+
+      element.className =
+        type === "error"
+          ? "error-message"
+          : "success-message";
+
+      element.textContent = message;
+
+      setTimeout(() => {
+        element.textContent = "";
+      }, 3500);
+    }
+
+
+    function emptyMessage(text = "Nothing saved yet.") {
+
+      return `
+        <div class="empty-message">
+          ${escapeHTML(text)}
+        </div>
+      `;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    function showSection(sectionId) {
+
+      document
+        .querySelectorAll(".page-section")
+        .forEach(section => {
+          section.classList.remove("active-section");
+        });
+
+      const target =
+        document.getElementById(sectionId);
+
+      if (target) {
+        target.classList.add("active-section");
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    /* =========================================================
+       DATABASE HELPERS
+       ========================================================= */
+
+    async function insertRow(table, data) {
+
+      const {
+        data: row,
+        error
+      } = await supabaseClient
+        .from(table)
+        .insert(data)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      return row;
+    }
+
+
+    async function updateRow(table, id, data) {
+
+      const {
+        data: row,
+        error
+      } = await supabaseClient
+        .from(table)
+        .update(data)
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      return row;
+    }
+
+
+    async function deleteRow(table, id) {
+
+      const {
+        error
+      } = await supabaseClient
+        .from(table)
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+
+    async function loadRows(table) {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from(table)
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+        console.error(
+          `Error loading ${table}:`,
+          error
+        );
+        throw error;
+      }
+
+      return data || [];
+    }
+
+
+    /* =========================================================
+       BIBI DATA HELPERS
+       ========================================================= */
+
+    async function saveBibiData(dataType, data) {
+
+      const {
+        data: row,
+        error
+      } = await supabaseClient
+        .from("bibi_data")
+        .insert({
+          data_type: dataType,
+          data: data
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      return row;
+    }
+
+
+    async function updateBibiDataRow(id, data) {
+
+      const {
+        data: row,
+        error
+      } = await supabaseClient
+        .from("bibi_data")
+        .update({
+          data: data
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      return row;
+    }
+
+
+    async function loadBibiData(dataType) {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("bibi_data")
+        .select("*")
+        .eq("data_type", dataType)
+        .order("created_at", {
+          ascending: false
+        });
+
+      if (error) {
+        console.error(
+          `Error loading ${dataType}:`,
+          error
+        );
+        throw error;
+      }
+
+      return data || [];
+    }
+
+
+    async function deleteBibiDataRow(id) {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("bibi_data")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+
+
+    /* =========================================================
+       BUSINESS IDEAS
+       ========================================================= */
+
+    document
+      .getElementById("businessIdeaForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await insertRow(
+            "business_ideas",
+            {
+              title:
+                document
+                  .getElementById("businessIdeaTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("businessIdeaDescription")
+                  .value
+                  .trim()
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "businessIdeaMessage",
+            "Business idea saved!"
+          );
+
+          displayBusinessIdeas();
+
+        } catch (error) {
+
+          showMessage(
+            "businessIdeaMessage",
+            error.message,
+            "error"
+          );
 
         }
 
-
-        const {
-            data,
-            error: detailError
-        } =
-            await supabaseClient
-                .from("bibi_data")
-                .select("*")
-                .eq(
-                    "data_type",
-                    "todo_details"
-                );
+      });
 
 
-        if (detailError) {
+    async function displayBusinessIdeas() {
 
-            throw detailError;
+      const list =
+        document.getElementById(
+          "businessIdeasList"
+        );
+
+      list.innerHTML =
+        `<div class="loading-message">Loading...</div>`;
+
+      try {
+
+        const rows =
+          await loadRows("business_ideas");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No business ideas yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(item => `
+
+            <div class="saved-item">
+
+              <h4>${escapeHTML(item.title)}</h4>
+
+              <p>
+                ${escapeHTML(item.description || "No description")}
+              </p>
+
+              <div class="item-actions">
+
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('business', ${item.id})"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteBusinessIdea(${item.id})"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    async function deleteBusinessIdea(id) {
+
+      if (!confirm("Delete this business idea?")) {
+        return;
+      }
+
+      try {
+
+        await deleteRow(
+          "business_ideas",
+          id
+        );
+
+        await displayBusinessIdeas();
+
+      } catch (error) {
+
+        alert(
+          "Could not delete business idea: " +
+          error.message
+        );
+
+      }
+    }
+
+
+    /* =========================================================
+       CLIENTS
+       ========================================================= */
+
+    document
+      .getElementById("clientForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await saveBibiData(
+            "client",
+            {
+              name:
+                document
+                  .getElementById("clientName")
+                  .value
+                  .trim(),
+
+              project:
+                document
+                  .getElementById("clientProject")
+                  .value
+                  .trim(),
+
+              status:
+                document
+                  .getElementById("clientStatus")
+                  .value
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "clientMessage",
+            "Client saved!"
+          );
+
+          displayClients();
+
+        } catch (error) {
+
+          showMessage(
+            "clientMessage",
+            error.message,
+            "error"
+          );
 
         }
 
+      });
 
-        const existing =
-            (data || []).find(
-                function(row) {
 
-                    return row.data &&
-                        String(
-                            row.data.todo_id
-                        ) ===
-                        String(todoId);
+    async function displayClients() {
 
-                }
+      const list =
+        document.getElementById("clientsList");
+
+      try {
+
+        const rows =
+          await loadBibiData("client");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No clients yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(row => {
+
+            const item =
+              row.data || {};
+
+            return `
+
+              <div class="saved-item">
+
+                <h4>
+                  ${escapeHTML(item.name || "Unnamed client")}
+                </h4>
+
+                <p>
+                  Project:
+                  ${escapeHTML(item.project || "—")}
+                </p>
+
+                <p>
+                  Status:
+                  ${escapeHTML(item.status || "—")}
+                </p>
+
+                <div class="item-actions">
+
+                  <button
+                    class="small-button edit-button"
+                    onclick="openEditModal('client', ${row.id})"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="small-button delete-button"
+                    onclick="deleteBibiItem(${row.id}, 'client')"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    /* =========================================================
+       MONEY
+       ========================================================= */
+
+    document
+      .getElementById("moneyForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await saveBibiData(
+            "money",
+            {
+              amount:
+                document
+                  .getElementById("moneyAmount")
+                  .value,
+
+              type:
+                document
+                  .getElementById("moneyType")
+                  .value,
+
+              description:
+                document
+                  .getElementById("moneyDescription")
+                  .value
+                  .trim()
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "moneyMessage",
+            "Money entry saved!"
+          );
+
+          displayMoney();
+
+        } catch (error) {
+
+          showMessage(
+            "moneyMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
+
+
+    async function displayMoney() {
+
+      const list =
+        document.getElementById("moneyList");
+
+      try {
+
+        const rows =
+          await loadBibiData("money");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No money entries yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(row => {
+
+            const item =
+              row.data || {};
+
+            return `
+
+              <div class="saved-item">
+
+                <h4>
+                  ${escapeHTML(item.type || "Entry")}
+                </h4>
+
+                <p>
+                  Amount:
+                  ${escapeHTML(item.amount || "0")}
+                </p>
+
+                <p>
+                  ${escapeHTML(item.description || "")}
+                </p>
+
+                <div class="item-actions">
+
+                  <button
+                    class="small-button edit-button"
+                    onclick="openEditModal('money', ${row.id})"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="small-button delete-button"
+                    onclick="deleteBibiItem(${row.id}, 'money')"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    /* =========================================================
+       GROWTH
+       ========================================================= */
+
+    document
+      .getElementById("growthForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await saveBibiData(
+            "growth",
+            {
+              metric:
+                document
+                  .getElementById("growthMetric")
+                  .value
+                  .trim(),
+
+              value:
+                document
+                  .getElementById("growthValue")
+                  .value,
+
+              notes:
+                document
+                  .getElementById("growthNotes")
+                  .value
+                  .trim()
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "growthMessage",
+            "Growth entry saved!"
+          );
+
+          displayGrowth();
+
+        } catch (error) {
+
+          showMessage(
+            "growthMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
+
+
+    async function displayGrowth() {
+
+      const list =
+        document.getElementById("growthList");
+
+      try {
+
+        const rows =
+          await loadBibiData("growth");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No growth entries yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(row => {
+
+            const item =
+              row.data || {};
+
+            return `
+
+              <div class="saved-item">
+
+                <h4>
+                  ${escapeHTML(item.metric || "Growth")}
+                </h4>
+
+                <p>
+                  Value:
+                  ${escapeHTML(item.value || "0")}
+                </p>
+
+                <p>
+                  ${escapeHTML(item.notes || "")}
+                </p>
+
+                <div class="item-actions">
+
+                  <button
+                    class="small-button edit-button"
+                    onclick="openEditModal('growth', ${row.id})"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="small-button delete-button"
+                    onclick="deleteBibiItem(${row.id}, 'growth')"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    async function deleteBibiItem(id, type) {
+
+      if (!confirm(`Delete this ${type} entry?`)) {
+        return;
+      }
+
+      try {
+
+        await deleteBibiDataRow(id);
+
+        if (type === "client") {
+          displayClients();
+        }
+
+        if (type === "money") {
+          displayMoney();
+        }
+
+        if (type === "growth") {
+          displayGrowth();
+        }
+
+      } catch (error) {
+
+        alert(
+          "Could not delete entry: " +
+          error.message
+        );
+
+      }
+    }
+
+
+    /* =========================================================
+       CONTENT
+       ========================================================= */
+
+    document
+      .getElementById("contentForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await insertRow(
+            "content",
+            {
+              title:
+                document
+                  .getElementById("contentTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("contentDescription")
+                  .value
+                  .trim(),
+
+              platform:
+                document
+                  .getElementById("contentPlatform")
+                  .value,
+
+              status:
+                document
+                  .getElementById("contentStatus")
+                  .value
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "contentStatusMessage",
+            "Content saved!"
+          );
+
+          displayContent();
+
+        } catch (error) {
+
+          showMessage(
+            "contentStatusMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
+
+
+    async function displayContent() {
+
+      const list =
+        document.getElementById("contentList");
+
+      list.innerHTML =
+        `<div class="loading-message">Loading...</div>`;
+
+      try {
+
+        const rows =
+          await loadRows("content");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No content saved yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(item => `
+
+            <div class="saved-item">
+
+              <h4>
+                ${escapeHTML(item.title)}
+              </h4>
+
+              <p>
+                ${escapeHTML(item.description || "")}
+              </p>
+
+              <p>
+                <strong>Platform:</strong>
+                ${escapeHTML(item.platform || "—")}
+              </p>
+
+              <p>
+                <strong>Status:</strong>
+                ${escapeHTML(item.status || "—")}
+              </p>
+
+              <div class="item-actions">
+
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('content', ${item.id})"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteContent(${item.id})"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    async function deleteContent(id) {
+
+      if (!confirm("Delete this content item?")) {
+        return;
+      }
+
+      try {
+
+        await deleteRow(
+          "content",
+          id
+        );
+
+        displayContent();
+
+      } catch (error) {
+
+        alert(
+          "Could not delete content: " +
+          error.message
+        );
+
+      }
+    }
+
+
+    /* =========================================================
+       TODO
+       ========================================================= */
+
+    document
+      .getElementById("todoForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          const todo =
+            await insertRow(
+              "todos",
+              {
+                title:
+                  document
+                    .getElementById("todoTitle")
+                    .value
+                    .trim(),
+
+                description:
+                  document
+                    .getElementById("todoDescription")
+                    .value
+                    .trim(),
+
+                completed:
+                  Number(
+                    document
+                      .getElementById("todoProgress")
+                      .value
+                  ) === 100
+              }
             );
 
 
-        if (existing) {
+          await saveBibiData(
+            "todo_details",
+            {
+              todo_id: todo.id,
 
-            const updatedData = {
+              due_date:
+                document
+                  .getElementById("todoDueDate")
+                  .value || null,
 
-                ...(existing.data || {}),
-
-                progress:
-                    progress
-
-            };
-
-
-            const {
-                error: updateError
-            } =
-                await supabaseClient
-                    .from("bibi_data")
-                    .update({
-
-                        data:
-                            updatedData
-
-                    })
-                    .eq(
-                        "id",
-                        existing.id
-                    );
-
-
-            if (updateError) {
-
-                throw updateError;
-
+              progress:
+                Number(
+                  document
+                    .getElementById("todoProgress")
+                    .value
+                )
             }
-
-        }
-        else {
-
-            const {
-                error: insertError
-            } =
-                await supabaseClient
-                    .from("bibi_data")
-                    .insert({
-
-                        data_type:
-                            "todo_details",
-
-                        data: {
-
-                            todo_id:
-                                todoId,
-
-                            due_date:
-                                null,
-
-                            progress:
-                                progress
-
-                        }
-
-                    });
+          );
 
 
-            if (insertError) {
+          this.reset();
 
-                throw insertError;
+          showMessage(
+            "todoMessage",
+            "Task saved!"
+          );
 
-            }
+          displayTodos();
+
+        } catch (error) {
+
+          showMessage(
+            "todoMessage",
+            error.message,
+            "error"
+          );
 
         }
 
+      });
 
-        displayTodos();
 
+    async function displayTodos() {
+
+      const list =
+        document.getElementById("todoList");
+
+      list.innerHTML =
+        `<div class="loading-message">Loading...</div>`;
+
+      try {
+
+        const todos =
+          await loadRows("todos");
+
+        const details =
+          await loadBibiData("todo_details");
+
+        if (!todos.length) {
+          list.innerHTML =
+            emptyMessage("No tasks yet.");
+          return;
+        }
+
+        list.innerHTML =
+          todos.map(todo => {
+
+            const matchingDetail =
+              details.find(
+                detail =>
+                  detail.data &&
+                  Number(detail.data.todo_id) === Number(todo.id)
+              );
+
+            const detail =
+              matchingDetail
+                ? matchingDetail.data
+                : {};
+
+            const progress =
+              Number(detail.progress || 0);
+
+            const completed =
+              progress === 100 ||
+              todo.completed === true;
+
+            return `
+
+              <div class="saved-item">
+
+                <h4>
+                  ${completed ? "✅" : "⬜"}
+                  ${escapeHTML(todo.title)}
+                </h4>
+
+                <p>
+                  ${escapeHTML(todo.description || "")}
+                </p>
+
+                <p>
+                  <strong>Due:</strong>
+                  ${detail.due_date
+                    ? formatDate(detail.due_date)
+                    : "No due date"}
+                </p>
+
+                <p>
+                  <strong>Progress:</strong>
+                  ${progress}%
+                </p>
+
+                <div class="progress-bar">
+                  <div
+                    class="progress-fill"
+                    style="width:${Math.max(
+                      0,
+                      Math.min(100, progress)
+                    )}%"
+                  ></div>
+                </div>
+
+                <div class="item-actions">
+
+                  <button
+                    class="small-button edit-button"
+                    onclick="openEditModal('todo', ${todo.id})"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="small-button delete-button"
+                    onclick="deleteTodo(${todo.id})"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
     }
-    catch(error) {
 
-        console.error(error);
 
-        alert(
-            "Could not update the task: " +
-            error.message
+    async function updateTodoDetails(
+      todoId,
+      progress,
+      dueDate,
+      existingDetailId = null
+    ) {
+
+      const detailsData = {
+        todo_id: todoId,
+        due_date: dueDate || null,
+        progress: Number(progress)
+      };
+
+
+      if (existingDetailId) {
+
+        await updateBibiDataRow(
+          existingDetailId,
+          detailsData
         );
-
-    }
-}
-
-
-/* =====================================================
-   TODO — DELETE
-===================================================== */
-
-async function deleteTodo(
-    todoId
-) {
-
-    const confirmed =
-        confirm(
-            "Delete this task? This cannot be undone."
-        );
-
-
-    if (!confirmed) {
 
         return;
 
+      }
+
+
+      const existingDetails =
+        await loadBibiData("todo_details");
+
+      const existing =
+        existingDetails.find(
+          row =>
+            row.data &&
+            Number(row.data.todo_id) === Number(todoId)
+        );
+
+
+      if (existing) {
+
+        await updateBibiDataRow(
+          existing.id,
+          detailsData
+        );
+
+      } else {
+
+        await saveBibiData(
+          "todo_details",
+          detailsData
+        );
+
+      }
+
     }
 
 
-    try {
+    async function deleteTodo(id) {
 
-        /*
-         * Delete its detail record first.
-         */
+      if (!confirm("Delete this task?")) {
+        return;
+      }
 
-        const {
-            data: details
-        } =
-            await supabaseClient
-                .from("bibi_data")
-                .select("*")
-                .eq(
-                    "data_type",
-                    "todo_details"
-                );
+      try {
 
+        const details =
+          await loadBibiData("todo_details");
 
-        const detailRow =
-            (details || []).find(
-                function(row) {
-
-                    return row.data &&
-                        String(
-                            row.data.todo_id
-                        ) ===
-                        String(todoId);
-
-                }
-            );
+        const matchingDetails =
+          details.filter(
+            row =>
+              row.data &&
+              Number(row.data.todo_id) === Number(id)
+          );
 
 
-        if (detailRow) {
+        for (const detail of matchingDetails) {
 
-            const {
-                error: detailError
-            } =
-                await supabaseClient
-                    .from("bibi_data")
-                    .delete()
-                    .eq(
-                        "id",
-                        detailRow.id
-                    );
-
-
-            if (detailError) {
-
-                throw detailError;
-
-            }
+          await deleteBibiDataRow(
+            detail.id
+          );
 
         }
 
 
-        /*
-         * Delete the actual Todo.
-         */
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("todos")
-                .delete()
-                .eq(
-                    "id",
-                    todoId
-                );
-
-
-        if (error) {
-
-            throw error;
-
-        }
+        await deleteRow(
+          "todos",
+          id
+        );
 
 
         displayTodos();
 
-    }
-    catch(error) {
-
-        console.error(error);
+      } catch (error) {
 
         alert(
-            "Could not delete task: " +
-            error.message
+          "Could not delete task: " +
+          error.message
         );
 
+      }
     }
-}
 
 
-/* =====================================================
-   TODO — CANCEL EDIT
-===================================================== */
+    /* =========================================================
+       NOTES
+       ========================================================= */
 
-function cancelTodoEdit() {
+    document
+      .getElementById("notesForm")
+      .addEventListener("submit", async function(event) {
 
-    document.getElementById(
-        "todoEditBox"
-    ).style.display =
-        "none";
+        event.preventDefault();
 
+        try {
 
-    document.getElementById(
-        "editingTodoId"
-    ).value = "";
-
-
-    document.getElementById(
-        "editTodoTitle"
-    ).value = "";
-
-
-    document.getElementById(
-        "editTodoDueDate"
-    ).value = "";
-
-
-    document.getElementById(
-        "editTodoProgress"
-    ).value = "0";
-
-
-    document.getElementById(
-        "todoEditStatus"
-    ).textContent = "";
-
-}
-
-
-/* =====================================================
-   NOTES
-===================================================== */
-
-async function saveNote() {
-
-    const title =
-        document.getElementById(
-            "noteTitle"
-        ).value.trim();
-
-
-    const content =
-        document.getElementById(
-            "noteText"
-        ).value.trim();
-
-
-    if (
-        !title &&
-        !content
-    ) return;
-
-
-    try {
-
-        await insertRow(
+          await insertRow(
             "notes",
             {
-                title,
-                content
+              title:
+                document
+                  .getElementById("noteTitle")
+                  .value
+                  .trim(),
+
+              content:
+                document
+                  .getElementById("noteContent")
+                  .value
+                  .trim()
             }
+          );
+
+          this.reset();
+
+          showMessage(
+            "notesMessage",
+            "Note saved!"
+          );
+
+          displayNotes();
+
+        } catch (error) {
+
+          showMessage(
+            "notesMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
+
+
+    async function displayNotes() {
+
+      const list =
+        document.getElementById("notesList");
+
+      try {
+
+        const rows =
+          await loadRows("notes");
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No notes yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(item => `
+
+            <div class="saved-item">
+
+              <h4>
+                ${escapeHTML(item.title)}
+              </h4>
+
+              <p>
+                ${escapeHTML(item.content || "")}
+              </p>
+
+              <div class="item-actions">
+
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('note', ${item.id})"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteNote(${item.id})"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    async function deleteNote(id) {
+
+      if (!confirm("Delete this note?")) {
+        return;
+      }
+
+      try {
+
+        await deleteRow(
+          "notes",
+          id
         );
-
-
-        document.getElementById(
-            "noteTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "noteText"
-        ).value = "";
-
 
         displayNotes();
 
-    }
-    catch(error) {
+      } catch (error) {
 
         alert(
-            "Could not save note: " +
-            error.message
+          "Could not delete note: " +
+          error.message
         );
 
-    }
-}
-
-
-async function displayNotes() {
-
-    const list =
-        document.getElementById(
-            "notesList"
-        );
-
-
-    const data =
-        await loadRows(
-            "notes"
-        );
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(function(item) {
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-                    🗒️
-                    ${escapeHTML(
-                        item.title
-                    )}
-                </h4>
-
-                <p>
-                    ${escapeHTML(
-                        item.content || ""
-                    )}
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   PERIOD TRACKER
-===================================================== */
-
-async function savePeriod() {
-
-    const startDate =
-        document.getElementById(
-            "periodStart"
-        ).value;
-
-
-    const endDate =
-        document.getElementById(
-            "periodEnd"
-        ).value;
-
-
-    const cycleLength =
-        parseInt(
-            document.getElementById(
-                "cycleLength"
-            ).value || 28
-        );
-
-
-    if (!startDate) {
-
-        alert(
-            "Please choose the start date."
-        );
-
-        return;
-
+      }
     }
 
 
-    const nextDate =
-        addDays(
-            startDate,
-            cycleLength
-        );
+    /* =========================================================
+       PERIOD TRACKER
+       ========================================================= */
 
+    document
+      .getElementById("periodForm")
+      .addEventListener("submit", async function(event) {
 
-    try {
+        event.preventDefault();
 
-        const {
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "period_tracker"
-                )
-                .insert({
+        try {
 
-                    period_date:
-                        startDate,
+          await insertRow(
+            "period_tracker",
+            {
+              period_date:
+                document
+                  .getElementById("periodDate")
+                  .value,
 
-                    end_date:
-                        endDate || null,
+              end_date:
+                document
+                  .getElementById("periodEndDate")
+                  .value || null,
 
-                    cycle_length:
-                        cycleLength,
+              cycle_length:
+                document
+                  .getElementById("cycleLength")
+                  .value || null,
 
-                    next_period_date:
-                        nextDate
+              next_period_date:
+                document
+                  .getElementById("nextPeriodDate")
+                  .value || null
+            }
+          );
 
-                });
+          this.reset();
 
+          showMessage(
+            "periodMessage",
+            "Period entry saved!"
+          );
 
-        if (error) {
+          displayPeriod();
 
-            throw error;
+        } catch (error) {
+
+          showMessage(
+            "periodMessage",
+            error.message,
+            "error"
+          );
 
         }
 
-
-        document.getElementById(
-            "periodStart"
-        ).value = "";
+      });
 
 
-        document.getElementById(
-            "periodEnd"
-        ).value = "";
+    async function displayPeriod() {
 
+      const list =
+        document.getElementById("periodList");
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+          .from("period_tracker")
+          .select("*")
+          .order("id", {
+            ascending: false
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        const rows = data || [];
+
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No period entries yet.");
+          return;
+        }
+
+        list.innerHTML =
+          rows.map(item => `
+
+            <div class="saved-item">
+
+              <h4>
+                ${escapeHTML(
+                  formatDate(item.period_date)
+                )}
+              </h4>
+
+              <p>
+                <strong>End:</strong>
+                ${item.end_date
+                  ? escapeHTML(formatDate(item.end_date))
+                  : "Not recorded"}
+              </p>
+
+              <p>
+                <strong>Cycle Length:</strong>
+                ${escapeHTML(
+                  item.cycle_length || "Not recorded"
+                )}
+              </p>
+
+              <p>
+                <strong>Next Period:</strong>
+                ${item.next_period_date
+                  ? escapeHTML(
+                      formatDate(item.next_period_date)
+                    )
+                  : "Not recorded"}
+              </p>
+
+              <div class="item-actions">
+
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('period', ${item.id})"
+                >
+                  Edit
+                </button>
+
+                <button
+                  class="small-button delete-button"
+                  onclick="deletePeriod(${item.id})"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("");
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
+
+      }
+    }
+
+
+    async function deletePeriod(id) {
+
+      if (!confirm("Delete this period entry?")) {
+        return;
+      }
+
+      try {
+
+        await deleteRow(
+          "period_tracker",
+          id
+        );
 
         displayPeriod();
 
-    }
-    catch(error) {
+      } catch (error) {
 
         alert(
-            "Could not save period: " +
-            error.message
+          "Could not delete period entry: " +
+          error.message
         );
 
-    }
-}
-
-
-/* =====================================================
-   PERIOD HISTORY
-===================================================== */
-
-async function displayPeriod() {
-
-    const status =
-        document.getElementById(
-            "periodStatus"
-        );
-
-
-    const info =
-        document.getElementById(
-            "periodInfo"
-        );
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from(
-                "period_tracker"
-            )
-            .select("*")
-            .order(
-                "period_date",
-                {
-                    ascending: false
-                }
-            );
-
-
-    if (error) {
-
-        status.textContent =
-            "Could not load period data.";
-
-        console.error(error);
-
-        return;
-
+      }
     }
 
 
-    if (
-        !data ||
-        !data.length
-    ) {
+    /* =========================================================
+       IMPORTANT EVENTS
+       ========================================================= */
 
-        status.textContent =
-            "🌸 No period information saved yet.";
+    document
+      .getElementById("eventForm")
+      .addEventListener("submit", async function(event) {
 
-        info.innerHTML = "";
+        event.preventDefault();
 
-        return;
+        try {
 
-    }
+          await insertRow(
+            "events",
+            {
+              event_date:
+                document
+                  .getElementById("eventDate")
+                  .value,
 
+              title:
+                document
+                  .getElementById("eventTitle")
+                  .value
+                  .trim(),
 
-    const latest =
-        data[0];
+              description:
+                document
+                  .getElementById("eventDescription")
+                  .value
+                  .trim()
+            }
+          );
 
+          this.reset();
 
-    const next =
-        latest.next_period_date ||
-        addDays(
-            latest.period_date,
-            latest.cycle_length || 28
-        );
+          showMessage(
+            "eventMessage",
+            "Important date saved!"
+          );
 
+          displayEvents();
 
-    status.innerHTML = `
+        } catch (error) {
 
-        🌸
-        <strong>
-            Period history saved
-        </strong>
+          showMessage(
+            "eventMessage",
+            error.message,
+            "error"
+          );
 
-    `;
+        }
 
-
-    let historyHTML = `
-
-        <div class="saved-item">
-
-            <h4>
-                🌸 Period History
-            </h4>
-
-            <p>
-                📅 Next expected period:
-                <strong>
-                    ${escapeHTML(
-                        formatDateOnly(next)
-                    )}
-                </strong>
-            </p>
-
-        </div>
-
-    `;
+      });
 
 
-    data.forEach(function(period) {
+    async function displayEvents() {
 
-        const start =
-            period.period_date || "";
+      const list =
+        document.getElementById("eventsList");
 
+      try {
 
-        const end =
-            period.end_date || "";
+        const rows =
+          await loadRows("events");
 
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No important dates yet.");
+          return;
+        }
 
-        const cycle =
-            period.cycle_length || 28;
-
-
-        const expected =
-            period.next_period_date ||
-            addDays(
-                start,
-                cycle
-            );
-
-
-        historyHTML += `
+        list.innerHTML =
+          rows.map(item => `
 
             <div class="saved-item">
 
-                <h4>
-                    🌸 Period Record
-                </h4>
+              <h4>
+                ${escapeHTML(item.title)}
+              </h4>
 
-                <p>
+              <p>
+                <strong>Date:</strong>
+                ${escapeHTML(
+                  formatDate(item.event_date)
+                )}
+              </p>
 
-                    🌸 Started:
-                    <strong>
-                        ${escapeHTML(
-                            formatDateOnly(start)
-                        )}
-                    </strong>
+              <p>
+                ${escapeHTML(item.description || "")}
+              </p>
 
-                </p>
+              <div class="item-actions">
 
-                <p>
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('event', ${item.id})"
+                >
+                  Edit
+                </button>
 
-                    🩷 Ended:
-                    <strong>
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteEvent(${item.id})"
+                >
+                  Delete
+                </button>
 
-                        ${
-                            end
-                            ? escapeHTML(
-                                formatDateOnly(end)
-                            )
-                            : "Not entered"
-                        }
-
-                    </strong>
-
-                </p>
-
-                <p>
-
-                    🔄 Cycle length:
-                    <strong>
-                        ${cycle} days
-                    </strong>
-
-                </p>
-
-                <p>
-
-                    📅 Expected next period:
-                    <strong>
-                        ${escapeHTML(
-                            formatDateOnly(
-                                expected
-                            )
-                        )}
-                    </strong>
-
-                </p>
+              </div>
 
             </div>
 
-        `;
+          `).join("");
 
-    });
+      } catch (error) {
 
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
 
-    info.innerHTML =
-        historyHTML;
-
-}
-
-
-/* =====================================================
-   EVENTS
-===================================================== */
-
-async function saveEvent() {
-
-    const date =
-        document.getElementById(
-            "eventDate"
-        ).value;
+      }
+    }
 
 
-    const title =
-        document.getElementById(
-            "eventTitle"
-        ).value.trim();
+    async function deleteEvent(id) {
 
+      if (!confirm("Delete this important date?")) {
+        return;
+      }
 
-    const description =
-        document.getElementById(
-            "eventDescription"
-        ).value.trim();
+      try {
 
-
-    if (
-        !date ||
-        !title
-    ) return;
-
-
-    try {
-
-        await insertRow(
-            "events",
-            {
-                event_date: date,
-                title,
-                description
-            }
+        await deleteRow(
+          "events",
+          id
         );
-
-
-        document.getElementById(
-            "eventDate"
-        ).value = "";
-
-
-        document.getElementById(
-            "eventTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "eventDescription"
-        ).value = "";
-
 
         displayEvents();
 
-    }
-    catch(error) {
+      } catch (error) {
 
         alert(
-            "Could not save event: " +
-            error.message
+          "Could not delete date: " +
+          error.message
         );
 
+      }
     }
-}
 
 
-async function displayEvents() {
+    /* =========================================================
+       MONTHLY PLANS
+       ========================================================= */
 
-    const list =
-        document.getElementById(
-            "eventsList"
-        );
+    document
+      .getElementById("monthlyForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await insertRow(
+            "monthly_plans",
+            {
+              month:
+                document
+                  .getElementById("monthlyMonth")
+                  .value,
+
+              plan:
+                document
+                  .getElementById("monthlyPlan")
+                  .value
+                  .trim()
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "monthlyMessage",
+            "Monthly plan saved!"
+          );
+
+          displayMonthlyPlans();
+
+        } catch (error) {
+
+          showMessage(
+            "monthlyMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
 
 
-    const data =
-        await loadRows(
-            "events"
-        );
+    async function displayMonthlyPlans() {
 
+      const list =
+        document.getElementById("monthlyList");
 
-    list.innerHTML = "";
+      try {
 
+        const rows =
+          await loadRows("monthly_plans");
 
-    data.forEach(function(item) {
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No monthly plans yet.");
+          return;
+        }
 
-        list.innerHTML += `
+        list.innerHTML =
+          rows.map(item => `
 
             <div class="saved-item">
 
-                <h4>
+              <h4>
+                ${escapeHTML(
+                  formatMonth(item.month)
+                )}
+              </h4>
 
-                    📌
-                    ${escapeHTML(
-                        item.title
-                    )}
+              <p>
+                ${escapeHTML(item.plan || "")}
+              </p>
 
-                </h4>
+              <div class="item-actions">
 
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('monthly', ${item.id})"
+                >
+                  Edit
+                </button>
 
-                <p>
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteMonthlyPlan(${item.id})"
+                >
+                  Delete
+                </button>
 
-                    📅
-                    ${escapeHTML(
-                        formatDateOnly(
-                            item.event_date
-                        )
-                    )}
-
-                </p>
-
-
-                <p>
-
-                    ${escapeHTML(
-                        item.description || ""
-                    )}
-
-                </p>
+              </div>
 
             </div>
 
-        `;
+          `).join("");
 
-    });
+      } catch (error) {
 
-}
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
 
-
-/* =====================================================
-   MONTHLY PLANS
-===================================================== */
-
-async function saveMonthlyPlan() {
-
-    const month =
-        document.getElementById(
-            "planMonth"
-        ).value;
+      }
+    }
 
 
-    const plan =
-        document.getElementById(
-            "monthlyPlan"
-        ).value.trim();
+    async function deleteMonthlyPlan(id) {
 
+      if (!confirm("Delete this monthly plan?")) {
+        return;
+      }
 
-    if (
-        !month ||
-        !plan
-    ) return;
+      try {
 
-
-    try {
-
-        await insertRow(
-            "monthly_plans",
-            {
-                month,
-                plan
-            }
+        await deleteRow(
+          "monthly_plans",
+          id
         );
-
-
-        document.getElementById(
-            "planMonth"
-        ).value = "";
-
-
-        document.getElementById(
-            "monthlyPlan"
-        ).value = "";
-
 
         displayMonthlyPlans();
 
-    }
-    catch(error) {
+      } catch (error) {
 
         alert(
-            "Could not save monthly plan: " +
-            error.message
+          "Could not delete monthly plan: " +
+          error.message
         );
 
+      }
     }
-}
 
 
-async function displayMonthlyPlans() {
+    /* =========================================================
+       GOALS
+       ========================================================= */
 
-    const list =
-        document.getElementById(
-            "monthlyList"
-        );
+    document
+      .getElementById("goalForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        try {
+
+          await insertRow(
+            "goals",
+            {
+              title:
+                document
+                  .getElementById("goalTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("goalDescription")
+                  .value
+                  .trim(),
+
+              target_date:
+                document
+                  .getElementById("goalTargetDate")
+                  .value || null
+            }
+          );
+
+          this.reset();
+
+          showMessage(
+            "goalMessage",
+            "Goal saved!"
+          );
+
+          displayGoals();
+
+        } catch (error) {
+
+          showMessage(
+            "goalMessage",
+            error.message,
+            "error"
+          );
+
+        }
+
+      });
 
 
-    const data =
-        await loadRows(
-            "monthly_plans"
-        );
+    async function displayGoals() {
 
+      const list =
+        document.getElementById("goalsList");
 
-    list.innerHTML = "";
+      try {
 
+        const rows =
+          await loadRows("goals");
 
-    data.forEach(function(item) {
+        if (!rows.length) {
+          list.innerHTML =
+            emptyMessage("No goals yet.");
+          return;
+        }
 
-        list.innerHTML += `
+        list.innerHTML =
+          rows.map(item => `
 
             <div class="saved-item">
 
-                <h4>
+              <h4>
+                🎯 ${escapeHTML(item.title)}
+              </h4>
 
-                    📆
-                    ${escapeHTML(
-                        item.month
-                    )}
+              <p>
+                ${escapeHTML(item.description || "")}
+              </p>
 
-                </h4>
+              <p>
+                <strong>Target:</strong>
+                ${item.target_date
+                  ? escapeHTML(
+                      formatDate(item.target_date)
+                    )
+                  : "No target date"}
+              </p>
 
+              <div class="item-actions">
 
-                <p>
+                <button
+                  class="small-button edit-button"
+                  onclick="openEditModal('goal', ${item.id})"
+                >
+                  Edit
+                </button>
 
-                    ${escapeHTML(
-                        item.plan
-                    )}
+                <button
+                  class="small-button delete-button"
+                  onclick="deleteGoal(${item.id})"
+                >
+                  Delete
+                </button>
 
-                </p>
+              </div>
 
             </div>
 
-        `;
+          `).join("");
 
-    });
+      } catch (error) {
 
-}
+        list.innerHTML =
+          `<div class="error-message">${escapeHTML(error.message)}</div>`;
 
-
-/* =====================================================
-   GOALS
-===================================================== */
-
-async function saveGoal() {
-
-    const title =
-        document.getElementById(
-            "goalTitle"
-        ).value.trim();
+      }
+    }
 
 
-    const description =
-        document.getElementById(
-            "goalDescription"
-        ).value.trim();
+    async function deleteGoal(id) {
 
+      if (!confirm("Delete this goal?")) {
+        return;
+      }
 
-    const targetDate =
-        document.getElementById(
-            "goalTargetDate"
-        ).value;
+      try {
 
-
-    if (!title) return;
-
-
-    try {
-
-        await insertRow(
-            "goals",
-            {
-                title,
-                description,
-                target_date:
-                    targetDate || null,
-
-                completed:
-                    false
-            }
+        await deleteRow(
+          "goals",
+          id
         );
-
-
-        document.getElementById(
-            "goalTitle"
-        ).value = "";
-
-
-        document.getElementById(
-            "goalDescription"
-        ).value = "";
-
-
-        document.getElementById(
-            "goalTargetDate"
-        ).value = "";
-
 
         displayGoals();
 
-    }
-    catch(error) {
+      } catch (error) {
 
         alert(
-            "Could not save goal: " +
-            error.message
+          "Could not delete goal: " +
+          error.message
         );
+
+      }
+    }
+
+
+    /* =========================================================
+       EDIT MODAL
+       ========================================================= */
+
+    function openModal(title, body) {
+
+      document
+        .getElementById("editModalTitle")
+        .textContent = title;
+
+      document
+        .getElementById("editModalBody")
+        .innerHTML = body;
+
+      const modal =
+        document.getElementById("editModal");
+
+      modal.classList.add("active");
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      document.body.style.overflow = "hidden";
+    }
+
+
+    function closeEditModal() {
+
+      const modal =
+        document.getElementById("editModal");
+
+      modal.classList.remove("active");
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.style.overflow = "";
+
+      editState = {
+        type: null,
+        id: null,
+        todoDetailId: null
+      };
+    }
+
+
+    function handleModalBackgroundClick(event) {
+
+      if (
+        event.target.id === "editModal"
+      ) {
+        closeEditModal();
+      }
 
     }
-}
 
 
-async function displayGoals() {
+    /* =========================================================
+       OPEN EDIT MODAL
+       ========================================================= */
 
-    const list =
-        document.getElementById(
-            "goalsList"
-        );
+    async function openEditModal(type, id) {
 
+      editState = {
+        type: type,
+        id: id,
+        todoDetailId: null
+      };
 
-    const data =
-        await loadRows(
-            "goals"
-        );
-
-
-    list.innerHTML = "";
-
-
-    data.forEach(function(item) {
-
-        list.innerHTML += `
-
-            <div class="saved-item">
-
-                <h4>
-
-                    🎯
-                    ${escapeHTML(
-                        item.title
-                    )}
-
-                </h4>
+      openModal(
+        "Edit",
+        `<div class="loading-message">Loading...</div>`
+      );
 
 
-                <p>
+      try {
 
-                    ${escapeHTML(
-                        item.description || ""
-                    )}
+        /* -----------------------------------------------------
+           BUSINESS
+           ----------------------------------------------------- */
 
-                </p>
+        if (type === "business") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("business_ideas")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Business Idea",
+            `
+
+              <div class="edit-field">
+                <label>Title</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(data.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <textarea id="editDescription">${escapeHTML(
+                  data.description || ""
+                )}</textarea>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
 
 
-                ${
-                    item.target_date
-                    ? `
+        /* -----------------------------------------------------
+           CONTENT
+           ----------------------------------------------------- */
 
-                        <small>
+        if (type === "content") {
 
-                            🎯 Target:
-                            ${escapeHTML(
-                                formatDateOnly(
-                                    item.target_date
-                                )
-                            )}
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("content")
+            .select("*")
+            .eq("id", id)
+            .single();
 
-                        </small>
+          if (error) throw error;
 
-                    `
-                    : ""
-                }
+          openModal(
+            "Edit Content",
+            `
+
+              <div class="edit-field">
+                <label>Title</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(data.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <textarea id="editDescription">${escapeHTML(
+                  data.description || ""
+                )}</textarea>
+              </div>
+
+              <div class="edit-field">
+                <label>Platform</label>
+                <select id="editPlatform">
+
+                  ${editOption(
+                    "Instagram",
+                    data.platform
+                  )}
+
+                  ${editOption(
+                    "TikTok",
+                    data.platform
+                  )}
+
+                  ${editOption(
+                    "YouTube",
+                    data.platform
+                  )}
+
+                  ${editOption(
+                    "Pinterest",
+                    data.platform
+                  )}
+
+                  ${editOption(
+                    "Blog",
+                    data.platform
+                  )}
+
+                  ${editOption(
+                    "Other",
+                    data.platform
+                  )}
+
+                </select>
+              </div>
+
+              <div class="edit-field">
+                <label>Status</label>
+                <select id="editStatus">
+
+                  ${editOption("Idea", data.status)}
+                  ${editOption("Planned", data.status)}
+                  ${editOption("In Progress", data.status)}
+                  ${editOption("Posted", data.status)}
+
+                </select>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           TODO
+           ----------------------------------------------------- */
+
+        if (type === "todo") {
+
+          const {
+            data: todo,
+            error: todoError
+          } = await supabaseClient
+            .from("todos")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (todoError) throw todoError;
+
+
+          const details =
+            await loadBibiData("todo_details");
+
+          const detail =
+            details.find(
+              row =>
+                row.data &&
+                Number(row.data.todo_id) === Number(id)
+            );
+
+
+          if (detail) {
+            editState.todoDetailId =
+              detail.id;
+          }
+
+
+          const todoData =
+            detail
+              ? detail.data
+              : {};
+
+
+          const progress =
+            todoData.progress !== undefined
+              ? Number(todoData.progress)
+              : (todo.completed ? 100 : 0);
+
+
+          openModal(
+            "Edit Task",
+            `
+
+              <div class="edit-field">
+                <label>Task</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(todo.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <textarea id="editDescription">${escapeHTML(
+                  todo.description || ""
+                )}</textarea>
+              </div>
+
+              <div class="edit-field">
+                <label>Due Date</label>
+                <input
+                  id="editDueDate"
+                  type="date"
+                  value="${escapeHTML(
+                    todoData.due_date || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Progress</label>
+                <select id="editProgress">
+
+                  ${editOption("0", progress)}
+                  ${editOption("25", progress)}
+                  ${editOption("50", progress)}
+                  ${editOption("75", progress)}
+                  ${editOption("100", progress)}
+
+                </select>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           NOTES
+           ----------------------------------------------------- */
+
+        if (type === "note") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("notes")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Note",
+            `
+
+              <div class="edit-field">
+                <label>Title</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(data.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Note</label>
+                <textarea id="editContent">${escapeHTML(
+                  data.content || ""
+                )}</textarea>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           PERIOD
+           ----------------------------------------------------- */
+
+        if (type === "period") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("period_tracker")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Period Entry",
+            `
+
+              <div class="edit-field">
+                <label>Period Start</label>
+                <input
+                  id="editPeriodStart"
+                  type="date"
+                  value="${escapeHTML(
+                    data.period_date || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Period End</label>
+                <input
+                  id="editPeriodEnd"
+                  type="date"
+                  value="${escapeHTML(
+                    data.end_date || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Cycle Length</label>
+                <input
+                  id="editCycleLength"
+                  type="number"
+                  min="1"
+                  value="${escapeHTML(
+                    data.cycle_length || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Next Period Date</label>
+                <input
+                  id="editNextPeriod"
+                  type="date"
+                  value="${escapeHTML(
+                    data.next_period_date || ""
+                  )}"
+                >
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           EVENTS
+           ----------------------------------------------------- */
+
+        if (type === "event") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("events")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Important Date",
+            `
+
+              <div class="edit-field">
+                <label>Date</label>
+                <input
+                  id="editDate"
+                  type="date"
+                  value="${escapeHTML(
+                    data.event_date || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Title</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(data.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <textarea id="editDescription">${escapeHTML(
+                  data.description || ""
+                )}</textarea>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           MONTHLY
+           ----------------------------------------------------- */
+
+        if (type === "monthly") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("monthly_plans")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Monthly Plan",
+            `
+
+              <div class="edit-field">
+                <label>Month</label>
+                <input
+                  id="editMonth"
+                  type="month"
+                  value="${escapeHTML(data.month)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Plan</label>
+                <textarea id="editPlan">${escapeHTML(
+                  data.plan || ""
+                )}</textarea>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           GOAL
+           ----------------------------------------------------- */
+
+        if (type === "goal") {
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("goals")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          openModal(
+            "Edit Goal",
+            `
+
+              <div class="edit-field">
+                <label>Goal</label>
+                <input
+                  id="editTitle"
+                  value="${escapeHTML(data.title)}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <textarea id="editDescription">${escapeHTML(
+                  data.description || ""
+                )}</textarea>
+              </div>
+
+              <div class="edit-field">
+                <label>Target Date</label>
+                <input
+                  id="editTargetDate"
+                  type="date"
+                  value="${escapeHTML(
+                    data.target_date || ""
+                  )}"
+                >
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           CLIENT
+           ----------------------------------------------------- */
+
+        if (type === "client") {
+
+          const {
+            data: row,
+            error
+          } = await supabaseClient
+            .from("bibi_data")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          const data =
+            row.data || {};
+
+          openModal(
+            "Edit Client",
+            `
+
+              <div class="edit-field">
+                <label>Client Name</label>
+                <input
+                  id="editClientName"
+                  value="${escapeHTML(data.name || "")}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Project</label>
+                <input
+                  id="editClientProject"
+                  value="${escapeHTML(data.project || "")}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Status</label>
+                <select id="editClientStatus">
+
+                  ${editOption("Lead", data.status)}
+                  ${editOption("Active", data.status)}
+                  ${editOption("Completed", data.status)}
+                  ${editOption("Paused", data.status)}
+
+                </select>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           MONEY
+           ----------------------------------------------------- */
+
+        if (type === "money") {
+
+          const {
+            data: row,
+            error
+          } = await supabaseClient
+            .from("bibi_data")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          const data =
+            row.data || {};
+
+          openModal(
+            "Edit Money Entry",
+            `
+
+              <div class="edit-field">
+                <label>Amount</label>
+                <input
+                  id="editAmount"
+                  type="number"
+                  step="0.01"
+                  value="${escapeHTML(data.amount || "")}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Type</label>
+                <select id="editMoneyType">
+
+                  ${editOption("Income", data.type)}
+                  ${editOption("Expense", data.type)}
+                  ${editOption("Savings", data.type)}
+
+                </select>
+              </div>
+
+              <div class="edit-field">
+                <label>Description</label>
+                <input
+                  id="editMoneyDescription"
+                  value="${escapeHTML(
+                    data.description || ""
+                  )}"
+                >
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           GROWTH
+           ----------------------------------------------------- */
+
+        if (type === "growth") {
+
+          const {
+            data: row,
+            error
+          } = await supabaseClient
+            .from("bibi_data")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+          if (error) throw error;
+
+          const data =
+            row.data || {};
+
+          openModal(
+            "Edit Growth Entry",
+            `
+
+              <div class="edit-field">
+                <label>Metric</label>
+                <input
+                  id="editMetric"
+                  value="${escapeHTML(
+                    data.metric || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Value</label>
+                <input
+                  id="editValue"
+                  type="number"
+                  step="0.01"
+                  value="${escapeHTML(
+                    data.value || ""
+                  )}"
+                >
+              </div>
+
+              <div class="edit-field">
+                <label>Notes</label>
+                <textarea id="editNotes">${escapeHTML(
+                  data.notes || ""
+                )}</textarea>
+              </div>
+
+              ${editButtons()}
+
+            `
+          );
+
+          return;
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        openModal(
+          "Could Not Load",
+          `
+
+            <p class="error-message">
+              ${escapeHTML(error.message)}
+            </p>
+
+            <div class="edit-actions">
+
+              <button
+                class="cancel-edit-button"
+                onclick="closeEditModal()"
+              >
+                Close
+              </button>
 
             </div>
 
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function escapeHTML(text) {
-
-    const div =
-        document.createElement(
-            "div"
+          `
         );
 
-
-    div.textContent =
-        text || "";
-
-
-    return div.innerHTML;
-}
-
-
-function formatDate(
-    dateString
-) {
-
-    if (!dateString) {
-
-        return "";
+      }
 
     }
 
 
-    const date =
-        new Date(dateString);
+    function editOption(value, selected) {
+
+      const isSelected =
+        String(value) === String(selected)
+          ? "selected"
+          : "";
+
+      return `
+        <option
+          value="${escapeHTML(value)}"
+          ${isSelected}
+        >
+          ${escapeHTML(value)}
+        </option>
+      `;
+    }
 
 
-    return date.toLocaleDateString(
-        undefined,
-        {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
+    function editButtons() {
+
+      return `
+
+        <div class="edit-actions">
+
+          <button
+            type="button"
+            class="cancel-edit-button"
+            onclick="closeEditModal()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="save-edit-button"
+            onclick="saveEdit()"
+          >
+            Save Changes
+          </button>
+
+        </div>
+
+      `;
+    }
+
+
+    /* =========================================================
+       SAVE EDIT
+       ========================================================= */
+
+    async function saveEdit() {
+
+      const {
+        type,
+        id,
+        todoDetailId
+      } = editState;
+
+
+      if (!type || !id) {
+        return;
+      }
+
+
+      try {
+
+        /* -----------------------------------------------------
+           BUSINESS
+           ----------------------------------------------------- */
+
+        if (type === "business") {
+
+          await updateRow(
+            "business_ideas",
+            id,
+            {
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("editDescription")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayBusinessIdeas();
+          return;
         }
-    );
-}
 
 
-function formatDateOnly(
-    dateString
-) {
+        /* -----------------------------------------------------
+           CONTENT
+           ----------------------------------------------------- */
 
-    if (!dateString) {
+        if (type === "content") {
 
-        return "";
+          await updateRow(
+            "content",
+            id,
+            {
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("editDescription")
+                  .value
+                  .trim(),
+
+              platform:
+                document
+                  .getElementById("editPlatform")
+                  .value,
+
+              status:
+                document
+                  .getElementById("editStatus")
+                  .value
+            }
+          );
+
+          closeEditModal();
+          displayContent();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           TODO
+           ----------------------------------------------------- */
+
+        if (type === "todo") {
+
+          const progress =
+            Number(
+              document
+                .getElementById("editProgress")
+                .value
+            );
+
+          const dueDate =
+            document
+              .getElementById("editDueDate")
+              .value || null;
+
+
+          await updateRow(
+            "todos",
+            id,
+            {
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("editDescription")
+                  .value
+                  .trim(),
+
+              completed:
+                progress === 100
+            }
+          );
+
+
+          await updateTodoDetails(
+            id,
+            progress,
+            dueDate,
+            todoDetailId
+          );
+
+
+          closeEditModal();
+          displayTodos();
+
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           NOTES
+           ----------------------------------------------------- */
+
+        if (type === "note") {
+
+          await updateRow(
+            "notes",
+            id,
+            {
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              content:
+                document
+                  .getElementById("editContent")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayNotes();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           PERIOD
+           ----------------------------------------------------- */
+
+        if (type === "period") {
+
+          await updateRow(
+            "period_tracker",
+            id,
+            {
+              period_date:
+                document
+                  .getElementById("editPeriodStart")
+                  .value,
+
+              end_date:
+                document
+                  .getElementById("editPeriodEnd")
+                  .value || null,
+
+              cycle_length:
+                document
+                  .getElementById("editCycleLength")
+                  .value || null,
+
+              next_period_date:
+                document
+                  .getElementById("editNextPeriod")
+                  .value || null
+            }
+          );
+
+          closeEditModal();
+          displayPeriod();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           EVENT
+           ----------------------------------------------------- */
+
+        if (type === "event") {
+
+          await updateRow(
+            "events",
+            id,
+            {
+              event_date:
+                document
+                  .getElementById("editDate")
+                  .value,
+
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("editDescription")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayEvents();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           MONTHLY PLAN
+           ----------------------------------------------------- */
+
+        if (type === "monthly") {
+
+          await updateRow(
+            "monthly_plans",
+            id,
+            {
+              month:
+                document
+                  .getElementById("editMonth")
+                  .value,
+
+              plan:
+                document
+                  .getElementById("editPlan")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayMonthlyPlans();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           GOAL
+           ----------------------------------------------------- */
+
+        if (type === "goal") {
+
+          await updateRow(
+            "goals",
+            id,
+            {
+              title:
+                document
+                  .getElementById("editTitle")
+                  .value
+                  .trim(),
+
+              description:
+                document
+                  .getElementById("editDescription")
+                  .value
+                  .trim(),
+
+              target_date:
+                document
+                  .getElementById("editTargetDate")
+                  .value || null
+            }
+          );
+
+          closeEditModal();
+          displayGoals();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           CLIENT
+           ----------------------------------------------------- */
+
+        if (type === "client") {
+
+          await updateBibiDataRow(
+            id,
+            {
+              name:
+                document
+                  .getElementById("editClientName")
+                  .value
+                  .trim(),
+
+              project:
+                document
+                  .getElementById("editClientProject")
+                  .value
+                  .trim(),
+
+              status:
+                document
+                  .getElementById("editClientStatus")
+                  .value
+            }
+          );
+
+          closeEditModal();
+          displayClients();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           MONEY
+           ----------------------------------------------------- */
+
+        if (type === "money") {
+
+          await updateBibiDataRow(
+            id,
+            {
+              amount:
+                document
+                  .getElementById("editAmount")
+                  .value,
+
+              type:
+                document
+                  .getElementById("editMoneyType")
+                  .value,
+
+              description:
+                document
+                  .getElementById("editMoneyDescription")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayMoney();
+          return;
+        }
+
+
+        /* -----------------------------------------------------
+           GROWTH
+           ----------------------------------------------------- */
+
+        if (type === "growth") {
+
+          await updateBibiDataRow(
+            id,
+            {
+              metric:
+                document
+                  .getElementById("editMetric")
+                  .value
+                  .trim(),
+
+              value:
+                document
+                  .getElementById("editValue")
+                  .value,
+
+              notes:
+                document
+                  .getElementById("editNotes")
+                  .value
+                  .trim()
+            }
+          );
+
+          closeEditModal();
+          displayGrowth();
+          return;
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Save edit error:",
+          error
+        );
+
+        alert(
+          "Could not save changes:\n\n" +
+          error.message
+        );
+
+      }
 
     }
 
 
-    const parts =
-        String(dateString)
-            .split("-");
+    /* =========================================================
+       ESC KEY CLOSES MODAL
+       ========================================================= */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Escape" &&
+          document
+            .getElementById("editModal")
+            .classList
+            .contains("active")
+        ) {
+
+          closeEditModal();
+
+        }
+
+      }
+    );
 
 
-    if (
-        parts.length !== 3
-    ) {
+    /* =========================================================
+       LOAD EVERYTHING
+       ========================================================= */
 
-        return dateString;
+    async function loadEverything() {
+
+      await Promise.allSettled([
+        displayBusinessIdeas(),
+        displayClients(),
+        displayMoney(),
+        displayGrowth(),
+        displayContent(),
+        displayTodos(),
+        displayNotes(),
+        displayPeriod(),
+        displayEvents(),
+        displayMonthlyPlans(),
+        displayGoals()
+      ]);
 
     }
 
 
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
-}
+    /* =========================================================
+       START APP
+       ========================================================= */
 
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
 
-function addDays(
-    dateString,
-    days
-) {
+        showSection("home");
 
-    const date =
-        new Date(
-            dateString +
-            "T00:00:00"
-        );
+        loadEverything();
 
-
-    date.setDate(
-        date.getDate() +
-        Number(days)
+      }
     );
 
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return `${year}-${month}-${day}`;
-}
-
-
-function setStatus(
-    elementId,
-    message,
-    success
-) {
-
-    const element =
-        document.getElementById(
-            elementId
-        );
-
-
-    if (!element) return;
-
-
-    element.textContent =
-        message;
-
-
-    element.className =
-        "status " +
-        (
-            success
-                ? "success"
-                : "error"
-        );
-}
-
-
-/* =====================================================
-   LOAD EVERYTHING
-===================================================== */
-
-async function loadEverything() {
-
-    await updateStreak();
-
-    await displayBusiness();
-
-    await displayClients();
-
-    await displayMoney();
-
-    await displayGrowth();
-
-    await displayContent();
-
-    await displayTodos();
-
-    await displayNotes();
-
-    await displayPeriod();
-
-    await displayEvents();
-
-    await displayMonthlyPlans();
-
-    await displayGoals();
-}
-
-
-/* =====================================================
-   START APP
-===================================================== */
-
-loadEverything();
-
-</script>
+  </script>
 
 </body>
 </html>
