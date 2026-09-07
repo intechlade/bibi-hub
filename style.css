@@ -202,6 +202,102 @@ header p {
     font-size:
         1rem;
 }
+/* =========================================================
+   4.1 NAVIGATION
+   ========================================================= */
+
+.main-nav {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    margin-top:
+        18px;
+
+    flex-wrap:
+        wrap;
+}
+
+
+.main-nav button {
+
+    padding:
+        9px 14px;
+
+    border:
+        1px solid
+        rgba(232, 180, 200, 0.25);
+
+    border-radius:
+        50px;
+
+    background:
+        rgba(232, 180, 200, 0.08);
+
+    color:
+        var(--rose-light);
+
+    font-family:
+        inherit;
+
+    font-size:
+        0.9rem;
+
+    cursor:
+        pointer;
+
+    transition:
+        var(--transition);
+}
+
+
+.main-nav button:hover {
+
+    background:
+        var(--rose-quartz);
+
+    color:
+        var(--black);
+
+    border-color:
+        var(--rose-quartz);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(232, 180, 200, 0.20);
+}
+
+
+.main-nav button.active {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rose-quartz),
+            var(--purple)
+        );
+
+    color:
+        var(--black);
+
+    border-color:
+        transparent;
+
+    font-weight:
+        700;
+}
 
 
 /* =========================================================
