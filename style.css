@@ -327,8 +327,42 @@ main {
 }
 
 
-.page-section.active {
+.page-section.active-section {
     display: block;
+}
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.main-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.main-nav button {
+    padding: 9px 14px;
+    border: 1px solid rgba(232, 180, 200, 0.25);
+    border-radius: 50px;
+    background: rgba(232, 180, 200, 0.08);
+    color: var(--rose-light);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.main-nav button:hover {
+    background: var(--rose-quartz);
+    color: var(--black);
+    transform: translateY(-2px);
+}
+
+.main-nav button:active {
+    transform: translateY(0);
 }
 
 
